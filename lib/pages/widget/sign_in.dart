@@ -33,6 +33,7 @@ class _SignInState extends State<SignIn> {
       child: Column(
         children: <Widget>[
           Stack(
+
             alignment: Alignment.center,
             children: <Widget>[
               Card(
