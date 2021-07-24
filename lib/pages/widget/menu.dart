@@ -5,7 +5,7 @@ List<MenuItem> items = [
   new MenuItem<int>(
     id: 0,
     title: 'HOME',
-    prefix: Icon(Icons.fastfood),
+    prefix: Icon(Icons.home),
   ),
   new MenuItem<int>(
     id: 1,
@@ -15,17 +15,17 @@ List<MenuItem> items = [
   new MenuItem<int>(
     id: 2,
     title: 'GIOCATORI',
-    prefix: Icon(Icons.terrain),
+    prefix: Icon(Icons.sports_football),
   ),
   new MenuItem<int>(
     id: 3,
     title: 'CIRCOLI',
-    prefix: Icon(Icons.settings),
+    prefix: Icon(Icons.map),
   ),
   new MenuItem<int>(
     id: 4,
     title: 'CONTATTACI',
-    prefix: Icon(Icons.settings),
+    prefix: Icon(Icons.info),
   ),
 ];
 final menu = Menu(

@@ -1,5 +1,7 @@
 import 'package:drawerbehavior/drawerbehavior.dart';
 import 'package:flutter/material.dart';
+import 'package:quickplay/pages/home_players.dart';
+import 'package:quickplay/pages/home_profile.dart';
 import 'package:quickplay/pages/widget/menu.dart';
 
 
@@ -14,7 +16,7 @@ class _Drawer3dState extends State<Drawer3d> {
 
   @override
   void initState() {
-    selectedMenuItemId = menu.items[0].id;
+    selectedMenuItemId = menuWithIcon.items[0].id;
     super.initState();
   }
 
@@ -39,7 +41,7 @@ class _Drawer3dState extends State<Drawer3d> {
         ),
         SideDrawer(
           degree: 45,
-          menu: menu,
+          menu: menuWithIcon,
           direction: Direction.right,
           animation: true,
           color: Theme.of(context).primaryColor,
@@ -53,11 +55,10 @@ class _Drawer3dState extends State<Drawer3d> {
       ],
       builder: (context, id) => IndexedStack(
         index: id,
-        children: menu.items
-            .map((e) => Center(
-          child: Text("Page~${e.title}"),
-        ))
-            .toList(),
+        children: [
+          Profile(),
+          Players(),
+        ]
       ),
     );
   }
