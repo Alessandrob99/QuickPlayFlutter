@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:quickplay/pages/home_page.dart';
 import 'package:quickplay/theme.dart';
 import 'package:quickplay/widgets/snackbar.dart';
 
@@ -205,6 +206,11 @@ class _SignInState extends State<SignIn> {
       {
         CustomSnackBar(context, const Text("Inserisci le credenziali d'accesso"));
       }
+    else
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => Home()),
+      );
   }
 
   void _toggleLogin() {
@@ -212,4 +218,6 @@ class _SignInState extends State<SignIn> {
       _obscureTextPassword = !_obscureTextPassword;
     });
   }
+
+
 }
