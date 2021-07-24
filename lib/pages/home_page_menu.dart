@@ -1,5 +1,6 @@
 import 'package:drawerbehavior/drawerbehavior.dart';
 import 'package:flutter/material.dart';
+import 'package:quickplay/pages/home_page_start.dart';
 import 'package:quickplay/pages/home_players.dart';
 import 'package:quickplay/pages/home_profile.dart';
 import 'package:quickplay/pages/widget/menu.dart';
@@ -56,8 +57,9 @@ class _Drawer3dState extends State<Drawer3d> {
       builder: (context, id) => IndexedStack(
         index: id,
         children: [
-          Profile(),
-          Players(),
+          HomePage(),//Home iniziale
+          Profile(),//Profilo utente
+          Players(),//Ricerca giocatori
         ]
       ),
     );
