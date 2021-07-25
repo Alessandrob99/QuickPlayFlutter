@@ -197,7 +197,11 @@ class _SignInState extends State<SignIn> {
     if(loginEmailController.text == "" || loginPasswordController.text == "" || (loginEmailController.text =="" && loginPasswordController.text == ""))
     {
       CustomSnackBar(context, const Text("Inserisci le credenziali d'accesso"));
-    }
+    }else
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => Home()),
+      );
   }
 
   //Metodo per il click del bottone da touch

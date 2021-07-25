@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:kf_drawer/kf_drawer.dart';
+import 'package:quickplay/pages/visualizza_prenotazioni.dart';
 
 
-class HomePage extends StatefulWidget {
-  HomePage({Key key, this.title}) : super(key: key);
+class HomePage extends KFDrawerContent {
+  HomePage({Key key}) ;
 
-  final String title;
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -25,7 +26,17 @@ class _MyHomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       primary: false,
-      appBar: EmptyAppBar(),
+      appBar:PreferredSize(
+        preferredSize: Size.fromHeight(85.0),
+      child: AppBar(
+        leading: Builder(
+          builder: (context) => IconButton(
+            icon: Icon(Icons.menu_rounded),
+            onPressed: widget.onMenuPressed,
+          ),
+        ),
+      ),
+      ),
       body: ListView(
         children: <Widget>[
           Stack(
@@ -186,9 +197,9 @@ class _MyHomePageState extends State<HomePage> {
           onTap: (){
             setState(() {
               _selectedIndex = index;
-              if(_selectedIndex == 1)
+              if(_selectedIndex == 1) //Visualizza prenotazioni
                 {
-
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => VisualizzaPrenotazioni()));
                 }
             });
           },

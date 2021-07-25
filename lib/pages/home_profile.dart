@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:kf_drawer/kf_drawer.dart';
+import 'package:quickplay/pages/home_page.dart';
+import 'package:quickplay/pages/home_page_start.dart';
 
-class Profile extends StatefulWidget {
+class Profile extends KFDrawerContent {
+  Profile({
+    Key key,
+  });
+
   @override
   MapScreenState createState() => MapScreenState();
 }
@@ -17,9 +24,34 @@ class MapScreenState extends State<Profile>
     super.initState();
   }
 
+  Future<bool> _onWillPop() async {
+    // This dialog will exit your app on saying yes
+    return (await showDialog(
+      context: context,
+      builder: (context) => new AlertDialog(
+        title: new Text('Are you sure?'),
+        content: new Text('Do you want to exit an App'),
+        actions: <Widget>[
+          new FlatButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: new Text('No'),
+          ),
+          new FlatButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: new Text('Yes'),
+          ),
+        ],
+      ),
+    )) ??
+        false;
+  }
+
+
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
+    return new WillPopScope(
+      onWillPop: _onWillPop,
+      child: new Scaffold(
         body: new Container(
           color: Colors.white,
           child: new ListView(
@@ -267,7 +299,9 @@ class MapScreenState extends State<Profile>
               ),
             ],
           ),
-        ));
+        ),
+      ),
+    );
   }
 
   @override
@@ -346,5 +380,9 @@ class MapScreenState extends State<Profile>
         });
       },
     );
+  }
+
+  void moveToLastScreen() {
+    Navigator.pop(context, HomePage());
   }
 }

@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:kf_drawer/kf_drawer.dart';
-
 import 'home_page_menu.dart';
 
 class Home extends StatefulWidget {
@@ -10,9 +8,6 @@ class Home extends StatefulWidget {
 
 class _MyAppState extends State<Home> {
 
-  Widget home(context) {
-    return Scaffold();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +16,7 @@ class _MyAppState extends State<Home> {
       theme: ThemeData(
           primarySwatch: Colors.indigo, accentColor: Colors.amberAccent),
       routes: {
-        "/": (context) => (Drawer3d()),
+        "/": (context) => (DrawerScreen()),
       },
     );
   }

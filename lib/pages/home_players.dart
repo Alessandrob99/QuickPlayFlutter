@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:kf_drawer/kf_drawer.dart';
 
-class Players extends StatefulWidget {
+class Players extends KFDrawerContent {
   @override
   _Players createState() => _Players();
 }
