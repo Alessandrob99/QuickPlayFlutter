@@ -1,195 +1,237 @@
 import 'package:flutter/material.dart';
 
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
+  HomePage({Key key, this.title}) : super(key: key);
+
+  final String title;
+
+  @override
+  _MyHomePageState createState() => _MyHomePageState();
+}
+
+class EmptyAppBar extends StatelessWidget implements PreferredSizeWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+
+  @override
+  Size get preferredSize => Size(0.0, 0.0);
+}
+
+class _MyHomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Container(
-          margin: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 25.0),
-          child: Column(
-            children: <Widget>[
-              Expanded(
-                flex: 2,
-                child: Column(
-                  children: <Widget>[
-                    Expanded(
-                      flex: 1,
-                      /** PARTE SUPERIORE DELLA HOME (Sta sotto la classe) **/
-                      child: HeaderView(),
-                    ),
-                    Expanded(
-                      flex: 3,
-                      child: HomeServiceView(),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-
-/** PARTE SUPERIORE DELLA HOME **/
-
-class HeaderView extends StatelessWidget {
-  const HeaderView({
-    Key key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 15.0),
-      child: Row(
+      primary: false,
+      appBar: EmptyAppBar(),
+      body: ListView(
         children: <Widget>[
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
+          Stack(
             children: <Widget>[
-              Text(
-                'Benvenuto',
-                style: TextStyle(
-                  fontSize: 28.0,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.black,
-                ),
+              Container(
+                height: 200.0,
+                width: double.infinity,
+                color: Colors.indigo, //Colore in basso del drawer menu
               ),
-              SizedBox(
-                height: 10.0,
+              Positioned(
+                //Cerchi del layout
+                  bottom: 180,
+                  left: -40,
+                  child: Container(
+                    height: 140,
+                    width: 140,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(70),
+                        color: Colors.yellowAccent[100].withOpacity(0.1)),
+                  )),
+              Positioned(
+                //Cerchi del layout
+                  top: -120,
+                  left: 100,
+                  child: Container(
+                    height: 300,
+                    width: 300,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(150),
+                        color: Colors.yellowAccent[100].withOpacity(0.1)),
+                  )),
+              Positioned(
+                //Cerchi del layout
+                  top: -50,
+                  left: 0,
+                  child: Container(
+                    height: 200,
+                    width: 200,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(100),
+                        color: Colors.yellowAccent[100].withOpacity(0.1)),
+                  )),
+              Positioned(
+                //Cerchi del layout
+                  top: 0,
+                  right: 0,
+                  child: Container(
+                    height: 150,
+                    width: 150,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(75),
+                        color: Colors.yellowAccent[100].withOpacity(0.1)),
+                  )),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  SizedBox(
+                    //Distanza dalla top bar al "Benvenuto"
+                    height: 70.0,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Text(
+                          "Benvenuto",
+                          style: TextStyle(
+                              fontSize: 30,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w500),
+                        ),
+                        Expanded(
+                          flex: 1,
+                          child: Container(),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
+                    //Distanza tra il "Benvenuto" ed il blocco "Nome-Cognome"
+                    child: Text(
+                      "",
+                    ),
+                  ),
+                  SizedBox(
+                    height: 25,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
+                    child: Container(
+                      height: 100,
+                      width: MediaQuery.of(context).size.width,
+                      child: Material(
+                        elevation: 2.0,
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(5.0),
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 25),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                'Nome:       Cognome:',
+                                style: TextStyle(
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black54),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                ],
               ),
-              Text(
-                'Nome da aggiungere',
-                style: TextStyle(
-                  fontSize: 15.0,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.grey[800],
-                ),
-              )
             ],
           ),
+          getGridView()
         ],
       ),
     );
   }
-}
 
 
-class HomeServiceView extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      alignment: Alignment.center,
-      child: Wrap(
-        direction: Axis.horizontal,
-        children: _buildHomeServiceMenu(context),
-      ),
+  Widget getGridView() {
+
+    return GridView.count(
+      shrinkWrap: true,
+      crossAxisCount: 2, //Numero di elementi nella riga
+      primary: false, //Il primo ha il distanziamento a sinistra di default
+      childAspectRatio: (MediaQuery
+          .of(context)
+          .size
+          .width - 60 / 2) / 280,
+      children: <Widget>[
+        //il "true" distanzia a destra
+        //il "false" distanzia a sinistra
+        createTile(0,_selectedIndex,false, 'Effettua Prenotazione', Colors.purple, Icons.sports_football),
+        createTile(1,_selectedIndex,true, 'Visualizza Prenotazione', Colors.yellow, Icons.local_activity),
+        createTile(2,_selectedIndex,false, 'Unisciti alla Prenotazione', Colors.red, Icons.app_settings_alt),
+      ],
     );
   }
+  int _selectedIndex = -1;
 
-  List<Padding> _buildHomeServiceMenu(BuildContext context) {
-    final services = Service.getHomeService();
-    return List.generate(
-          //Gli elementi presenti
-          3,
-          (index) => Padding(
-        padding:
-        const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 8.0, top: 8.0),
-        child: _buildContainer(index, context, services[index]),
-      ),
-    );
-  }
 
-  Container _buildContainer(int index, BuildContext context, Service service) {
-    BorderRadius borderRaidus;
+  Widget createTile(int index,int selectedIndex,bool isEven, String title, Color color, IconData icon) {
+    return Padding(
+      padding: EdgeInsets.only(
+          left:  isEven?10:20, right: isEven?20:10, top: 10, bottom: 10),
+      child: Container(
+        width: MediaQuery.of(context).size.width,
+        child: GestureDetector(
+          onTap: (){
+            setState(() {
+              _selectedIndex = index;
+              if(_selectedIndex == 1)
+                {
 
-    switch (index) {
-      case 0:
-        borderRaidus = BorderRadius.only(topLeft: Radius.circular(15.0));
-        break;
-      case 1:
-        borderRaidus = BorderRadius.only(topRight: Radius.circular(15.0));
-        break;
-      case 2:
-        borderRaidus = BorderRadius.only(bottomLeft: Radius.circular(15.0));
-        break;
-      default:
-        borderRaidus = BorderRadius.only(bottomRight: Radius.circular(15.0));
-    }
-
-    return Container(
-      padding: const EdgeInsets.all(10.0),
-      height: MediaQuery.of(context).size.height / 6,
-      width: MediaQuery.of(context).size.width / 2.8,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Icon(service.icon, color: Colors.blueGrey,),
-                ClipOval(
-                  child: Container(height: 10.0, width: 10.0, color: service.status ? Colors.pinkAccent[700] : Theme.of(context).primaryColor,),
-                ),
-              ],
-            ),
-            Text(
-              service.name,
-              style: TextStyle(
-                fontSize: 16.0,
-                color: Colors.blueGrey,
+                }
+            });
+          },
+          child: Material(
+            elevation: 3.0,
+            color: _selectedIndex==index?Colors.orange:Colors.white,
+            borderRadius: BorderRadius.circular(5.0),
+            child: Padding(
+              padding: const EdgeInsets.only(left: 20,top: 20,bottom: 20),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Icon(icon,color: _selectedIndex==index?Colors.white:color,),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        title,
+                        style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: _selectedIndex==index?Colors.white:Colors.black),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left:2.0),
+                        child: Container(
+                          height: 3.0,
+                          width: 40,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(2.0),
+                            color: _selectedIndex==index?Colors.orange:color, //Colore quando attivi un bottone
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ],
               ),
             ),
-          ],
+          ),
         ),
-      ),
-      decoration: BoxDecoration(
-        borderRadius: borderRaidus,
-        color: Theme.of(context).primaryColor,
-        boxShadow: [
-          BoxShadow(
-            offset: Offset(3, 3),
-            color: Colors.black12,
-            blurRadius: 3,
-          ),
-          BoxShadow(
-            offset: Offset(-3, -3),
-            color: Colors.white,
-            blurRadius: 3,
-          ),
-        ],
       ),
     );
   }
 }
-
-
-class Service {
-  Service({
-    @required this.name,
-    @required this.icon,
-    this.status = false,
-  });
-  String name;
-  IconData icon;
-  bool status;
-
-  static List<Service> getHomeService() {
-    List<Service> services = [
-      Service(name: 'Smart TV', icon: Icons.live_tv),
-      Service(name: 'Wifi', icon: Icons.wifi, status: true),
-      Service(name: 'Temperature', icon: Icons.wb_sunny),
-    ];
-    return services;
-  }
-}
-
-

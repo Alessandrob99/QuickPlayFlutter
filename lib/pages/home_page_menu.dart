@@ -29,7 +29,7 @@ class _Drawer3dState extends State<Drawer3d> {
         SideDrawer(
           percentage: 0.8,
           degree: 45,
-          menu: menu,
+          menu: menuWithIcon,
           direction: Direction.left,
           animation: true,
           color: Theme.of(context).primaryColor,
