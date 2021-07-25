@@ -4,6 +4,7 @@ import 'package:kf_drawer/kf_drawer.dart';
 import 'package:quickplay/pages/home_page.dart';
 import 'package:quickplay/pages/home_players.dart';
 import 'package:quickplay/pages/home_profile.dart';
+import 'package:quickplay/utils/dialog_helper.dart';
 
 class DrawerScreen extends StatefulWidget {
   @override
@@ -105,7 +106,9 @@ class _DrawerScreenState extends State<DrawerScreen> {
             ),
           ),
           icon: Icon(Icons.logout, color: Colors.white54),
-          onPressed: () {},
+          onPressed: () {
+              return DialogHelper.exit(context);
+          },
         ),
         decoration: BoxDecoration(
           color: Color.fromARGB(255, 31, 31, 31),

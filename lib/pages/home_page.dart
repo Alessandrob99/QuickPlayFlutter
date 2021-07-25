@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kf_drawer/kf_drawer.dart';
 import 'package:quickplay/pages/visualizza_prenotazioni.dart';
+import 'package:quickplay/utils/dialog_helper.dart';
 
 
 class Home extends KFDrawerContent {
@@ -24,7 +25,8 @@ class EmptyAppBar extends StatelessWidget implements PreferredSizeWidget {
 class _MyHomePageState extends State<Home> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return WillPopScope(
+      child: Scaffold(
       primary: false,
       appBar:PreferredSize(
         preferredSize: Size.fromHeight(85.0),
@@ -162,12 +164,17 @@ class _MyHomePageState extends State<Home> {
           getGridView()
         ],
       ),
+      ),
+      onWillPop: () async {
+        return await DialogHelper.exit(context);},
     );
   }
 
 
-  Widget getGridView() {
 
+
+
+  Widget getGridView() {
     return GridView.count(
       shrinkWrap: true,
       crossAxisCount: 2, //Numero di elementi nella riga
