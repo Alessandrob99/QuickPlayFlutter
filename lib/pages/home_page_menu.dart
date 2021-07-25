@@ -1,12 +1,9 @@
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:kf_drawer/kf_drawer.dart';
 import 'package:quickplay/pages/home_page.dart';
-import 'package:quickplay/pages/home_page_start.dart';
 import 'package:quickplay/pages/home_players.dart';
 import 'package:quickplay/pages/home_profile.dart';
-import 'package:quickplay/pages/widget/class_builder.dart';
 
 class DrawerScreen extends StatefulWidget {
   @override
@@ -20,25 +17,47 @@ class _DrawerScreenState extends State<DrawerScreen> {
   void initState() {
     super.initState();
     _drawerController = KFDrawerController(
-      initialPage: HomePage(),
+      initialPage: Home(),
       items: [
         KFDrawerItem.initWithPage(
           text: Text('Home',
               style: TextStyle(color: Colors.white, fontSize: 18)),
-          icon: Icon(Icons.person, color: Colors.white),
-          page: HomePage(),
+          icon: Icon(Icons.home, color: Colors.white),
+          page: Home(),
         ),
         KFDrawerItem.initWithPage(
           text: Text('Profilo',
               style: TextStyle(color: Colors.white, fontSize: 18)),
-          icon: Icon(Icons.settings, color: Colors.white),
+          icon: Icon(Icons.person, color: Colors.white),
           page: Profile(),
         ),
         KFDrawerItem.initWithPage(
           text: Text('Giocatori',
               style: TextStyle(color: Colors.white, fontSize: 18)),
-          icon: Icon(Icons.info, color: Colors.white),
+          icon: Icon(Icons.people, color: Colors.white),
           page: Players(),
+        ),
+        KFDrawerItem.initWithPage(
+          text: Text('Circoli',
+              style: TextStyle(color: Colors.white, fontSize: 18)),
+          icon: Icon(Icons.map, color: Colors.white),
+          //page: Circoli(),
+        ),
+        KFDrawerItem.initWithPage(
+          text: Text('_________________________________________________________',
+              style: TextStyle(color: Colors.white, fontSize: 2)),
+        ),
+        KFDrawerItem.initWithPage(
+          text: Text('Info App',
+              style: TextStyle(color: Colors.white, fontSize: 18)),
+          icon: Icon(Icons.perm_device_info, color: Colors.white),
+          //page: InfoApp(),
+        ),
+        KFDrawerItem.initWithPage(
+          text: Text('Contattaci',
+              style: TextStyle(color: Colors.white, fontSize: 18)),
+          icon: Icon(Icons.contact_mail, color: Colors.white),
+          //page: Contattaci(),
         ),
       ],
     );

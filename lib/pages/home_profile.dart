@@ -1,22 +1,30 @@
+
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:kf_drawer/kf_drawer.dart';
 import 'package:quickplay/pages/home_page.dart';
-import 'package:quickplay/pages/home_page_start.dart';
 
+import 'home_page_menu.dart';
+
+// ignore: must_be_immutable
 class Profile extends KFDrawerContent {
   Profile({
     Key key,
   });
 
   @override
-  MapScreenState createState() => MapScreenState();
+  _ProfileScreenState createState() => _ProfileScreenState();
 }
 
-class MapScreenState extends State<Profile>
-    with SingleTickerProviderStateMixin {
+class _ProfileScreenState extends State<Profile> with SingleTickerProviderStateMixin {
   bool _status = true;
-  final FocusNode myFocusNode = FocusNode();
+
+  TextEditingController nomeController = TextEditingController();
+  TextEditingController cognomeController = TextEditingController();
+  TextEditingController cellulareController = TextEditingController();
+
+  final FocusNode focusNodeNome = FocusNode();
+  final FocusNode focusNodeCognome = FocusNode();
+  final FocusNode focusNodeCellulare= FocusNode();
 
   @override
   void initState() {
@@ -24,34 +32,29 @@ class MapScreenState extends State<Profile>
     super.initState();
   }
 
-  Future<bool> _onWillPop() async {
-    // This dialog will exit your app on saying yes
-    return (await showDialog(
-      context: context,
-      builder: (context) => new AlertDialog(
-        title: new Text('Are you sure?'),
-        content: new Text('Do you want to exit an App'),
-        actions: <Widget>[
-          new FlatButton(
-            onPressed: () => Navigator.of(context).pop(false),
-            child: new Text('No'),
-          ),
-          new FlatButton(
-            onPressed: () => Navigator.of(context).pop(true),
-            child: new Text('Yes'),
-          ),
-        ],
-      ),
-    )) ??
-        false;
-  }
+  @override
+  void dispose() {
+    focusNodeNome.dispose();
+    focusNodeCognome.dispose();
+    focusNodeCellulare.dispose();
 
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return new WillPopScope(
-      onWillPop: _onWillPop,
-      child: new Scaffold(
+    Size _height = MediaQuery.of(context).size;
+    return WillPopScope(
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.indigo,
+          leading: Builder(
+            builder: (context) => IconButton(
+              icon: Icon(Icons.menu_rounded),
+              onPressed: widget.onMenuPressed,
+            ),
+          ),
+        ),
         body: new Container(
           color: Colors.white,
           child: new ListView(
@@ -80,8 +83,6 @@ class MapScreenState extends State<Profile>
                                             'assets/img/icon_profile.png'),
                                         fit: BoxFit.cover,
 
-                                        //DA FARE IL METODO PER SALVARE L'IMMAGINE
-
                                       ),
                                     )),
                               ],
@@ -97,6 +98,7 @@ class MapScreenState extends State<Profile>
                                       child: new Icon(
                                         Icons.camera_alt,
                                         color: Colors.white,
+
                                       ),
                                     )
                                   ],
@@ -174,8 +176,10 @@ class MapScreenState extends State<Profile>
                                         hintText: "Nome",
                                       ),
                                       enabled: !_status,
-                                      autofocus: !_status,
-
+                                      focusNode: focusNodeNome,
+                                      onSubmitted: (_) {
+                                        focusNodeCognome.requestFocus();
+                                      },
                                     ),
                                   ),
                                 ],
@@ -211,6 +215,10 @@ class MapScreenState extends State<Profile>
                                       decoration: const InputDecoration(
                                           hintText: "Cognome"),
                                       enabled: !_status,
+                                      focusNode: focusNodeCognome,
+                                      onSubmitted: (_) {
+                                        focusNodeCellulare.requestFocus();
+                                      },
                                     ),
                                   ),
                                 ],
@@ -246,6 +254,7 @@ class MapScreenState extends State<Profile>
                                       decoration: const InputDecoration(
                                           hintText: "Cellulare"),
                                       enabled: !_status,
+                                      focusNode: focusNodeCellulare,
                                     ),
                                   ),
                                 ],
@@ -282,8 +291,8 @@ class MapScreenState extends State<Profile>
                                       padding: EdgeInsets.only(right: 10.0),
                                       child: new TextField(
                                         decoration: const InputDecoration(
-                                            hintText: "Email"),
-                                        enabled: !_status,
+                                            hintText: "Email da prendere e non modificare"),
+                                        enabled: false,
                                       ),
                                     ),
                                     flex: 2,
@@ -301,15 +310,30 @@ class MapScreenState extends State<Profile>
           ),
         ),
       ),
+      onWillPop: onBackPressed,
     );
   }
 
-  @override
-  void dispose() {
-    // Clean up the controller when the Widget is disposed
-    myFocusNode.dispose();
-    super.dispose();
+
+  Widget _getEditIcon() {
+    return new GestureDetector(
+      child: new CircleAvatar(
+        backgroundColor: Colors.red,
+        radius: 14.0,
+        child: new Icon(
+          Icons.edit,
+          color: Colors.white,
+          size: 16.0,
+        ),
+      ),
+      onTap: () {
+        setState(() {
+          _status = false;
+        });
+      },
+    );
   }
+
 
   Widget _getActionButtons() {
     return Padding(
@@ -363,26 +387,11 @@ class MapScreenState extends State<Profile>
     );
   }
 
-  Widget _getEditIcon() {
-    return new GestureDetector(
-      child: new CircleAvatar(
-        backgroundColor: Colors.red,
-        radius: 14.0,
-        child: new Icon(
-          Icons.edit,
-          color: Colors.white,
-          size: 16.0,
-        ),
-      ),
-      onTap: () {
-        setState(() {
-          _status = false;
-        });
+  Future<bool> onBackPressed() {
+    return Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
+      builder: (context) {
+        return DrawerScreen();
       },
-    );
-  }
-
-  void moveToLastScreen() {
-    Navigator.pop(context, HomePage());
+    ), (route) => false);
   }
 }
