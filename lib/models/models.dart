@@ -5,8 +5,7 @@ class User {
   String password;
   String telefono;
 
-
-  User();
+  User(this.nome, this.cognome, this.email, this.password, this.telefono);
 
   User.fromJson(Map<String, dynamic> json)
       : nome = json['nome'],
