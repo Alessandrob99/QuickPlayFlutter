@@ -121,6 +121,7 @@ class _ListState extends State<VisualizzaPrenotazioni> {
         ),
       ),
       dense: true,
+
       //onTap: () => ,
     );
   }
