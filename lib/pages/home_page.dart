@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kf_drawer/kf_drawer.dart';
+import 'package:quickplay/ViewModel/Auth_Handler.dart';
 import 'package:quickplay/pages/visualizza_prenotazioni.dart';
 import 'package:quickplay/utils/dialog_helper.dart';
 
@@ -145,7 +146,7 @@ class _MyHomePageState extends State<Home> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               Text(
-                                'Nome:       Cognome:',
+                                Auth_Handler.CURRENT_USER.nome.capitalize()+"  "+Auth_Handler.CURRENT_USER.cognome.capitalize(),
                                 style: TextStyle(
                                     fontSize: 24,
                                     fontWeight: FontWeight.bold,
@@ -268,5 +269,10 @@ class _MyHomePageState extends State<Home> {
         ),
       ),
     );
+  }
+}
+extension StringExtension on String {
+  String capitalize() {
+    return "${this[0].toUpperCase()}${this.substring(1)}";
   }
 }

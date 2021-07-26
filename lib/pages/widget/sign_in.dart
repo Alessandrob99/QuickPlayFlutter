@@ -194,7 +194,27 @@ class _SignInState extends State<SignIn> {
     );
   }
 
-  showLoaderDialog(BuildContext context){
+  void showLoginErrorDialog(BuildContext context, String msg) {
+    showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Errore",),
+            content: Text(msg),
+            //buttons?
+            actions: <Widget>[
+              FlatButton(
+                child: Text("Riprova"),
+                onPressed: () { Navigator.of(context).pop(); }, //closes popup
+              ),
+            ],
+          );
+        }
+    );
+  }
+
+  showCheckCredenzialiDialog(BuildContext context){
     AlertDialog alert=AlertDialog(
       content: new Row(
         children: [
@@ -232,13 +252,29 @@ class _SignInState extends State<SignIn> {
 
       //Check della presenza di credenziali
     if(loginEmailController.text!="" && loginPasswordController.text!=""){
-      //showLoaderDialog(context);
+      showCheckCredenzialiDialog(context);
       //CheckCredenziali corrette
+      Auth_Handler.FireBaseLogin(true, context, loginEmailController.text, loginPasswordController.text, (result, msg){
+
+        if(result){
+          //Credenziali corrette -> Facciamo partire la homePage
+          Navigator.pop(context);
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => DrawerScreen()),
+          );
+        }else{
+          Navigator.pop(context);
+          showLoginErrorDialog(context,msg);
+        }
+
+      });
 
 
 
-      Auth_Handler.setLOGGED_IN_Context(context, true, loginEmailController.text, loginPasswordController.text, (result){
-        //Navigator.pop(context);
+
+      /*Auth_Handler.setLOGGED_IN_Context(context, true, loginEmailController.text, loginPasswordController.text, (result){
+        //
         if(result){
           //Utente trovato - Credenziali giuste
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -251,14 +287,11 @@ class _SignInState extends State<SignIn> {
           ));
         }
 
-      });
+      });*/
     }
 
 
-    Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => DrawerScreen()),
-      );
+
   }
 
   void _toggleLogin() {
