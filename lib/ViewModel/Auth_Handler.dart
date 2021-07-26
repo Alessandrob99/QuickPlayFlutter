@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:quickplay/ViewModel/DB_Handler_Users.dart';
 import "package:quickplay/models/models.dart";
 import 'package:shared_preferences/shared_preferences.dart';
@@ -9,6 +11,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 class Auth_Handler{
 
   static Firestore myRef = Firestore.instance;
+  static FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+
   static bool LOGGED_IN = false;
   static User CURRENT_USER  = null;
 
@@ -56,6 +60,39 @@ class Auth_Handler{
 
 
     });
+
+  }
+
+  static FireBaseLogin(bool ricordami,BuildContext context,String email,String password,myCallBack(bool result,String msg)) async{
+       try{
+         await firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
+         setLOGGED_IN_Context(context, ricordami, email, password, (result) {
+           myCallBack(true, "");
+         });
+       }catch (e){
+         switch(e.code){
+           case  "ERROR_INVALID_EMAIL" :
+             myCallBack(false,"L'email non è scritta correttamente.");
+             break;
+           case  "ERROR_WRONG_PASSWORD" :
+             myCallBack(false,"Password errata.");
+             break;
+           case  "ERROR_USER_NOT_FOUND" :
+             myCallBack(false,"L'account non risulta registrato.");
+             break;
+           case  "ERROR_OPERATION_NOT_ALLOWED" :
+             myCallBack(false,"L'account non risulta abilitato.");
+             break;
+           case  "ERROR_USER_DISABLED" :
+             myCallBack(false,"L'account risulta disabilitato.");
+             break;
+           case  "ERROR_TOO_MANY_REQUESTS" :
+             myCallBack(false,"Sono stati fatti troppi tentativi di accesso.");
+             break;
+           default :
+             myCallBack(false,"Errore durante il Login.");
+         }
+       };
 
   }
 
