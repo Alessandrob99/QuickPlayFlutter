@@ -10,7 +10,7 @@ class Auth_Handler{
 
   static Firestore myRef = Firestore.instance;
   static bool LOGGED_IN = false;
-  static User? CURRENT_USER  = null;
+  static User CURRENT_USER  = null;
 
 
   static testFunction(Function func){
@@ -36,7 +36,7 @@ class Auth_Handler{
       await prefs.setString("email", email);
       await prefs.setString("password", password);
     }
-    DB_Handler_Users.SearchUsersByEmail("alessandrobedetta941@gmail.com", (returnedUser){
+    DB_Handler_Users.SearchUsersByEmail(email, (returnedUser){
 
       //Assegno a CURRENT USER i parametri ritornati (se sono != da null)
 
@@ -48,10 +48,13 @@ class Auth_Handler{
             returnedUser.password,
             returnedUser.telefono,
         );
+        myCallBack(true);
+      }else{
+        CURRENT_USER = null;
+        myCallBack(false);
       }
 
 
-      myCallBack(true);
     });
 
   }

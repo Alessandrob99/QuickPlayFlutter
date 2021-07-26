@@ -8,13 +8,13 @@ class DB_Handler_Users{
   static Firestore myRef = Firestore.instance;
 
 
-  static SearchUsersByEmail(String email, callback(User? returnedUser)) {
+  static SearchUsersByEmail(String email, callback(User returnedUser)) {
     CollectionReference users = Firestore.instance.collection('users');
 
     users.document(email).get().then<dynamic>((
         DocumentSnapshot snapshot) async {
       var result = snapshot.data;
-      if(!result.isEmpty){
+      if(result!=null){
         var foundUser = User(result["nome"], result["cognome"],  result["email"],  result["password"],  result["telefono"]);
         callback(foundUser);
       }else{

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:quickplay/ViewModel/Auth_Handler.dart';
 import 'package:quickplay/pages/home_page.dart';
 import 'package:quickplay/pages/home_page_menu.dart';
 import 'package:quickplay/theme.dart';
@@ -193,6 +194,22 @@ class _SignInState extends State<SignIn> {
     );
   }
 
+  showLoaderDialog(BuildContext context){
+    AlertDialog alert=AlertDialog(
+      content: new Row(
+        children: [
+          CircularProgressIndicator(),
+          Container(margin: EdgeInsets.only(left: 7),child:Text("Controllando le credenziali..." )),
+        ],),
+    );
+    showDialog(barrierDismissible: false,
+      context:context,
+      builder:(BuildContext context){
+        return alert;
+      },
+    );
+  }
+
   //Metodo per l'invio dalla tastiera.
   void _toggleSignInButton() {
     if(loginEmailController.text == "" || loginPasswordController.text == "" || (loginEmailController.text =="" && loginPasswordController.text == ""))
@@ -212,7 +229,33 @@ class _SignInState extends State<SignIn> {
         CustomSnackBar(context, const Text("Inserisci le credenziali d'accesso"));
       }
     else
-      Navigator.push(
+
+      //Check della presenza di credenziali
+    if(loginEmailController.text!="" && loginPasswordController.text!=""){
+      //showLoaderDialog(context);
+      //CheckCredenziali corrette
+
+
+
+      Auth_Handler.setLOGGED_IN_Context(context, true, loginEmailController.text, loginPasswordController.text, (result){
+        //Navigator.pop(context);
+        if(result){
+          //Utente trovato - Credenziali giuste
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text("Credenziali giuste"),
+          ));
+        }else{
+          //Utente non esistente o credenziali errate
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text("Credenziali errate"),
+          ));
+        }
+
+      });
+    }
+
+
+    Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => DrawerScreen()),
       );
