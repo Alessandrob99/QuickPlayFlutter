@@ -68,7 +68,6 @@ enum GroupType {
   scroll,
 }
 
-
 class _ListState extends State<VisualizzaPrenotazioni> {
   var _direction = Axis.vertical;
   List<User> users;
@@ -84,26 +83,45 @@ class _ListState extends State<VisualizzaPrenotazioni> {
 
   Widget _itemTitle(User user) {
     return ListTile(
-      title: Text(
-        user.name,
-        style: TextStyle(
-          color: Colors.white,
-        ),
-      ),
-      subtitle: Text(
-        user.email,
-        style: TextStyle(
-          color: Colors.white30,
-        ),
-      ),
+      title: Padding(
+          padding: const EdgeInsets.only(top: 10.0),
+          child: Column(
+            children: <Widget>[
+              Text("Nome Campo"),
+              Text("Numero Campo"),
+              Text("Data"),
+              Text("Dalle/Alle"),
+              Row(children: [
+                TextButton(
+                    onPressed: () {},
+                    child: const Text(
+                      'Cancella',
+                      style: TextStyle(
+                          decoration: TextDecoration.underline,
+                          color: Colors.black,
+                          fontSize: 16.0,
+                          fontFamily: 'WorkSansMedium'),
+                    )),
+                TextButton(
+                    onPressed: () {},
+                    child: const Text(
+                      'Visualizza Partecipanti',
+                      style: TextStyle(
+                          decoration: TextDecoration.underline,
+                          color: Colors.black,
+                          fontSize: 16.0,
+                          fontFamily: 'WorkSansMedium'),
+                    ))
+              ])
+            ],
+          )),
       leading: CircleAvatar(
-        child: Text(
-          user.name[0],
-          style: TextStyle(
-            color: Colors.white,
-          ),
+        backgroundImage: ExactAssetImage(
+          'assets/img/sport.png',
         ),
       ),
+      dense: true,
+      //onTap: () => ,
     );
   }
 
@@ -115,6 +133,7 @@ class _ListState extends State<VisualizzaPrenotazioni> {
     return ListView.builder(
       scrollDirection: _direction,
       itemCount: users.length,
+      itemExtent: 150.0,
       itemBuilder: (context, index) {
         return Container(
           alignment: AlignmentDirectional.center,
@@ -131,28 +150,27 @@ class _ListState extends State<VisualizzaPrenotazioni> {
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       child: Scaffold(
         appBar: AppBar(
-        backgroundColor: Colors.indigo,
-        leading: Builder(
-          builder: (context) => IconButton(
-            icon: Icon(Icons.arrow_back_outlined),
-            onPressed: onBackPressed,
+          backgroundColor: Colors.indigo,
+          leading: Builder(
+            builder: (context) => IconButton(
+              icon: Icon(Icons.arrow_back_outlined),
+              onPressed: onBackPressed,
+            ),
           ),
         ),
-      ),
-      body: Container(
-        constraints: _direction == Axis.vertical
-            ? null
-            : BoxConstraints.tightForFinite(height: 80.0),
-        child: Center(
-          child: _bodyContent(),
+        body: Container(
+          constraints: _direction == Axis.vertical
+              ? null
+              : BoxConstraints.tightForFinite(height: 80.0),
+          child: Center(
+            child: _bodyContent(),
+          ),
         ),
-      ),
       ),
       onWillPop: onBackPressed,
     );
