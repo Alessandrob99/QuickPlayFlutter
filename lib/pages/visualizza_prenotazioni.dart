@@ -1,93 +1,162 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
 
 import 'home_page_menu.dart';
 
+class User {
+  User({this.name, this.email});
 
-class VisualizzaPrenotazioni extends StatefulWidget {
-  @override
-  _VisualizzaPrenotazioni createState() => _VisualizzaPrenotazioni();
+  final String name;
+  final String email;
 }
 
-class _VisualizzaPrenotazioni extends State<VisualizzaPrenotazioni> {
+const USER_NAMES = [
+  "Isa Tusa",
+  "Racquel Ricciardi",
+  "Teresita Mccubbin",
+  "Rhoda Hassinger",
+  "Carson Cupps",
+  "Devora Nantz",
+  "Tyisha Primus",
+  "Muriel Lewellyn",
+  "Hunter Giraud",
+  "Corina Whiddon",
+  "Meaghan Covarrubias",
+  "Ulysses Severson",
+  "Richard Baxter",
+  "Alessandra Kahn",
+  "Libby Saari",
+  "Valeria Salvador",
+  "Fredrick Folkerts",
+  "Delmy Izzi",
+  "Leann Klock",
+  "Rhiannon Macfarlane",
+];
+const USER_EMAILS = [
+  "isa.tusa@me.com",
+  "racquel.ricciardi@me.com",
+  "teresita.mccubbin@me.com",
+  "rhoda.hassinger@me.com",
+  "carson.cupps@me.com",
+  "devora.nantz@me.com",
+  "tyisha.primus@me.com",
+  "muriel.lewellyn@me.com",
+  "hunter.giraud@me.com",
+  "corina.whiddon@me.com",
+  "meaghan.covarrubias@me.com",
+  "ulysses.severson@me.com",
+  "richard.baxter@me.com",
+  "alessandra.kahn@me.com",
+  "libby.saari@me.com",
+  "valeria.salvador@me.com",
+  "fredrick.folkerts@me.com",
+  "delmy.izzi@me.com",
+  "leann.klock@me.com",
+  "rhiannon.macfarlane@me.com",
+];
 
-  final List<String> _listItem = [
-    'assets/img/icon_profile.png',
-    'assets/img/quickplaylogo.PNG',
-  ];
+class VisualizzaPrenotazioni extends StatefulWidget {
+  VisualizzaPrenotazioni({Key key, this.group, this.onClick}) : super(key: key);
+  final VoidCallback onClick;
+  final GroupType group;
+
+  @override
+  _ListState createState() => _ListState();
+}
+
+enum GroupType {
+  simple,
+  scroll,
+}
+
+
+class _ListState extends State<VisualizzaPrenotazioni> {
+  var _direction = Axis.vertical;
+  List<User> users;
+
+  List<User> _users() {
+    var list = List<User>();
+    for (int i = 0; i < USER_NAMES.length; i++) {
+      var user = User(name: USER_NAMES[i], email: USER_EMAILS[i]);
+      list.add(user);
+    }
+    return list;
+  }
+
+  Widget _itemTitle(User user) {
+    return ListTile(
+      title: Text(
+        user.name,
+        style: TextStyle(
+          color: Colors.white,
+        ),
+      ),
+      subtitle: Text(
+        user.email,
+        style: TextStyle(
+          color: Colors.white30,
+        ),
+      ),
+      leading: CircleAvatar(
+        child: Text(
+          user.name[0],
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _bodyContent() {
+    if (users == null) {
+      users = _users();
+    }
+    var isVertical = _direction == Axis.vertical;
+    return ListView.builder(
+      scrollDirection: _direction,
+      itemCount: users.length,
+      itemBuilder: (context, index) {
+        return Container(
+          alignment: AlignmentDirectional.center,
+          color: Colors.brown,
+          margin: isVertical
+              ? EdgeInsets.only(bottom: 1.0)
+              : EdgeInsets.only(right: 1.0),
+          constraints: isVertical
+              ? BoxConstraints.tightForFinite(height: 80.0)
+              : BoxConstraints.tightForFinite(width: 260.0),
+          child: _itemTitle(users[index]),
+        );
+      },
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      child: new Scaffold(
-      backgroundColor: Colors.grey[600],
-      body: SafeArea(
-        child: Container(
-          padding: EdgeInsets.all(20.0),
-          child: Column(
-            children: <Widget>[
-              Text("Le tue prenotazioni", style: TextStyle(color: Colors.white, fontSize: 35, fontWeight: FontWeight.bold),),
-              Container(
-                width: double.infinity,
-                height: 170,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    image: DecorationImage(
-                        image: AssetImage('assets/img/sport.png'),
-                        fit: BoxFit.fitHeight,
-                    )
-                ),
-                child: Container(
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      gradient: LinearGradient(
-                          begin: Alignment.bottomRight,
-                          colors: [
-                            Colors.black.withOpacity(.4),
-                            Colors.black.withOpacity(.2),
-                          ]
-                      )
-                  ),
-                ),
-              ),
-              SizedBox(height: 20,),
-              Expanded(
-                  child: GridView.count(
-                    crossAxisCount: 1,
-                    crossAxisSpacing: 2,
-                    mainAxisSpacing: 2,
-                    childAspectRatio: MediaQuery.of(context).size.height / 400,
-                    scrollDirection: Axis.vertical,
-                    children: _listItem.map((item) =>
-                        Container(
-                          height: 10,
-                          child: Card(
-                              color: Colors.red,
-                              elevation: 0,
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    image: DecorationImage(
-                                        image: AssetImage(item),
-                                        fit: BoxFit.cover
-                                    )
-                                ),
-                        child: Transform.translate(
-                          offset: Offset(50, -50),
-                        ),
-                      ),
-                    ))).toList(),
-                  )
-              )
-            ],
+      child: Scaffold(
+        appBar: AppBar(
+        backgroundColor: Colors.indigo,
+        leading: Builder(
+          builder: (context) => IconButton(
+            icon: Icon(Icons.arrow_back_outlined),
+            onPressed: onBackPressed,
           ),
+        ),
+      ),
+      body: Container(
+        constraints: _direction == Axis.vertical
+            ? null
+            : BoxConstraints.tightForFinite(height: 80.0),
+        child: Center(
+          child: _bodyContent(),
         ),
       ),
       ),
       onWillPop: onBackPressed,
     );
   }
-
 
   Future<bool> onBackPressed() {
     return Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
@@ -96,7 +165,4 @@ class _VisualizzaPrenotazioni extends State<VisualizzaPrenotazioni> {
       },
     ), (route) => false);
   }
-
 }
-
-

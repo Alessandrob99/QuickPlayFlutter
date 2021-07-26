@@ -1,7 +1,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:kf_drawer/kf_drawer.dart';
-import 'package:quickplay/pages/home_page.dart';
 
 import 'home_page_menu.dart';
 

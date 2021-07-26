@@ -205,10 +205,26 @@ class _MyHomePageState extends State<Home> {
           onTap: (){
             setState(() {
               _selectedIndex = index;
+
+              /**
+               * CREA PRENOTAZIONE
+               */
+
+
+              /**
+               * UNISCITI A PRENOTAZIONE
+               */
+
+
+              /**
+               * VISUALIZZA PRENOTAZIONI
+               */
               if(_selectedIndex == 1) //Visualizza prenotazioni
                   {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => VisualizzaPrenotazioni()));
               }
+
+
             });
           },
           child: Material(
