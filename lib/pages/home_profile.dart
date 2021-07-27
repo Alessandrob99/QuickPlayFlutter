@@ -1,6 +1,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:kf_drawer/kf_drawer.dart';
+import 'package:quickplay/ViewModel/Auth_Handler.dart';
+import 'package:quickplay/ViewModel/DB_Handler_Users.dart';
+import 'package:quickplay/pages/home_page.dart';
 
 import 'home_page_menu.dart';
 
@@ -171,8 +174,9 @@ class _ProfileScreenState extends State<Profile> with SingleTickerProviderStateM
                                 children: <Widget>[
                                   new Flexible(
                                     child: new TextField(
-                                      decoration: const InputDecoration(
-                                        hintText: "Nome",
+                                      controller : nomeController,
+                                      decoration: InputDecoration(
+                                        hintText: Auth_Handler.CURRENT_USER.nome.capitalize(),
                                       ),
                                       enabled: !_status,
                                       focusNode: focusNodeNome,
@@ -211,8 +215,9 @@ class _ProfileScreenState extends State<Profile> with SingleTickerProviderStateM
                                 children: <Widget>[
                                   new Flexible(
                                     child: new TextField(
-                                      decoration: const InputDecoration(
-                                          hintText: "Cognome"),
+                                      controller : cognomeController,
+                                      decoration: InputDecoration(
+                                          hintText: Auth_Handler.CURRENT_USER.cognome.capitalize()),
                                       enabled: !_status,
                                       focusNode: focusNodeCognome,
                                       onSubmitted: (_) {
@@ -250,8 +255,9 @@ class _ProfileScreenState extends State<Profile> with SingleTickerProviderStateM
                                 children: <Widget>[
                                   new Flexible(
                                     child: new TextField(
-                                      decoration: const InputDecoration(
-                                          hintText: "Cellulare"),
+                                      controller : cellulareController,
+                                      decoration: InputDecoration(
+                                          hintText: Auth_Handler.CURRENT_USER.telefono),
                                       enabled: !_status,
                                       focusNode: focusNodeCellulare,
                                     ),
@@ -289,8 +295,8 @@ class _ProfileScreenState extends State<Profile> with SingleTickerProviderStateM
                                     child: Padding(
                                       padding: EdgeInsets.only(right: 10.0),
                                       child: new TextField(
-                                        decoration: const InputDecoration(
-                                            hintText: "Email da prendere e non modificare"),
+                                        decoration: InputDecoration(
+                                            hintText: Auth_Handler.CURRENT_USER.email),
                                         enabled: false,
                                       ),
                                     ),
@@ -350,9 +356,13 @@ class _ProfileScreenState extends State<Profile> with SingleTickerProviderStateM
                     textColor: Colors.white,
                     color: Colors.green,
                     onPressed: () {
+                      showModificheDialog(context);
                       setState(() {
                         _status = true;
                         FocusScope.of(context).requestFocus(new FocusNode());
+                      });
+                      DB_Handler_Users.applyMod(nomeController.text, cognomeController.text, cellulareController.text, (){
+                        Navigator.pop(context);
                       });
                     },
                     shape: new RoundedRectangleBorder(
@@ -394,3 +404,21 @@ class _ProfileScreenState extends State<Profile> with SingleTickerProviderStateM
     ), (route) => false);
   }
 }
+
+showModificheDialog(BuildContext context){
+  AlertDialog alert=AlertDialog(
+    content: new Row(
+      children: [
+        CircularProgressIndicator(),
+        Container(margin: EdgeInsets.only(left: 7),child:Text("Salvando le modifiche..." )),
+      ],),
+  );
+  showDialog(barrierDismissible: false,
+    context:context,
+    builder:(BuildContext context){
+      return alert;
+    },
+  );
+}
+
+

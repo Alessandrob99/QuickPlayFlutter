@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:kf_drawer/kf_drawer.dart';
+import 'package:quickplay/ViewModel/Auth_Handler.dart';
 import 'package:quickplay/pages/home_page.dart';
 import 'package:quickplay/pages/home_players.dart';
 import 'package:quickplay/pages/home_profile.dart';
@@ -84,7 +85,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
                       backgroundImage: ExactAssetImage('assets/img/icon_profile.png'),
                     ),
                     Text(
-                      "Nome Cognome",
+                      Auth_Handler.CURRENT_USER.nome.capitalize()+" "+Auth_Handler.CURRENT_USER.cognome.capitalize(),
                       style: TextStyle(color: Colors.white, fontSize: 18),
                     ),
                     Text(
