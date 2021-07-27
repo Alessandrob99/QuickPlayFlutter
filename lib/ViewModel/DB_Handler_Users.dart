@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import "package:quickplay/models/models.dart";
 
+import 'Auth_Handler.dart';
+
 
 class DB_Handler_Users{
 
@@ -35,5 +37,24 @@ class DB_Handler_Users{
       'telefono':telefono
     });
   }
+
+
+  static applyMod(String nome,String cognome,String telefono,callBack()) async {
+    if(nome=="") nome = Auth_Handler.CURRENT_USER.nome;
+    if(cognome=="") cognome = Auth_Handler.CURRENT_USER.cognome;
+    if(telefono=="") telefono = Auth_Handler.CURRENT_USER.telefono;
+    await  myRef.collection("users").document(Auth_Handler.CURRENT_USER.email).updateData({
+      'email':Auth_Handler.CURRENT_USER.email,
+      'password':Auth_Handler.CURRENT_USER.password,
+      'nome':nome.toLowerCase(),
+      'cognome':cognome.toLowerCase(),
+      'telefono':telefono
+    });
+    Auth_Handler.CURRENT_USER.nome = nome;
+    Auth_Handler.CURRENT_USER.cognome = cognome;
+    Auth_Handler.CURRENT_USER.telefono = telefono;
+    callBack();
+  }
+
 
 }
