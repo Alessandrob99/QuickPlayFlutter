@@ -238,7 +238,7 @@ class _SignUpState extends State<SignUp> {
                       ),
                       Padding(
                         padding: const EdgeInsets.only(
-                            top: 5.0, bottom: 5.0, left: 25.0, right: 25.0),
+                            top: 5.0, bottom: 20.0, left: 25.0, right: 25.0),
                         child: TextField(
                           focusNode: focusNodeConfirmPassword,
                           controller: signupConfirmPasswordController,
@@ -273,7 +273,9 @@ class _SignUpState extends State<SignUp> {
                           },
                           textInputAction: TextInputAction.go,
                         ),
+
                       ),
+
                       Container(
                           decoration: const BoxDecoration(
                           borderRadius: BorderRadius.all(Radius.circular(5.0)),
@@ -307,10 +309,10 @@ class _SignUpState extends State<SignUp> {
                             padding: EdgeInsets.symmetric(
                                 vertical: 10.0, horizontal: 42.0),
                             child: Text(
-                              'SIGN UP',
+                              'Conferma',
                               style: TextStyle(
                                   color: Colors.white,
-                                  fontSize: 25.0,
+                                  fontSize: 20.0,
                                   fontFamily: 'WorkSansBold'),
                             ),
                           ),

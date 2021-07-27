@@ -138,7 +138,7 @@ class _ListState extends State<VisualizzaPrenotazioni> {
       itemBuilder: (context, index) {
         return Container(
           alignment: AlignmentDirectional.center,
-          color: Colors.brown,
+          color: Colors.white,
           margin: isVertical
               ? EdgeInsets.only(bottom: 1.0)
               : EdgeInsets.only(right: 1.0),

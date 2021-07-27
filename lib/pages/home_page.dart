@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kf_drawer/kf_drawer.dart';
 import 'package:quickplay/ViewModel/Auth_Handler.dart';
+import 'package:quickplay/pages/effettua_prenotazione.dart';
 import 'package:quickplay/pages/visualizza_prenotazioni.dart';
 import 'package:quickplay/utils/dialog_helper.dart';
 
@@ -210,6 +211,10 @@ class _MyHomePageState extends State<Home> {
               /**
                * CREA PRENOTAZIONE
                */
+              if(_selectedIndex == 0)
+                {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => EffettuaPrenotazione()));
+                }
 
 
               /**

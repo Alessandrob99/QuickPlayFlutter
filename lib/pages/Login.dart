@@ -6,7 +6,7 @@ import 'package:quickplay/pages/register_page.dart';
 import 'package:quickplay/utils/constants.dart';
 import 'package:quickplay/widgets/snackbar.dart';
 
-import '../home_page_menu.dart';
+import 'home_page_menu.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -58,9 +58,9 @@ class _LoginScreenState extends State<LoginScreen> {
               hintText: 'Email',
               hintStyle: kHintTextStyle,
             ),
-            onSubmitted: (_) {
-              focusNodePassword.requestFocus();
-            },
+              onSubmitted: (_) {
+                focusNodePassword.requestFocus();
+              },
           ),
         ),
       ],
@@ -104,10 +104,10 @@ class _LoginScreenState extends State<LoginScreen> {
               hintText: 'Password',
               hintStyle: kHintTextStyle,
             ),
-            onSubmitted: (_) {
-              _toggleSignInButton();
-            },
-            textInputAction: TextInputAction.go,
+              onSubmitted: (_) {
+                _toggleSignInButton();
+              },
+              textInputAction: TextInputAction.go,
           ),
         ),
       ],
@@ -161,9 +161,9 @@ class _LoginScreenState extends State<LoginScreen> {
       width: double.infinity,
       child: RaisedButton(
         elevation: 5.0,
-        onPressed: () {
-          _LoginButton();
-        },
+          onPressed: () {
+            _LoginButton();
+          },
         padding: EdgeInsets.all(15.0),
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(30.0),
@@ -233,13 +233,13 @@ class _LoginScreenState extends State<LoginScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           _buildSocialBtn(
-                () => print('Login with Facebook'),
+            () => print('Login with Facebook'),
             AssetImage(
               'assets/logos/facebook.jpg',
             ),
           ),
           _buildSocialBtn(
-                () => print('Login with Google'),
+            () => print('Login with Google'),
             AssetImage(
               'assets/logos/google.jpg',
             ),
@@ -297,18 +297,25 @@ class _LoginScreenState extends State<LoginScreen> {
                   physics: AlwaysScrollableScrollPhysics(),
                   padding: EdgeInsets.symmetric(
                     horizontal: 40.0,
-                    vertical: 20.0,
+                    vertical: 0.0,
                   ),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-
+                      SizedBox(height: 30.0),
+                      Image(
+                          height: MediaQuery.of(context).size.height > 800
+                              ? 191.0
+                              : 150,
+                          fit: BoxFit.fill,
+                          image:
+                              const AssetImage('assets/img/quickplaylogo.PNG')),
                       SizedBox(height: 30.0),
                       Card(
                           elevation: 2.0,
                           color: Colors.white, //Colore interno
                           shape: new RoundedRectangleBorder(
-                            //Colore del bordo
+                              //Colore del bordo
                               side: new BorderSide(
                                   color: Colors.black26, width: 2.0),
                               borderRadius: BorderRadius.circular(8.0)),

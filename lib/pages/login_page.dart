@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quickplay/pages/register_page.dart';
 import 'package:quickplay/pages/widget/sign_in.dart';
 import 'package:quickplay/pages/widget/sign_up.dart';
 import 'package:quickplay/theme.dart';
@@ -93,11 +94,11 @@ class _LoginPageState extends State<LoginPage>
                       children: <Widget>[
                         ConstrainedBox(
                           constraints: const BoxConstraints.expand(),
-                          child: const SignIn(),
+                          child:  LoginScreen(),
                         ),
                         ConstrainedBox(
                           constraints: const BoxConstraints.expand(),
-                          child: const SignUp(),
+                          child: Register(),
                         ),
                       ],
                     ),
@@ -167,13 +168,13 @@ class _LoginPageState extends State<LoginPage>
   void _onSignInButtonPress() {
     //Cambia pagina con un'animazione
     _pageController.animateToPage(0,
-        duration: const Duration(milliseconds: 500), curve: Curves.decelerate);
+        duration: const Duration(milliseconds: 600), curve: Curves.decelerate);
   }
 
   void _onSignUpButtonPress() {
     //Cambia pagina con un'animazione
     _pageController?.animateToPage(1,
-        duration: const Duration(milliseconds: 500), curve: Curves.decelerate);
+        duration: const Duration(milliseconds: 600), curve: Curves.decelerate);
   }
 }
 
