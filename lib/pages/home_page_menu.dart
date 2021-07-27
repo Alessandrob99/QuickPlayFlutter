@@ -6,6 +6,7 @@ import 'package:quickplay/pages/home_page.dart';
 import 'package:quickplay/pages/home_players.dart';
 import 'package:quickplay/pages/home_profile.dart';
 import 'package:quickplay/utils/dialog_helper.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DrawerScreen extends StatefulWidget {
   @override
@@ -14,6 +15,8 @@ class DrawerScreen extends StatefulWidget {
 
 class _DrawerScreenState extends State<DrawerScreen> {
   KFDrawerController _drawerController;
+  SharedPreferences logindata;
+
 
   @override
   void initState() {

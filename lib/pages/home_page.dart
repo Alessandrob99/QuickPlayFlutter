@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:kf_drawer/kf_drawer.dart';
 import 'package:quickplay/ViewModel/Auth_Handler.dart';
+import 'package:quickplay/pages/Login.dart';
 import 'package:quickplay/pages/effettua_prenotazione.dart';
 import 'package:quickplay/pages/visualizza_prenotazioni.dart';
 import 'package:quickplay/utils/dialog_helper.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 class Home extends KFDrawerContent {
@@ -25,9 +27,12 @@ class EmptyAppBar extends StatelessWidget implements PreferredSizeWidget {
 }
 
 class _MyHomePageState extends State<Home> {
+
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
+      onWillPop: onBackPressed,
       child: Scaffold(
       primary: false,
       appBar:PreferredSize(
@@ -167,9 +172,15 @@ class _MyHomePageState extends State<Home> {
         ],
       ),
       ),
-      onWillPop: () async {
-        return await DialogHelper.exit(context);},
-    );
+      );
+  }
+
+  Future<bool> onBackPressed() {
+    return Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
+      builder: (context) {
+        return LoginScreen();
+      },
+    ), (route) => false);
   }
 
 

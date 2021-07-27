@@ -5,16 +5,24 @@ import 'package:quickplay/ViewModel/Auth_Handler.dart';
 import 'package:quickplay/pages/register_page.dart';
 import 'package:quickplay/utils/constants.dart';
 import 'package:quickplay/widgets/snackbar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'home_page_menu.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
   _LoginScreenState createState() => _LoginScreenState();
+
+
 }
+
 
 class _LoginScreenState extends State<LoginScreen> {
   bool _rememberMe = false;
+  bool newUser;
+  SharedPreferences logindata;
+  SharedPreferences loginpw;
+
   TextEditingController loginEmailController = TextEditingController();
   TextEditingController loginPasswordController = TextEditingController();
 
@@ -29,6 +37,20 @@ class _LoginScreenState extends State<LoginScreen> {
     focusNodePassword.dispose();
     super.dispose();
   }
+
+  @override
+  void initState()
+  {
+    super.initState();
+    check();
+  }
+
+  void check() async
+  {
+    logindata = await SharedPreferences.getInstance();
+    loginpw = await SharedPreferences.getInstance();
+  }
+
 
 
   Widget _buildEmailTF() {
@@ -226,56 +248,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Widget _buildSocialBtnRow() {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: 30.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          _buildSocialBtn(
-            () => print('Login with Facebook'),
-            AssetImage(
-              'assets/logos/facebook.jpg',
-            ),
-          ),
-          _buildSocialBtn(
-            () => print('Login with Google'),
-            AssetImage(
-              'assets/logos/google.jpg',
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 
-  Widget _buildSignupBtn() {
-    return GestureDetector(
-      onTap: () => print('Sign Up Button Pressed'),
-      child: RichText(
-        text: TextSpan(
-          children: [
-            TextSpan(
-              text: 'Don\'t have an Account? ',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 18.0,
-                fontWeight: FontWeight.w400,
-              ),
-            ),
-            TextSpan(
-              text: 'Sign Up',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 18.0,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -411,7 +384,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   //Metodo per il click del bottone da touch
-  void _LoginButton(){
+  Future<void> _LoginButton() async {
     if(loginEmailController.text == "" || loginPasswordController.text == "" || (loginEmailController.text =="" && loginPasswordController.text == ""))
     {
       CustomSnackBar(context, const Text("Inserisci le credenziali d'accesso"));
@@ -437,6 +410,16 @@ class _LoginScreenState extends State<LoginScreen> {
             });
       }
     }
+
+    if(_rememberMe == true)
+      {
+        print("ok");
+        logindata.setBool('login', false);
+        logindata.setString('Email', loginEmailController.text.toString());
+        loginpw.setString('Password', loginPasswordController.text.toString());
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginScreen()));
+      }
+
   }
 
   void _toggleLogin() {
