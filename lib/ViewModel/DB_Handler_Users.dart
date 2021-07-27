@@ -24,4 +24,16 @@ class DB_Handler_Users{
     });
   }
 
+  static newUser(String email,String password,String nome,String cognome,String telefono){
+    var nomeSafe = nome.replaceAll(" ","");
+    var cognomeSafe = cognome.replaceAll(" ", "");
+    myRef.collection("users").document(email).setData({
+      'email':email,
+      'password':password,
+      'nome':nomeSafe,
+      'cognome':cognomeSafe,
+      'telefono':telefono
+    });
+  }
+
 }

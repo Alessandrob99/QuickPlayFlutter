@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:quickplay/ViewModel/Auth_Handler.dart';
+import 'package:quickplay/ViewModel/DB_Handler_Users.dart';
 import 'package:quickplay/theme.dart';
 import 'package:quickplay/widgets/snackbar.dart';
 
@@ -326,6 +328,64 @@ class _SignUpState extends State<SignUp> {
     );
   }
 
+
+  void showRegistrationDialog(BuildContext context) {
+    showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Operazione conclusa",),
+            content: Text("Account registrato con successo.\nAbbiamo inviato una mail all'account:\n"+signupEmailController.text+"\nCliccare sul link per attivare l'account.\n(CONTROLLARE CHE LA MAIL NON SIA FINITA NELLO SPAM)"),
+            //buttons?
+            actions: <Widget>[
+              FlatButton(
+                child: Text("OK"),
+                onPressed: () { Navigator.of(context).pop(); }, //closes popup
+              ),
+            ],
+          );
+        }
+    );
+  }
+
+
+  void showTegistrationErrorDialog(BuildContext context, String msg) {
+    showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Errore",),
+            content: Text(msg),
+            //buttons?
+            actions: <Widget>[
+              FlatButton(
+                child: Text("Riprova"),
+                onPressed: () { Navigator.of(context).pop(); }, //closes popup
+              ),
+            ],
+          );
+        }
+    );
+  }
+
+  showCheckCredenzialiDialog(BuildContext context){
+    AlertDialog alert=AlertDialog(
+      content: new Row(
+        children: [
+          CircularProgressIndicator(),
+          Container(margin: EdgeInsets.only(left: 7),child:Text("Controllando le credenziali..." )),
+        ],),
+    );
+    showDialog(barrierDismissible: false,
+      context:context,
+      builder:(BuildContext context){
+        return alert;
+      },
+    );
+  }
+
   void _toggleSignUpButton() {
     if(signupNameController.text == "" || signupCognomeController.text == "" || signupEmailController.text == "" ||
     signupConfirmTelController.text == "" || signupPasswordController.text == "" || signupConfirmPasswordController.text == "")
@@ -335,7 +395,17 @@ class _SignUpState extends State<SignUp> {
     else if(signupPasswordController.text != signupConfirmPasswordController.text)
       {
         CustomSnackBar(context, const Text('Le password non combaciano'));
-      }
+      } else {
+
+      Auth_Handler.FireBaseRegistration(signupEmailController.text, signupPasswordController.text, signupNameController.text, signupCognomeController.text, signupConfirmTelController.text, (result, msg){
+        if(result){
+            DB_Handler_Users.newUser(signupEmailController.text, signupPasswordController.text, signupNameController.text, signupCognomeController.text, signupConfirmTelController.text);
+            showRegistrationDialog(context);
+        }else{
+          CustomSnackBar(context, Text(msg));
+        }
+      });
+    }
 
   }
 
@@ -343,6 +413,10 @@ class _SignUpState extends State<SignUp> {
     setState(() {
       _obscureTextPassword = !_obscureTextPassword;
     });
+
+
+
+
   }
 
   void _toggleSignupConfirm() {

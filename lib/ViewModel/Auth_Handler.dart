@@ -65,10 +65,15 @@ class Auth_Handler{
 
   static FireBaseLogin(bool ricordami,BuildContext context,String email,String password,myCallBack(bool result,String msg)) async{
        try{
-         await firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
-         setLOGGED_IN_Context(context, ricordami, email, password, (result) {
-           myCallBack(true, "");
-         });
+         var user = await firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
+         if(user.user.isEmailVerified){
+           setLOGGED_IN_Context(context, ricordami, email, password, (result) {
+             myCallBack(true, "");
+           });
+         }else{
+           myCallBack(false, "L'account non è stato verificato.");
+         }
+
        }catch (e){
          switch(e.code){
            case  "ERROR_INVALID_EMAIL" :
@@ -93,6 +98,29 @@ class Auth_Handler{
              myCallBack(false,"Errore durante il Login.");
          }
        };
+  }
+
+  static FireBaseRegistration(String email,String password,String nome,String cognome,String telefono,myCallBack(bool result,String msg)) async {
+    try{
+      var user = await firebaseAuth.createUserWithEmailAndPassword(email: email, password: password);
+      user.user.sendEmailVerification();
+      //Aggiungere invio mail
+      myCallBack(true,"");
+    }catch(e){
+      switch(e.code){
+        case  "ERROR_INVALID_EMAIL" :
+          myCallBack(false,"L'email non è scritta correttamente.");
+          break;
+        case  "ERROR_EMAIL_ALREADY_IN_USE" :
+          myCallBack(false,"L'email è già in uso.");
+          break;
+        case  "ERROR_WEAK_PASSWORD" :
+          myCallBack(false,"Scegliere una password migliore.");
+          break;
+        default :
+          myCallBack(false,"Errore durante la registrazione.");
+      }
+    }
 
   }
 

@@ -235,11 +235,29 @@ class _SignInState extends State<SignIn> {
     if(loginEmailController.text == "" || loginPasswordController.text == "" || (loginEmailController.text =="" && loginPasswordController.text == ""))
     {
       CustomSnackBar(context, const Text("Inserisci le credenziali d'accesso"));
-    }else
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => DrawerScreen()),
-      );
+    }else {
+      //Check della presenza di credenziali
+      if(loginEmailController.text!="" && loginPasswordController.text!=""){
+        showCheckCredenzialiDialog(context);
+        //CheckCredenziali corrette
+        Auth_Handler.FireBaseLogin(true, context, loginEmailController.text, loginPasswordController.text, (result, msg){
+
+          if(result){
+            //Credenziali corrette -> Facciamo partire la homePage
+            Navigator.pop(context);
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => DrawerScreen()),
+            );
+          }else{
+            Navigator.pop(context);
+            CustomSnackBar(context, Text(msg));
+          }
+
+        });
+
+      }
+    }
   }
 
   //Metodo per il click del bottone da touch
@@ -247,51 +265,28 @@ class _SignInState extends State<SignIn> {
     if(loginEmailController.text == "" || loginPasswordController.text == "" || (loginEmailController.text =="" && loginPasswordController.text == ""))
       {
         CustomSnackBar(context, const Text("Inserisci le credenziali d'accesso"));
-      }
-    else
-
+      } else {
       //Check della presenza di credenziali
-    if(loginEmailController.text!="" && loginPasswordController.text!=""){
-      showCheckCredenzialiDialog(context);
-      //CheckCredenziali corrette
-      Auth_Handler.FireBaseLogin(true, context, loginEmailController.text, loginPasswordController.text, (result, msg){
-
-        if(result){
-          //Credenziali corrette -> Facciamo partire la homePage
-          Navigator.pop(context);
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => DrawerScreen()),
-          );
-        }else{
-          Navigator.pop(context);
-          showLoginErrorDialog(context,msg);
-        }
-
-      });
-
-
-
-
-      /*Auth_Handler.setLOGGED_IN_Context(context, true, loginEmailController.text, loginPasswordController.text, (result){
-        //
-        if(result){
-          //Utente trovato - Credenziali giuste
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text("Credenziali giuste"),
-          ));
-        }else{
-          //Utente non esistente o credenziali errate
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text("Credenziali errate"),
-          ));
-        }
-
-      });*/
+      if (loginEmailController.text != "" &&
+          loginPasswordController.text != "") {
+        showCheckCredenzialiDialog(context);
+        //CheckCredenziali corrette
+        Auth_Handler.FireBaseLogin(true, context, loginEmailController.text,
+            loginPasswordController.text, (result, msg) {
+              if (result) {
+                //Credenziali corrette -> Facciamo partire la homePage
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => DrawerScreen()),
+                );
+              } else {
+                Navigator.pop(context);
+                CustomSnackBar(context, Text(msg));
+              }
+            });
+      }
     }
-
-
-
   }
 
   void _toggleLogin() {
