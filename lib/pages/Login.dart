@@ -47,8 +47,12 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void check() async
   {
-    logindata = await SharedPreferences.getInstance();
-    loginpw = await SharedPreferences.getInstance();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if(prefs.getString("email")!=""){
+      loginEmailController.text = prefs.getString("email");
+      loginPasswordController.text = prefs.getString("password");
+      _rememberMe = true;
+    }
   }
 
 
@@ -161,7 +165,12 @@ class _LoginScreenState extends State<LoginScreen> {
               value: _rememberMe,
               checkColor: Colors.green,
               activeColor: Colors.white,
-              onChanged: (value) {
+              onChanged: (value) async {
+                if(!value){
+                  SharedPreferences prefs = await SharedPreferences.getInstance();
+                  prefs.setString("email", "");
+                  prefs.setString("password", "");
+                }
                 setState(() {
                   _rememberMe = value;
                 });
@@ -183,7 +192,7 @@ class _LoginScreenState extends State<LoginScreen> {
       width: double.infinity,
       child: RaisedButton(
         elevation: 5.0,
-          onPressed: () {
+          onPressed: (){
             _LoginButton();
           },
         padding: EdgeInsets.all(15.0),
@@ -363,7 +372,7 @@ class _LoginScreenState extends State<LoginScreen> {
       if(loginEmailController.text!="" && loginPasswordController.text!=""){
         showCheckCredenzialiDialog(context);
         //CheckCredenziali corrette
-        Auth_Handler.FireBaseLogin(true, context, loginEmailController.text, loginPasswordController.text, (result, msg){
+        Auth_Handler.FireBaseLogin(_rememberMe, context, loginEmailController.text, loginPasswordController.text, (result, msg){
 
           if(result){
             //Credenziali corrette -> Facciamo partire la homePage
@@ -394,7 +403,7 @@ class _LoginScreenState extends State<LoginScreen> {
           loginPasswordController.text != "") {
         showCheckCredenzialiDialog(context);
         //CheckCredenziali corrette
-        Auth_Handler.FireBaseLogin(true, context, loginEmailController.text,
+        Auth_Handler.FireBaseLogin(_rememberMe, context, loginEmailController.text,
             loginPasswordController.text, (result, msg) {
               if (result) {
                 //Credenziali corrette -> Facciamo partire la homePage
@@ -410,15 +419,6 @@ class _LoginScreenState extends State<LoginScreen> {
             });
       }
     }
-
-    if(_rememberMe == true)
-      {
-        print("ok");
-        logindata.setBool('login', false);
-        logindata.setString('Email', loginEmailController.text.toString());
-        loginpw.setString('Password', loginPasswordController.text.toString());
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginScreen()));
-      }
 
   }
 

@@ -5,6 +5,7 @@ import 'package:quickplay/ViewModel/Auth_Handler.dart';
 import 'package:quickplay/pages/register_page.dart';
 import 'package:quickplay/utils/constants.dart';
 import 'package:quickplay/widgets/snackbar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../home_page_menu.dart';
 
@@ -17,6 +18,7 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _rememberMe = false;
   TextEditingController loginEmailController = TextEditingController();
   TextEditingController loginPasswordController = TextEditingController();
+
 
   final FocusNode focusNodeEmail = FocusNode();
   final FocusNode focusNodePassword = FocusNode();
@@ -77,6 +79,7 @@ class _LoginScreenState extends State<LoginScreen> {
           decoration: kBoxDecorationStyle,
           height: 60.0,
           child: TextField(
+
             focusNode: focusNodePassword,
             controller: loginPasswordController,
             obscureText: _obscureTextPassword,
@@ -139,7 +142,7 @@ class _LoginScreenState extends State<LoginScreen> {
               value: _rememberMe,
               checkColor: Colors.green,
               activeColor: Colors.white,
-              onChanged: (value) {
+              onChanged: (value) async {
                 setState(() {
                   _rememberMe = value;
                 });
@@ -383,7 +386,7 @@ class _LoginScreenState extends State<LoginScreen> {
       if(loginEmailController.text!="" && loginPasswordController.text!=""){
         showCheckCredenzialiDialog(context);
         //CheckCredenziali corrette
-        Auth_Handler.FireBaseLogin(true, context, loginEmailController.text, loginPasswordController.text, (result, msg){
+        Auth_Handler.FireBaseLogin(_rememberMe, context, loginEmailController.text, loginPasswordController.text, (result, msg){
 
           if(result){
             //Credenziali corrette -> Facciamo partire la homePage
@@ -414,11 +417,12 @@ class _LoginScreenState extends State<LoginScreen> {
           loginPasswordController.text != "") {
         showCheckCredenzialiDialog(context);
         //CheckCredenziali corrette
-        Auth_Handler.FireBaseLogin(true, context, loginEmailController.text,
-            loginPasswordController.text, (result, msg) {
+        Auth_Handler.FireBaseLogin(_rememberMe, context, loginEmailController.text,
+            loginPasswordController.text, (result, msg)  {
               if (result) {
                 //Credenziali corrette -> Facciamo partire la homePage
                 Navigator.pop(context);
+
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => DrawerScreen()),

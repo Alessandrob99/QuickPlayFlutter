@@ -17,15 +17,6 @@ class Auth_Handler{
   static User CURRENT_USER  = null;
 
 
-  static testFunction(Function func){
-    //Qualcosa che prende tempo
-    Future.delayed(const Duration(milliseconds: 5000), () {
-
-      func();//faccio questa roba appena ho finito le cose sopra
-
-    });
-
-  }
 
   static setLOGGED_IN(){
     LOGGED_IN = true;

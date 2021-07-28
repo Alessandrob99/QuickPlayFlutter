@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:quickplay/pages/register_page.dart';
 import 'package:quickplay/pages/widget/sign_in.dart';
-import 'package:quickplay/pages/widget/sign_up.dart';
 import 'package:quickplay/theme.dart';
 import 'package:quickplay/utils/bubble_indicator_painter.dart';
 
