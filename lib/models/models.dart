@@ -22,3 +22,15 @@ class User {
     'telefono': telefono,
   };
 }
+
+
+class Prenotazione
+{
+
+  String id;
+  String prenotatore;
+  DateTime oraInizio;
+  DateTime oraFine;
+
+  Prenotazione(this.id, this.prenotatore, this.oraInizio, this.oraFine);
+}
