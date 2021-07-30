@@ -28,8 +28,6 @@ dependencies:
   kf_drawer:
   drawerbehavior:
 
-
-
   firebase_core: ^0.4.0+9
 
     # Add the dependency for the FlutterFire plugin for Google Analytics

@@ -26,8 +26,10 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController loginEmailController = TextEditingController();
   TextEditingController loginPasswordController = TextEditingController();
 
+
   final FocusNode focusNodeEmail = FocusNode();
   final FocusNode focusNodePassword = FocusNode();
+
 
   bool _obscureTextPassword = true;
 
@@ -39,8 +41,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   @override
-  void initState()
-  {
+  void initState() {
     super.initState();
     check();
   }
@@ -48,13 +49,12 @@ class _LoginScreenState extends State<LoginScreen> {
   void check() async
   {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    if(prefs.getString("email")!=""){
+    if (prefs.getString("email") != "") {
       loginEmailController.text = prefs.getString("email");
       loginPasswordController.text = prefs.getString("password");
       _rememberMe = true;
     }
   }
-
 
 
   Widget _buildEmailTF() {
@@ -84,9 +84,9 @@ class _LoginScreenState extends State<LoginScreen> {
               hintText: 'Email',
               hintStyle: kHintTextStyle,
             ),
-              onSubmitted: (_) {
-                focusNodePassword.requestFocus();
-              },
+            onSubmitted: (_) {
+              focusNodePassword.requestFocus();
+            },
           ),
         ),
       ],
@@ -130,10 +130,10 @@ class _LoginScreenState extends State<LoginScreen> {
               hintText: 'Password',
               hintStyle: kHintTextStyle,
             ),
-              onSubmitted: (_) {
-                _toggleSignInButton();
-              },
-              textInputAction: TextInputAction.go,
+            onSubmitted: (_) {
+              _toggleSignInButton();
+            },
+            textInputAction: TextInputAction.go,
           ),
         ),
       ],
@@ -144,7 +144,9 @@ class _LoginScreenState extends State<LoginScreen> {
     return Container(
       alignment: Alignment.centerLeft,
       child: FlatButton(
-        onPressed: () => print("Metodo da fare"),
+        onPressed: () {
+          _displayTextInputDialog(context);
+        },
         child: Text(
           'Password dimenticata?',
           style: kLabelStyle,
@@ -166,8 +168,9 @@ class _LoginScreenState extends State<LoginScreen> {
               checkColor: Colors.green,
               activeColor: Colors.white,
               onChanged: (value) async {
-                if(!value){
-                  SharedPreferences prefs = await SharedPreferences.getInstance();
+                if (!value) {
+                  SharedPreferences prefs = await SharedPreferences
+                      .getInstance();
                   prefs.setString("email", "");
                   prefs.setString("password", "");
                 }
@@ -192,9 +195,9 @@ class _LoginScreenState extends State<LoginScreen> {
       width: double.infinity,
       child: RaisedButton(
         elevation: 5.0,
-          onPressed: (){
-            _LoginButton();
-          },
+        onPressed: () {
+          _LoginButton();
+        },
         padding: EdgeInsets.all(15.0),
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(30.0),
@@ -226,7 +229,9 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
         SizedBox(height: 20.0),
         FlatButton(
-          onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => Register())),
+          onPressed: () =>
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => Register())),
           child: Text('REGISTRATI', style: kLabelStyle),
         )
       ],
@@ -258,7 +263,6 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -286,18 +290,21 @@ class _LoginScreenState extends State<LoginScreen> {
                     children: <Widget>[
                       SizedBox(height: 30.0),
                       Image(
-                          height: MediaQuery.of(context).size.height > 800
+                          height: MediaQuery
+                              .of(context)
+                              .size
+                              .height > 800
                               ? 191.0
                               : 150,
                           fit: BoxFit.fill,
                           image:
-                              const AssetImage('assets/img/quickplaylogo.PNG')),
+                          const AssetImage('assets/img/quickplaylogo.PNG')),
                       SizedBox(height: 30.0),
                       Card(
                           elevation: 2.0,
                           color: Colors.white, //Colore interno
                           shape: new RoundedRectangleBorder(
-                              //Colore del bordo
+                            //Colore del bordo
                               side: new BorderSide(
                                   color: Colors.black26, width: 2.0),
                               borderRadius: BorderRadius.circular(8.0)),
@@ -338,7 +345,9 @@ class _LoginScreenState extends State<LoginScreen> {
             actions: <Widget>[
               FlatButton(
                 child: Text("Riprova"),
-                onPressed: () { Navigator.of(context).pop(); }, //closes popup
+                onPressed: () {
+                  Navigator.of(context).pop();
+                }, //closes popup
               ),
             ],
           );
@@ -346,17 +355,46 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  showCheckCredenzialiDialog(BuildContext context){
-    AlertDialog alert=AlertDialog(
+  _displayTextInputDialog(BuildContext context) {
+
+    TextEditingController emailResetPasswordController = TextEditingController();
+
+    showDialog(context: context, barrierDismissible: true,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('Inserisci email di recupero'),
+            content: Column(
+              children: [
+                TextField(
+
+                  controller: emailResetPasswordController,
+                  decoration: InputDecoration(hintText: "Email"),
+                ),
+                FlatButton(
+                  onPressed: () async {
+                    Navigator.pop(context);
+                    sendValidationEmail(emailResetPasswordController.text);
+                  },
+                  child: Text("Invia"),)
+              ],
+            ),
+
+          );
+        });
+  }
+
+  showCheckCredenzialiDialog(BuildContext context) {
+    AlertDialog alert = AlertDialog(
       content: new Row(
         children: [
           CircularProgressIndicator(),
-          Container(margin: EdgeInsets.only(left: 7),child:Text("Controllando le credenziali..." )),
+          Container(margin: EdgeInsets.only(left: 7),
+              child: Text("Controllando le credenziali...")),
         ],),
     );
     showDialog(barrierDismissible: false,
-      context:context,
-      builder:(BuildContext context){
+      context: context,
+      builder: (BuildContext context) {
         return alert;
       },
     );
@@ -364,38 +402,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
   //Metodo per l'invio dalla tastiera.
   void _toggleSignInButton() {
-    if(loginEmailController.text == "" || loginPasswordController.text == "" || (loginEmailController.text =="" && loginPasswordController.text == ""))
-    {
-      CustomSnackBar(context, const Text("Inserisci le credenziali d'accesso"));
-    }else {
-      //Check della presenza di credenziali
-      if(loginEmailController.text!="" && loginPasswordController.text!=""){
-        showCheckCredenzialiDialog(context);
-        //CheckCredenziali corrette
-        Auth_Handler.FireBaseLogin(_rememberMe, context, loginEmailController.text, loginPasswordController.text, (result, msg){
-
-          if(result){
-            //Credenziali corrette -> Facciamo partire la homePage
-            Navigator.pop(context);
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => DrawerScreen()),
-            );
-          }else{
-            Navigator.pop(context);
-            CustomSnackBar(context, Text(msg));
-          }
-
-        });
-
-      }
-    }
-  }
-
-  //Metodo per il click del bottone da touch
-  Future<void> _LoginButton() async {
-    if(loginEmailController.text == "" || loginPasswordController.text == "" || (loginEmailController.text =="" && loginPasswordController.text == ""))
-    {
+    if (loginEmailController.text == "" || loginPasswordController.text == "" ||
+        (loginEmailController.text == "" &&
+            loginPasswordController.text == "")) {
       CustomSnackBar(context, const Text("Inserisci le credenziali d'accesso"));
     } else {
       //Check della presenza di credenziali
@@ -403,23 +412,54 @@ class _LoginScreenState extends State<LoginScreen> {
           loginPasswordController.text != "") {
         showCheckCredenzialiDialog(context);
         //CheckCredenziali corrette
-        Auth_Handler.FireBaseLogin(_rememberMe, context, loginEmailController.text,
+        Auth_Handler.FireBaseLogin(
+            _rememberMe, context, loginEmailController.text,
             loginPasswordController.text, (result, msg) {
-              if (result) {
-                //Credenziali corrette -> Facciamo partire la homePage
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => DrawerScreen()),
-                );
-              } else {
-                Navigator.pop(context);
-                CustomSnackBar(context, Text(msg));
-              }
-            });
+          if (result) {
+            //Credenziali corrette -> Facciamo partire la homePage
+            Navigator.pop(context);
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => DrawerScreen()),
+            );
+          } else {
+            Navigator.pop(context);
+            CustomSnackBar(context, Text(msg));
+          }
+        });
       }
     }
+  }
 
+  //Metodo per il click del bottone da touch
+  Future<void> _LoginButton() async {
+    if (loginEmailController.text == "" || loginPasswordController.text == "" ||
+        (loginEmailController.text == "" &&
+            loginPasswordController.text == "")) {
+      CustomSnackBar(context, const Text("Inserisci le credenziali d'accesso"));
+    } else {
+      //Check della presenza di credenziali
+      if (loginEmailController.text != "" &&
+          loginPasswordController.text != "") {
+        showCheckCredenzialiDialog(context);
+        //CheckCredenziali corrette
+        Auth_Handler.FireBaseLogin(
+            _rememberMe, context, loginEmailController.text,
+            loginPasswordController.text, (result, msg) {
+          if (result) {
+            //Credenziali corrette -> Facciamo partire la homePage
+            Navigator.pop(context);
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => DrawerScreen()),
+            );
+          } else {
+            Navigator.pop(context);
+            CustomSnackBar(context, Text(msg));
+          }
+        });
+      }
+    }
   }
 
   void _toggleLogin() {
@@ -427,4 +467,24 @@ class _LoginScreenState extends State<LoginScreen> {
       _obscureTextPassword = !_obscureTextPassword;
     });
   }
+
+
+  Future<void> sendValidationEmail(String email) async {
+    try {
+      await Auth_Handler.firebaseAuth.sendPasswordResetEmail(email : email);
+    } catch (e) {
+      switch (e.code) {
+        case "ERROR_INVALID_EMAIL" :
+          CustomSnackBar(context, const Text("Indirizzo email non valido."));
+          break;
+        case "ERROR_USER_NOT_FOUND":
+          CustomSnackBar(context, const Text("La mail inserita non è legata a nessun account."));
+          break;
+        default :
+          CustomSnackBar(context, const Text("Errore durante l'invio della mail."));
+          break;
+      }
+    }
+  }
+
 }
