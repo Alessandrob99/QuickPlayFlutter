@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:kf_drawer/kf_drawer.dart';
 import 'package:quickplay/ViewModel/Auth_Handler.dart';
+import 'package:quickplay/ViewModel/DB_Handler_Reservations.dart';
+import 'package:quickplay/ViewModel/DB_Handler_Users.dart';
+import 'package:quickplay/models/models.dart';
 import 'package:quickplay/pages/Login.dart';
 import 'package:quickplay/pages/effettua_prenotazione.dart';
 import 'package:quickplay/pages/visualizza_prenotazioni.dart';
@@ -215,34 +218,45 @@ class _MyHomePageState extends State<Home> {
       child: Container(
         width: MediaQuery.of(context).size.width,
         child: GestureDetector(
-          onTap: (){
-            setState(() {
-              _selectedIndex = index;
+          onTap: () async {
+            _selectedIndex = index;
 
-              /**
-               * CREA PRENOTAZIONE
-               */
-              if(_selectedIndex == 0)
+            /**
+             * CREA PRENOTAZIONE
+             */
+            if(_selectedIndex == 0)
+            {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => EffettuaPrenotazione()));
+            }
+
+
+
+
+            /**
+             * VISUALIZZA PRENOTAZIONI
+             */
+            if(_selectedIndex == 1) //Visualizza prenotazioni
                 {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => EffettuaPrenotazione()));
-                }
+              //Leggo i dati
+              List<LayoutInfo> layoutData = [];
+              var prenotazioni = await DB_Handler_Users.getReservations(Auth_Handler.CURRENT_USER.email);
+              await Future.forEach(prenotazioni,(element) async {
+                LayoutInfo info = await DB_Handler_Reservations.getReservationLayoutInfo(element );
+                layoutData.add(info);
+
+              });
+
+              Navigator.push(context, MaterialPageRoute(builder: (context) => VisualizzaPrenotazioni(layoutData)));
+            }
 
 
-              /**
-               * UNISCITI A PRENOTAZIONE
-               */
+            /**
+             * UNISCITI A  PRENOTAZIONE
+             */
+            if(_selectedIndex == 2){
+            }
 
-
-              /**
-               * VISUALIZZA PRENOTAZIONI
-               */
-              if(_selectedIndex == 1) //Visualizza prenotazioni
-                  {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => VisualizzaPrenotazioni()));
-              }
-
-
-            });
+            setState((){});
           },
           child: Material(
             elevation: 3.0,

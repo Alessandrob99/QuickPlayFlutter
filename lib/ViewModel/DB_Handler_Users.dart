@@ -1,9 +1,6 @@
-import 'dart:ffi';
-import 'dart:html';
+
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import "package:quickplay/models/models.dart";
 
 import 'Auth_Handler.dart';
@@ -61,8 +58,7 @@ class DB_Handler_Users{
   }
 
 
-  //DA TESTARE
-  static getReservations(String email) async {
+  static Future<List<Prenotazione>> getReservations(String email) async {
       List<Prenotazione> prenotazioni = [];
       var prenotazioniData = await myRef.collection("users").document(email).collection("prenotazioni").getDocuments();
       var data =  prenotazioniData.documents;

@@ -1,7 +1,21 @@
+
 import 'dart:convert';
+
+import 'package:quickplay/ViewModel/DB_Handler_Clubs.dart';
+import 'package:quickplay/models/models.dart';
 
 class DB_Handler_Reservations {
 
+
+  static getReservationLayoutInfo(Prenotazione prenotazione) async{
+      String codice = decrypt(prenotazione.id, 15);
+      var cod_split = codice.split("&");
+      String oraFine = prenotazione.oraFine.hour.toString()+":"+prenotazione.oraFine.minute.toString();
+
+      Club _circolo =  await DB_Handler_Clubs.getClubById(cod_split[0]);
+
+      return LayoutInfo(_circolo.nome, cod_split[1], cod_split[2], cod_split[3], oraFine, prenotazione.id);
+  }
 
 
   static String crypt(String text, int shift){

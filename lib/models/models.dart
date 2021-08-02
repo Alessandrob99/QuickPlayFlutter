@@ -34,3 +34,31 @@ class Prenotazione
 
   Prenotazione(this.id, this.prenotatore, this.oraInizio, this.oraFine);
 }
+
+
+class Club{
+    String id;
+    String nome;
+    String telefono;
+    String email;
+    bool docce;
+    double lat;
+    double lng;
+
+    Club(this.id, this.nome, this.telefono, this.email, this.docce, this.lat,
+      this.lng);
+}
+
+
+class LayoutInfo {
+  String circolo;
+  String campo;
+  String data;
+  String orainizio;
+  String oraFine;
+  String codice;
+
+  LayoutInfo(this.circolo, this.campo, this.data, this.orainizio,
+      this.oraFine, this.codice);
+
+}
