@@ -36,10 +36,18 @@ class _ListState extends State<VisualizzaPrenotazioni> {
           padding: const EdgeInsets.only(top: 10.0),
           child: Column(
             children: <Widget>[
-              Text(prenotazione.circolo),
+              Text(prenotazione.circolo,style: TextStyle(
+                fontSize: 13.0,
+                color: Colors.black,
+              ),
+              ),
               Text("Campo n° "+prenotazione.campo),
               Text(prenotazione.data),
-              Text("Dalle "+prenotazione.orainizio+" Alle "+prenotazione.oraFine),
+              Text("Dalle "+prenotazione.orainizio+" Alle "+prenotazione.oraFine,style: TextStyle(
+                fontSize: 13.0,
+                color: Colors.black,
+              ),
+              ),
               Row(children: [
                 TextButton(
                     onPressed: () {},
@@ -48,17 +56,17 @@ class _ListState extends State<VisualizzaPrenotazioni> {
                       style: TextStyle(
                           decoration: TextDecoration.underline,
                           color: Colors.black,
-                          fontSize: 16.0,
+                          fontSize: 14.0,
                           fontFamily: 'WorkSansMedium'),
                     )),
                 TextButton(
                     onPressed: () {},
                     child: const Text(
-                      'Visualizza Partecipanti',
+                      'Partecipanti',
                       style: TextStyle(
                           decoration: TextDecoration.underline,
                           color: Colors.black,
-                          fontSize: 16.0,
+                          fontSize: 14.0,
                           fontFamily: 'WorkSansMedium'),
                     ))
               ])

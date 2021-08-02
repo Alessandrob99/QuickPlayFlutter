@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:quickplay/ViewModel/DB_Handler_Users.dart';
@@ -10,12 +11,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class Auth_Handler{
 
+
+  static SharedPreferences prefs;
   static Firestore myRef = Firestore.instance;
   static FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 
   static bool LOGGED_IN = false;
   static User CURRENT_USER  = null;
-
+  static String profileImg = "";
 
 
   static setLOGGED_IN(){
@@ -26,7 +29,10 @@ class Auth_Handler{
   static setLOGGED_IN_Context( BuildContext context,bool ricordami ,String email,String password, myCallBack(bool result)) async {
     LOGGED_IN = true;
     if (ricordami) {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs = await SharedPreferences.getInstance();
+      var ref = FirebaseStorage.instance.ref().child("usersPics/"+email);
+      String location = await ref.getDownloadURL();
+      profileImg = location;
       await prefs.setBool("ricordami", true);
       await prefs.setString("email", email);
       await prefs.setString("password", password);

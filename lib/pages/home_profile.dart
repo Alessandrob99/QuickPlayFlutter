@@ -1,9 +1,11 @@
 
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:kf_drawer/kf_drawer.dart';
 import 'package:quickplay/ViewModel/Auth_Handler.dart';
 import 'package:quickplay/ViewModel/DB_Handler_Users.dart';
 import 'package:quickplay/pages/home_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'home_page_menu.dart';
 
@@ -27,12 +29,10 @@ class _ProfileScreenState extends State<Profile> with SingleTickerProviderStateM
   final FocusNode focusNodeNome = FocusNode();
   final FocusNode focusNodeCognome = FocusNode();
   final FocusNode focusNodeCellulare= FocusNode();
+  
+  static String profileImg = "";
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
+
 
   @override
   void dispose() {
@@ -81,8 +81,7 @@ class _ProfileScreenState extends State<Profile> with SingleTickerProviderStateM
                                     decoration: new BoxDecoration(
                                       shape: BoxShape.circle,
                                       image: new DecorationImage(
-                                        image: new ExactAssetImage(
-                                            'assets/img/icon_profile.png'),
+                                        image: new NetworkImage(Auth_Handler.profileImg),
                                         fit: BoxFit.cover,
 
                                       ),
