@@ -1,13 +1,13 @@
 
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:kf_drawer/kf_drawer.dart';
 import 'package:quickplay/ViewModel/Auth_Handler.dart';
 import 'package:quickplay/ViewModel/DB_Handler_Users.dart';
 import 'package:quickplay/pages/home_page.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
 import 'home_page_menu.dart';
+import 'dart:io';
+import 'package:firebase_storage/firebase_storage.dart'; // For File Upload To Firestore
 
 // ignore: must_be_immutable
 class Profile extends KFDrawerContent {
@@ -21,6 +21,9 @@ class Profile extends KFDrawerContent {
 
 class _ProfileScreenState extends State<Profile> with SingleTickerProviderStateMixin {
   bool _status = true;
+
+  File _image;
+  StorageReference storageReference = FirebaseStorage.instance.ref();
 
   TextEditingController nomeController = TextEditingController();
   TextEditingController cognomeController = TextEditingController();
@@ -80,7 +83,7 @@ class _ProfileScreenState extends State<Profile> with SingleTickerProviderStateM
                                     height: 140.0,
                                     decoration: new BoxDecoration(
                                       shape: BoxShape.circle,
-                                      image: new DecorationImage(
+                                      image: new DecorationImage (
                                         image: new NetworkImage(Auth_Handler.profileImg),
                                         fit: BoxFit.cover,
 
@@ -93,15 +96,26 @@ class _ProfileScreenState extends State<Profile> with SingleTickerProviderStateM
                                 child: new Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: <Widget>[
-                                    new CircleAvatar(
-                                      backgroundColor: Colors.red,
-                                      radius: 25.0,
-                                      child: new Icon(
-                                        Icons.camera_alt,
-                                        color: Colors.white,
+                                    SizedBox(height: 25),
+                                    GestureDetector(
+                                      onTap: (){
+                                          _selectProfilePicture().then((value){
+                                            uploadImage(_image);
+                                          });
 
+
+                                      },
+                                      child: CircleAvatar(
+                                        backgroundColor: Colors.red,
+                                        radius: 25.0,
+                                        child: new Icon(
+                                          Icons.camera_alt,
+                                          color: Colors.white,
+
+                                        ),
                                       ),
-                                    )
+                                    ),
+                                    
                                   ],
                                 )),
                           ]),
@@ -138,7 +152,7 @@ class _ProfileScreenState extends State<Profile> with SingleTickerProviderStateM
                                   ),
                                   new Column(
                                     mainAxisAlignment: MainAxisAlignment.end,
-                                    mainAxisSize: MainAxisSize.min,
+                                    mainAxisSize: MainAxisSize.max,
                                     children: <Widget>[
                                       _status ? _getEditIcon() : new Container(),
                                     ],
@@ -395,6 +409,25 @@ class _ProfileScreenState extends State<Profile> with SingleTickerProviderStateM
     );
   }
 
+  uploadImage(File image) async {
+    imgLoading(context);
+    StorageReference reference =
+    FirebaseStorage.instance.ref().child("usersPics/"+Auth_Handler.CURRENT_USER.email);
+    StorageUploadTask uploadTask = await reference.putFile(image);
+    StorageTaskSnapshot downloadUrl = (await uploadTask.onComplete);
+    Auth_Handler.profileImg = await (downloadUrl.ref.getDownloadURL());
+    Navigator.pop(context);
+    setState(() {
+    });
+
+  }
+
+  Future _selectProfilePicture() async{
+    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+     _image = image;
+
+  }
+
   Future<bool> onBackPressed() {
     return Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
       builder: (context) {
@@ -418,6 +451,25 @@ showModificheDialog(BuildContext context){
       return alert;
     },
   );
+
+
 }
 
+
+imgLoading(BuildContext context) {
+  AlertDialog alert = AlertDialog(
+    content: new Row(
+      children: [
+        CircularProgressIndicator(),
+        Container(margin: EdgeInsets.only(left: 7),
+            child: Text("Caricando l'immagine...")),
+      ],),
+  );
+  showDialog(barrierDismissible: false,
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
+}
 

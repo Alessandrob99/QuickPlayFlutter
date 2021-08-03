@@ -85,7 +85,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
                   children: <Widget>[
                     CircleAvatar(
                       radius: 50.0,
-                      backgroundImage: ExactAssetImage('assets/img/icon_profile.png'),
+                      backgroundImage: NetworkImage(Auth_Handler.profileImg),
                     ),
                     Text(
                       Auth_Handler.CURRENT_USER.nome.capitalize()+" "+Auth_Handler.CURRENT_USER.cognome.capitalize(),
