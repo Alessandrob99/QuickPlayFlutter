@@ -35,7 +35,7 @@ class _MyHomePageState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: onBackPressed,
+      onWillPop: _onBackPressed,
       child: Scaffold(
       primary: false,
       appBar:PreferredSize(
@@ -178,14 +178,6 @@ class _MyHomePageState extends State<Home> {
       );
   }
 
-  Future<bool> onBackPressed() {
-    return Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
-      builder: (context) {
-        return LoginScreen();
-      },
-    ), (route) => false);
-  }
-
 
 
 
@@ -300,7 +292,40 @@ class _MyHomePageState extends State<Home> {
       ),
     );
   }
+
+  Future<bool> _onBackPressed() {
+    return showDialog(
+      context: context,
+      builder: (context) => new AlertDialog(
+        title: new Text('Sei sicuro?'),
+        content: new Text('Effettuare il logout'),
+        actions: <Widget>[
+          new GestureDetector(
+            onTap: () => Navigator.of(context).pop(false),
+            child: Text("NO"),
+          ),
+          SizedBox(height: 16),
+          new GestureDetector(
+            onTap: (){
+              Auth_Handler.setLOGGET_OUT(context);
+              Navigator.of(context).pop(true);
+              Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
+                builder: (context) {
+                  false;
+                  return LoginScreen();
+                },
+              ), (route) => false);
+            },
+            child: Text("SI"),
+          ),
+        ],
+      ),
+    ) ??
+        false;
+  }
+
 }
+
 extension StringExtension on String {
   String capitalize() {
     return "${this[0].toUpperCase()}${this.substring(1)}";

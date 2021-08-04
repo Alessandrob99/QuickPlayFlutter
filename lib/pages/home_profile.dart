@@ -423,8 +423,8 @@ class _ProfileScreenState extends State<Profile> with SingleTickerProviderStateM
   }
 
   Future _selectProfilePicture() async{
-    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
-     _image = image;
+    var image = await ImagePicker.platform.pickImage(source: ImageSource.gallery);
+     _image = File(image.path);
 
   }
 

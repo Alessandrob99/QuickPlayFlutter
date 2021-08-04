@@ -60,6 +60,16 @@ class Auth_Handler{
 
   }
 
+
+  static setLOGGET_OUT(BuildContext context) async {
+  LOGGED_IN = false;
+  CURRENT_USER = null;
+  prefs = await SharedPreferences.getInstance();
+  prefs.setString("email", "");
+  prefs.setString("password", "");
+  prefs.setBool("remember", false);
+  }
+
   static FireBaseLogin(bool ricordami,BuildContext context,String email,String password,myCallBack(bool result,String msg)) async{
        try{
          var user = await firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
