@@ -6,6 +6,7 @@ import 'package:quickplay/ViewModel/DB_Handler_Users.dart';
 import 'package:quickplay/models/models.dart';
 import 'package:quickplay/pages/Login.dart';
 import 'package:quickplay/pages/effettua_prenotazione.dart';
+import 'package:quickplay/pages/selezione1.dart';
 import 'package:quickplay/pages/visualizza_prenotazioni.dart';
 import 'package:quickplay/utils/dialog_helper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -218,7 +219,7 @@ class _MyHomePageState extends State<Home> {
              */
             if(_selectedIndex == 0)
             {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => EffettuaPrenotazione()));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => Selezione1()));
             }
 
 
