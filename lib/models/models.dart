@@ -1,4 +1,3 @@
-import 'dart:ffi';
 
 class User {
   String nome;
@@ -70,7 +69,7 @@ class Court{
   int codClub;
   String superficie;
   String sport;
-  Float prezzo;
+  int prezzo;
   bool riscaldamento;
   bool coperto;
 

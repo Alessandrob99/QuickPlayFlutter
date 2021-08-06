@@ -50,6 +50,10 @@ class DB_Handler_Clubs{
     List<Club> clubsInRange = await getAllClubsInRange(distanza, LatLng(myPosition.latitude, myPosition.longitude));
 
 
+    //Filtraggio sui campi trovati
+
+
+
     callback(clubsInRange,null);
   }
 

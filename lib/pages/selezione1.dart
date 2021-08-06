@@ -1,6 +1,8 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:quickplay/ViewModel/DB_Handler_Courts.dart';
+import 'package:quickplay/models/models.dart';
 import 'package:quickplay/pages/effettua_prenotazione.dart';
 
 class Selezione1 extends StatefulWidget {
@@ -69,16 +71,17 @@ class _createSelezione1 extends State<Selezione1> {
             child:
             Text("Conferma"),
           ),
-          onPressed: (){
+          onPressed: () async {
             if(date==null || _selectedSport==null){
               //Errore
               print("Inserisci tutti i campi!!!");
             }else{
-              //Passa i valori a effettua_prenotazione
+              //Trova i campi per quello sport
+              List<Court> campiPerSport = await DB_Handler_Courts.getCourtsBySport(_selectedSport.toLowerCase());
               //cambia page
 
               Navigator.push(context,
-              MaterialPageRoute(builder: (context)=>EffettuaPrenotazione(sport: _selectedSport, data: date)));
+              MaterialPageRoute(builder: (context)=>EffettuaPrenotazione(campiPerSport: campiPerSport,data: date,)));
 
             }
           },

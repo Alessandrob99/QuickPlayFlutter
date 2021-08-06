@@ -3,19 +3,20 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:quickplay/ViewModel/DB_Handler_Clubs.dart';
+import 'package:quickplay/models/models.dart';
 
 class EffettuaPrenotazione extends StatefulWidget {
-  const EffettuaPrenotazione({Key key, this.sport, this.data})
+  const EffettuaPrenotazione({Key key, this.campiPerSport, this.data})
       : super(key: key);
   @override
-  final String sport;
+  final List<Court> campiPerSport;
   final DateTime data;
 
-  _EffettuaPrenotazione createState() => _EffettuaPrenotazione(sport, data);
+  _EffettuaPrenotazione createState() => _EffettuaPrenotazione(campiPerSport, data);
 }
 
 class _EffettuaPrenotazione extends State<EffettuaPrenotazione> {
-  String sport;
+  List<Court> campiPerSport =  [];
   DateTime data;
 
   bool coperto = false;
@@ -30,7 +31,7 @@ class _EffettuaPrenotazione extends State<EffettuaPrenotazione> {
   ScrollController scrollController;
 
 
-  _EffettuaPrenotazione(this.sport, this.data);
+  _EffettuaPrenotazione(this.campiPerSport, this.data);
 
   GoogleMapController mapController;
   final LatLng _center = const LatLng(43.586751779797915, 13.51659500105265);
