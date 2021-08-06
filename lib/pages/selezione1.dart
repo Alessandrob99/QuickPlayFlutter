@@ -1,6 +1,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:quickplay/pages/effettua_prenotazione.dart';
 
 class Selezione1 extends StatefulWidget {
   const Selezione1({Key key}) : super(key: key);
@@ -75,7 +76,9 @@ class _createSelezione1 extends State<Selezione1> {
             }else{
               //Passa i valori a effettua_prenotazione
               //cambia page
-              print("Vuoi giocare a "+_selectedSport+" il "+date.toString());
+
+              Navigator.push(context,
+              MaterialPageRoute(builder: (context)=>EffettuaPrenotazione(sport: _selectedSport, data: date)));
 
             }
           },

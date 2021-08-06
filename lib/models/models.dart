@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 class User {
   String nome;
   String cognome;
@@ -37,7 +39,7 @@ class Prenotazione
 
 
 class Club{
-    String id;
+    int id;
     String nome;
     String telefono;
     String email;
@@ -61,4 +63,17 @@ class LayoutInfo {
   LayoutInfo(this.circolo, this.campo, this.data, this.orainizio,
       this.oraFine, this.codice);
 
+}
+
+class Court{
+  int n_c;
+  int codClub;
+  String superficie;
+  String sport;
+  Float prezzo;
+  bool riscaldamento;
+  bool coperto;
+
+  Court(this.n_c, this.codClub, this.superficie, this.sport, this.prezzo,
+      this.riscaldamento, this.coperto);
 }
