@@ -215,7 +215,7 @@ class _EffettuaPrenotazione extends State<EffettuaPrenotazione> {
       print("Errore! Filtri non validi");
       return;
     }
-    DB_Handler_Clubs.getFilteredClubsAndCourt(distanza, prezzo , docce, riscaldamento, coperto, superficie.text, (circoli, campi){
+    DB_Handler_Clubs.getFilteredClubsAndCourt(distanza, prezzo , docce, riscaldamento, coperto, superficie.text, campiPerSport,(circoli, campi){
       print("Circoli trovati :");
       circoli.forEach((element) {
         print("\n"+element.nome);

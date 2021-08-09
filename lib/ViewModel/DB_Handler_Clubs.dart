@@ -1,3 +1,4 @@
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:quickplay/models/models.dart';
@@ -35,8 +36,14 @@ class DB_Handler_Clubs{
     return Club(record["id_circolo"], record["nome"], record["telefono"], record["email"], record["docce"],record["posizione"].latitude, record["posizione"].longitude);
   }
 
-  static Future<void> getFilteredClubsAndCourt(int distanza,int prezzo,bool docce, bool riscaldamento, bool coperto, String superficie , callback(List<Club> circoli, List<Court> campi)) async {
+  static Future<void> getFilteredClubsAndCourt(int distanza,int prezzo,bool docce, bool riscaldamento, bool coperto, String superficie , List<Court>campiPerSportNonFiltrati , callback(List<Club> circoli, List<Court> campi)) async {
     var myPosition;
+    List<Court> campiPerSportFiltrati = [];
+    campiPerSportNonFiltrati.forEach((element) {
+      campiPerSportFiltrati.add(element);
+    });
+
+    List<Club> filteredClubs = [];
     try {
       LocationPermission permission = await Geolocator.checkPermission();
     }catch(e){
@@ -48,13 +55,72 @@ class DB_Handler_Clubs{
 
 
     List<Club> clubsInRange = await getAllClubsInRange(distanza, LatLng(myPosition.latitude, myPosition.longitude));
+    clubsInRange.forEach((element) {
+      filteredClubs.add(element);
+    });
 
 
     //Filtraggio sui campi trovati
 
+    if(superficie!="") {
+      campiPerSportNonFiltrati.forEach((element) {
+        if (element.superficie != superficie.toLowerCase()) {
+          campiPerSportFiltrati.remove(element);
+        }
+      });
+    }
+      if(coperto==true){
+        campiPerSportNonFiltrati.forEach((element) {
+          if(!element.coperto){
+            campiPerSportFiltrati.remove(element);
+          }
+        });
+      }
+      if(riscaldamento==true){
+        campiPerSportNonFiltrati.forEach((element) {
+          if(!element.riscaldamento){
+            campiPerSportFiltrati.remove(element);
+          }
+        });
+      }
+      campiPerSportNonFiltrati.forEach((element) {
+        if(element.prezzo>prezzo){
+          campiPerSportFiltrati.remove(element);
+        }
+      });
 
+      //Filtro i club
+      if(docce) {
+        clubsInRange.forEach((element) {
+          if (!element.docce) {
+            filteredClubs.remove(element);
+          }
+        });
+      }
+        //troviamo gli id dei club corrispondenti ai campi filtrati
+        List<int> filteredClubIDs = [];
+        campiPerSportFiltrati.forEach((element) {
+          filteredClubIDs.add(element.codClub);
+        });
+        clubsInRange.forEach((element) {
+          if(!filteredClubIDs.contains(element.id)){
+            filteredClubs.remove(element);
+          }
+        });
 
-    callback(clubsInRange,null);
+        filteredClubIDs.clear();
+        //filtriamo i campi che fanno riferimento a campi o fuori range (o senza docce)
+
+        filteredClubs.forEach((element) {
+          filteredClubIDs.add(element.id);
+        });
+        campiPerSportNonFiltrati.forEach((element) {
+          if(!filteredClubIDs.contains(element.codClub)){
+            campiPerSportFiltrati.remove(element);
+          }
+        });
+
+        callback(filteredClubs,campiPerSportFiltrati);
   }
 
 }
