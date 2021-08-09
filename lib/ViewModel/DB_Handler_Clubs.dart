@@ -37,7 +37,7 @@ class DB_Handler_Clubs{
   }
 
   static Future<void> getFilteredClubsAndCourt(int distanza,int prezzo,bool docce, bool riscaldamento, bool coperto, String superficie , List<Court>campiPerSportNonFiltrati , callback(List<Club> circoli, List<Court> campi)) async {
-    var myPosition;
+    Position myPosition;
     List<Court> campiPerSportFiltrati = [];
     campiPerSportNonFiltrati.forEach((element) {
       campiPerSportFiltrati.add(element);

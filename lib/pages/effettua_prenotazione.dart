@@ -1,9 +1,12 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:quickplay/ViewModel/DB_Handler_Clubs.dart';
 import 'package:quickplay/models/models.dart';
+import 'package:geolocator/geolocator.dart';
+
 
 class EffettuaPrenotazione extends StatefulWidget {
   const EffettuaPrenotazione({Key key, this.campiPerSport, this.data})
@@ -11,6 +14,8 @@ class EffettuaPrenotazione extends StatefulWidget {
   @override
   final List<Court> campiPerSport;
   final DateTime data;
+
+
 
   _EffettuaPrenotazione createState() => _EffettuaPrenotazione(campiPerSport, data);
 }
@@ -25,7 +30,8 @@ class _EffettuaPrenotazione extends State<EffettuaPrenotazione> {
   TextEditingController maxDistance = TextEditingController();
   TextEditingController maxPrice = TextEditingController();
   TextEditingController superficie = TextEditingController();
-
+  Set<Marker> clubMarkers = Set();
+  LatLng _center = LatLng(43.586751779797915, 13.51659500105265);
 
 
   ScrollController scrollController;
@@ -34,10 +40,10 @@ class _EffettuaPrenotazione extends State<EffettuaPrenotazione> {
   _EffettuaPrenotazione(this.campiPerSport, this.data);
 
   GoogleMapController mapController;
-  final LatLng _center = const LatLng(43.586751779797915, 13.51659500105265);
 
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
+
   }
 
   @override
@@ -55,6 +61,7 @@ class _EffettuaPrenotazione extends State<EffettuaPrenotazione> {
         children: [
           GoogleMap(
             onMapCreated: _onMapCreated,
+            markers: aggiornaFiltri(),
             initialCameraPosition: CameraPosition(
               target: _center,
               zoom: 11.0,
@@ -192,12 +199,9 @@ class _EffettuaPrenotazione extends State<EffettuaPrenotazione> {
 
 
   //legge i filtri e chiama il metodo che restituisce i circoli corrispondenti
-  void aggiornaFiltri(){
-
+  Set<Marker> aggiornaFiltri(){
     //Usiamo una callback in quanto dobbiamo ritornare sia i circoli che i campi corrispondenti
     // ( Per ogni circolo non è detto che tutti i campi siano accettabili )
-
-
     var prezzo;
     var distanza;
     try{
@@ -213,15 +217,33 @@ class _EffettuaPrenotazione extends State<EffettuaPrenotazione> {
       }
     }catch(e){
       print("Errore! Filtri non validi");
-      return;
+      return null;
     }
-    DB_Handler_Clubs.getFilteredClubsAndCourt(distanza, prezzo , docce, riscaldamento, coperto, superficie.text, campiPerSport,(circoli, campi){
-      print("Circoli trovati :");
+    DB_Handler_Clubs.getFilteredClubsAndCourt(distanza, prezzo , docce, riscaldamento, coperto, superficie.text, campiPerSport,(circoli, campi) async {
+      Position clubPos;
       circoli.forEach((element) {
-        print("\n"+element.nome);
+        clubMarkers.add(Marker(
+          markerId: MarkerId(element.nome),
+          position: LatLng(element.lat,element.lng)));
+      });
+
+      var myPos = await Geolocator.getCurrentPosition();
+
+      _center = LatLng(myPos.latitude, myPos.longitude);
+
+      clubMarkers.add(Marker(
+        markerId: MarkerId("Tu"),
+        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueYellow),
+        position: _center,
+      ));
+
+      setState(() {
+
       });
     });
 
 
+
+    return clubMarkers;
   }
 }
