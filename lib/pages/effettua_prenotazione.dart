@@ -48,150 +48,164 @@ class _EffettuaPrenotazione extends State<EffettuaPrenotazione> {
 
   @override
   void initState() {
-    maxDistance.text = "20";
-    maxPrice.text = "";
-    super.initState();
+      maxDistance.text = "20";
+      maxPrice.text = "";
+      super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+
+    if(clubMarkers.isEmpty){
+      aggiornaFiltri();
+    }
+
+
     return Scaffold(
       body: Stack(
         fit: StackFit.expand,
         children: [
           GoogleMap(
             onMapCreated: _onMapCreated,
-            markers: aggiornaFiltri(),
+            markers: clubMarkers,
             initialCameraPosition: CameraPosition(
               target: _center,
               zoom: 11.0,
             ),
           ),
-          DraggableScrollableSheet(
-              initialChildSize: 0.6,
-              builder: (context, scrollcontroller) => Container(
-                    color: Colors.white,
-                    child: Column(
-                      children: [
-                        Center(
-                          child: Text(
-                            "FILTRI",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                decoration: TextDecoration.underline,
-                                fontSize: 28),
-                          ),
+          SizedBox.expand(
+            child: DraggableScrollableSheet(
+                initialChildSize: 0.6,
+                minChildSize: 0.2,
+                maxChildSize: 0.6,
+                builder: (context, scrollcontroller) => Container(
+                  color: Colors.white,
+                  child: Column(
+                    children: [
+                      Center(
+                        child: Text(
+                          "FILTRI",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              decoration: TextDecoration.underline,
+                              fontSize: 28),
                         ),
-                        Row(
-                          children: [
-                            Expanded(
-                                child: CheckboxListTile(
-                                  title: Text("Coperto"),
-                                  value: coperto,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      coperto = value;
-                                    });
-                                    print("Vuoi un campo coperto.");
-                                  },
-                                )
-                            )
-
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Expanded(
-                                child: CheckboxListTile(
-                                  title: Text("Riscaldamento"),
-                                  value: riscaldamento,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      riscaldamento = value;
-                                    });
-                                    print("Vuoi un campo con il Riscaldamento.");
-                                  },
-                                )
-                            )
-
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Expanded(
-                                child: CheckboxListTile(
-                                  title: Text("Docce"),
-                                  value: docce,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      docce = value;
-                                    });
-                                    print("Vuoi un campo con le docce.");
-                                  },
-                                )
-                            )
-
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Expanded(child: Text("Distanza massima da te : "),),
-                            Expanded(child: TextField(
-                              controller: maxDistance,
-                              keyboardType: TextInputType.number,
-                            ))
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Expanded(child: Text("Prezzo massimo : "),),
-                            Expanded(child: TextField(
-                              controller: maxPrice,
-                              keyboardType: TextInputType.number,
-                            )),
-                            Expanded(child: Text("€/h"),),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Expanded(child: Text("Superficie : "),),
-                            Expanded(child: TextField(
-                              controller: superficie,
-                              keyboardType: TextInputType.text,
-                            )),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Center(
-                              child:
-                              RaisedButton(
-                                elevation: 5.0,
-                                onPressed: () {
-                                  aggiornaFiltri();
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                              child: CheckboxListTile(
+                                title: Text("Coperto"),
+                                value: coperto,
+                                onChanged: (value) {
+                                  setState(() {
+                                    coperto = value;
+                                  });
+                                  print("Vuoi un campo coperto.");
                                 },
-                                padding: EdgeInsets.all(15.0),
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(30.0),
-                                    side: BorderSide(color: Colors.black26, width: 2.0)),
-                                color: Colors.white,
-                                child: Text(
-                                  'AGGIORNA',
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    letterSpacing: 1.5,
-                                    fontSize: 14.0,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: 'OpenSans',
-                                  ),
+                              )
+                          )
+
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                              child: CheckboxListTile(
+                                title: Text("Riscaldamento"),
+                                value: riscaldamento,
+                                onChanged: (value) {
+                                  setState(() {
+                                    riscaldamento = value;
+                                  });
+                                  print("Vuoi un campo con il Riscaldamento.");
+                                },
+                              )
+                          )
+
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                              child: CheckboxListTile(
+                                title: Text("Docce"),
+                                value: docce,
+                                onChanged: (value) {
+                                  setState(() {
+                                    docce = value;
+                                  });
+                                  print("Vuoi un campo con le docce.");
+                                },
+                              )
+                          )
+
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Expanded(child: Text("Distanza massima da te : "),),
+                          Expanded(child: TextField(
+                            controller: maxDistance,
+                            keyboardType: TextInputType.number,
+                          ))
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Expanded(child: Text("Prezzo massimo : "),),
+                          Expanded(child: TextField(
+                            controller: maxPrice,
+                            keyboardType: TextInputType.number,
+                          )),
+                          Expanded(child: Text("€/h"),),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Expanded(child: Text("Superficie : "),),
+                          Expanded(child: TextField(
+                            controller: superficie,
+                            keyboardType: TextInputType.text,
+                          )),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Center(
+                            child:
+                            RaisedButton(
+                              elevation: 5.0,
+                              onPressed: () {
+                                aggiornaFiltri();
+                                setState(() {
+
+                                });
+                              },
+                              padding: EdgeInsets.all(15.0),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(30.0),
+                                  side: BorderSide(color: Colors.black26, width: 2.0)),
+                              color: Colors.white,
+                              child: Text(
+                                'AGGIORNA',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  letterSpacing: 1.5,
+                                  fontSize: 14.0,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: 'OpenSans',
                                 ),
                               ),
-                            )
-                          ],
-                        )
-                      ],
-                    ),
-                  )),
+                            ),
+                          )
+                        ],
+                      )
+                    ],
+                  ),
+                )
+            ),
+          )
         ],
       ),
     );
@@ -199,11 +213,13 @@ class _EffettuaPrenotazione extends State<EffettuaPrenotazione> {
 
 
   //legge i filtri e chiama il metodo che restituisce i circoli corrispondenti
-  Set<Marker> aggiornaFiltri(){
+  void aggiornaFiltri() async {
+
     //Usiamo una callback in quanto dobbiamo ritornare sia i circoli che i campi corrispondenti
     // ( Per ogni circolo non è detto che tutti i campi siano accettabili )
     var prezzo;
     var distanza;
+    clubMarkers.clear();
     try{
       if(maxPrice.text!="") {
         prezzo = int.parse(maxPrice.text);
@@ -219,11 +235,33 @@ class _EffettuaPrenotazione extends State<EffettuaPrenotazione> {
       print("Errore! Filtri non validi");
       return null;
     }
-    DB_Handler_Clubs.getFilteredClubsAndCourt(distanza, prezzo , docce, riscaldamento, coperto, superficie.text, campiPerSport,(circoli, campi) async {
+    await DB_Handler_Clubs.getFilteredClubsAndCourt(distanza, prezzo , docce, riscaldamento, coperto, superficie.text, campiPerSport,(circoli, campi) async {
       Position clubPos;
       circoli.forEach((element) {
         clubMarkers.add(Marker(
-          markerId: MarkerId(element.nome),
+          markerId: MarkerId(element.id.toString()),
+          infoWindow: InfoWindow(
+              title: element.nome,
+              onTap: (){
+                //CAMBIO SCREEN sul campo element.id.toString
+
+                //Seleziono i campi da inviare alla schermata di scelta del campo
+                List<Court> campiDaInviare = [];
+                campi.forEach((campo) {
+                  if(campo.codClub==element.id){
+                    campiDaInviare.add(campo);
+                  }
+                });
+
+                print("Campi buoni : \n");
+                campiDaInviare.forEach((element) {
+                  print(element.n_c.toString() +" "+element.superficie+"\n");
+                });
+
+
+
+
+              }),
           position: LatLng(element.lat,element.lng)));
       });
 
@@ -232,18 +270,19 @@ class _EffettuaPrenotazione extends State<EffettuaPrenotazione> {
       _center = LatLng(myPos.latitude, myPos.longitude);
 
       clubMarkers.add(Marker(
-        markerId: MarkerId("Tu"),
-        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueYellow),
+            markerId: MarkerId("tu"),
+            infoWindow: InfoWindow(title: "Tu"),
+        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
         position: _center,
       ));
-
       setState(() {
 
       });
     });
 
+  }
 
-
-    return clubMarkers;
+  goToClubDetails(int codClub) {
+    print("CAMBIO SCREEN sul campo "+codClub.toString());
   }
 }

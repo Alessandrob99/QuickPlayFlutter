@@ -61,7 +61,6 @@ class DB_Handler_Clubs{
 
 
     //Filtraggio sui campi trovati
-
     if(superficie!="") {
       campiPerSportNonFiltrati.forEach((element) {
         if (element.superficie != superficie.toLowerCase()) {
