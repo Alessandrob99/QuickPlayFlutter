@@ -295,34 +295,7 @@ class _MyHomePageState extends State<Home> {
   }
 
   Future<bool> _onBackPressed() {
-    return showDialog(
-      context: context,
-      builder: (context) => new AlertDialog(
-        title: new Text('Sei sicuro?'),
-        content: new Text('Effettuare il logout'),
-        actions: <Widget>[
-          new GestureDetector(
-            onTap: () => Navigator.of(context).pop(false),
-            child: Text("NO"),
-          ),
-          SizedBox(height: 16),
-          new GestureDetector(
-            onTap: (){
-              Auth_Handler.setLOGGET_OUT(context);
-              Navigator.of(context).pop(true);
-              Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
-                builder: (context) {
-                  false;
-                  return LoginScreen();
-                },
-              ), (route) => false);
-            },
-            child: Text("SI"),
-          ),
-        ],
-      ),
-    ) ??
-        false;
+    return DialogHelper.exit(context);
   }
 
 }

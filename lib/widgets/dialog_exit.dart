@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quickplay/pages/Login.dart';
 import 'package:quickplay/pages/login_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -55,7 +56,7 @@ class ExitConfirmationDialog extends StatelessWidget {
             SizedBox(width: 8,),
             RaisedButton(onPressed: (){
               return Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)
-              { return LoginPage(); }), (route) => false);
+              { return LoginScreen(); }), (route) => false);
             }, child: Text('Si'), color: Colors.white, textColor: Colors.redAccent,)
           ],
         )
