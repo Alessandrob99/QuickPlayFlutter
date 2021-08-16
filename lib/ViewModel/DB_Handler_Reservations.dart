@@ -1,11 +1,12 @@
 
 import 'dart:convert';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:quickplay/ViewModel/DB_Handler_Clubs.dart';
 import 'package:quickplay/models/models.dart';
 
 class DB_Handler_Reservations {
 
+  static Firestore myRef = Firestore.instance;
 
   static getReservationLayoutInfo(Prenotazione prenotazione) async{
       String codice = decrypt(prenotazione.id, 15);
@@ -16,6 +17,23 @@ class DB_Handler_Reservations {
 
       return LayoutInfo(_circolo.nome, codSplit[1], codSplit[2], codSplit[3], oraFine, prenotazione.id);
   }
+
+
+  static void getListOfReservations(String giorno,int campo,int circolo,callback(List<Prenotazione> prenotazioni)) async{
+    String reservationDocument = circolo.toString()+"-"+campo.toString()+"-"+giorno;
+    var records = await myRef.collection("prenotazione").document(reservationDocument).collection("prenotazioni").getDocuments();
+    List<Prenotazione> prenotazioni = [];
+    records.documents.forEach((element) {
+      DocumentReference ref = element.data['prenotatore'] as DocumentReference;
+      Timestamp timestamp = element.data['oraInizio'];
+      DateTime oraInizio = DateTime.fromMillisecondsSinceEpoch(timestamp.millisecondsSinceEpoch);
+      timestamp = element.data['oraFine'];
+      DateTime oraFine = DateTime.fromMillisecondsSinceEpoch(timestamp.millisecondsSinceEpoch);
+      prenotazioni.add(Prenotazione(element.documentID, ref.documentID , oraInizio, oraFine));
+    });
+    callback(prenotazioni);
+  }
+
 
 
   static String crypt(String text, int shift){
