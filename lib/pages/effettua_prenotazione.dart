@@ -6,6 +6,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:quickplay/ViewModel/DB_Handler_Clubs.dart';
 import 'package:quickplay/models/models.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:quickplay/pages/ClubDetails.dart';
 
 
 class EffettuaPrenotazione extends StatefulWidget {
@@ -252,14 +253,8 @@ class _EffettuaPrenotazione extends State<EffettuaPrenotazione> {
                     campiDaInviare.add(campo);
                   }
                 });
-
-                print("Campi buoni : \n");
-                campiDaInviare.forEach((element) {
-                  print(element.n_c.toString() +" "+element.superficie+"\n");
-                });
-
-
-
+                //Invio i campi
+                Navigator.push(context,MaterialPageRoute(builder: (context)=>ClubDetails(campi: campiDaInviare,circolo: element,data: data)));
 
               }),
           position: LatLng(element.lat,element.lng)));
@@ -280,9 +275,5 @@ class _EffettuaPrenotazione extends State<EffettuaPrenotazione> {
       });
     });
 
-  }
-
-  goToClubDetails(int codClub) {
-    print("CAMBIO SCREEN sul campo "+codClub.toString());
   }
 }
