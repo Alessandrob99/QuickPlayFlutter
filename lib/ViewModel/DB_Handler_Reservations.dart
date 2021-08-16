@@ -35,6 +35,17 @@ class DB_Handler_Reservations {
   }
 
 
+  static bool checkAvailability(String giorno,String oraInizio,String oraFine,List<Prenotazione> prenotazioni){
+    bool result = false;
+    DateTime dtInizio = DateTime.parse(giorno+" "+oraInizio);
+    DateTime dtFine = DateTime.parse(giorno+" "+oraFine);
+
+    prenotazioni.forEach((element) {
+      if(element.oraInizio.millisecondsSinceEpoch<dtFine.millisecondsSinceEpoch && element.oraFine.millisecondsSinceEpoch>dtInizio.millisecondsSinceEpoch){ result = true;}
+    });
+    return result;
+
+  }
 
   static String crypt(String text, int shift){
     List<int> codeStr = [];

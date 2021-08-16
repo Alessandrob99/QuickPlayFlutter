@@ -378,6 +378,8 @@ class _SelezioneOrario extends State<SelezioneOrario> {
   void firstClick(String btn){
     clickFlag = true;
     oraInizioSel = btn;
+    buttonsEnabled["24:00"] = true;
+    buttonsColour["24:00"] = Colors.white;
 
     String ora;
     String minuti;
@@ -419,6 +421,47 @@ class _SelezioneOrario extends State<SelezioneOrario> {
   }
 
   void secondClick(String btn){
+    var dateSplit = data.toString().split(" ");
+    String giorno = dateSplit[0];
+    String oraFine;
+    if(btn=="24:00"){oraFine = "23:59";}else{oraFine = btn;}
+    bool result = DB_Handler_Reservations.checkAvailability(giorno, oraInizioSel, oraFine, prenotazioni);
+    if(result){
+      print("Collisione!");
+      initialize();
+    }else{
+      oraFineSel = oraFine;
+      var orainizioSplit = oraInizioSel.split(":");
+      String ora = orainizioSplit[0];
+      String minuti = orainizioSplit[1];
+      while(ora+":"+minuti != oraFine){
+        buttonsEnabled[ora+":"+minuti] = false;
+        buttonsColour[ora+":"+minuti] = Colors.cyan;
+        if(minuti=="00") {
+          minuti = "30";
+        }else{
+          if(ora=="23"){
+            minuti="59";
+          }else{
+            int oraInt = int.parse(ora)+1;
+            ora = oraInt.toString();
+            minuti = "00";
+          }
+        }
+      }
+      if(ora+":"+minuti == "23:59"){
+        buttonsEnabled["24:00"] = false;
+        buttonsColour["24:00"] = Colors.cyan;
+      }else{
+        buttonsEnabled[ora+":"+minuti] = false;
+        buttonsColour[ora+":"+minuti] = Colors.cyan;
+      }
+
+      setState(() {
+
+      });
+      //Richiesta/Riepilogo e richiesta di conferma
+    }
 
   }
 
