@@ -1,6 +1,7 @@
 
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:quickplay/ViewModel/Auth_Handler.dart';
 import 'package:quickplay/ViewModel/DB_Handler_Clubs.dart';
 import 'package:quickplay/models/models.dart';
 
@@ -32,6 +33,31 @@ class DB_Handler_Reservations {
       prenotazioni.add(Prenotazione(element.documentID, ref.documentID , oraInizio, oraFine));
     });
     callback(prenotazioni);
+  }
+
+  static Future<void> newReservation(String data,String oraInizio,String oraFine,String n_campo,String id_circolo) async {
+
+    String uncodedID = id_circolo+"&"+n_campo+"&"+data+"&"+oraInizio;
+    String codedID = crypt(uncodedID, 15);
+
+    var giornoSplit = data.split("-");
+    String giornoFormatoAmericano = giornoSplit[2]+"-"+giornoSplit[1]+"-"+giornoSplit[0];
+
+
+    DateTime dtInizio = DateTime.parse(giornoFormatoAmericano+" "+oraInizio);
+    DateTime dtFine = DateTime.parse(giornoFormatoAmericano+" "+oraFine);
+    Timestamp tsInizio = Timestamp.fromMillisecondsSinceEpoch(dtInizio.millisecondsSinceEpoch);
+    Timestamp tsFine = Timestamp.fromMillisecondsSinceEpoch(dtFine.millisecondsSinceEpoch);
+    DocumentReference prenotatore = myRef.document("/users/"+Auth_Handler.CURRENT_USER.email);
+
+    var doc = await myRef.collection("prenotazione").document(id_circolo.toString()+"-"+n_campo.toString()+"-"+data).get();
+    if(doc.exists){
+      //Registra la prenotazione
+    }else{
+      //Crea il documento (compreso il dummy text) e registra la prenotazione
+
+    }
+
   }
 
 

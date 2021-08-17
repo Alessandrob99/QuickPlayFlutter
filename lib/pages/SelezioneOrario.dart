@@ -206,10 +206,6 @@ class _SelezioneOrario extends State<SelezioneOrario> {
               RaisedButton(
                   child: Text("Annulla"),
                   onPressed: initialize
-              ),
-              RaisedButton(
-                  child: Text("Conferma"),
-                  onPressed: conferma
               )
             ],
          )
@@ -461,13 +457,57 @@ class _SelezioneOrario extends State<SelezioneOrario> {
 
       });
       //Richiesta/Riepilogo e richiesta di conferma
+      showAlertDialog(context);
+
     }
 
   }
 
-  void conferma(){
-
+  showAlertDialog(BuildContext context) {
+    // set up the buttons
+    Widget cancelButton = FlatButton(
+      child: Text("Annulla"),
+      onPressed:  () {
+        Navigator.of(context).pop();
+        initialize();
+      },
+    );
+    Widget continueButton = FlatButton(
+      child: Text("Conferma"),
+      onPressed:  () {
+        Navigator.of(context).pop();
+        print("Prenotazione Confermata");
+        String dataStr = "";
+        if(data.day.toString().length==1){
+          dataStr += "0"+data.day.toString();
+        }else{
+          dataStr += data.day.toString();
+        }
+        if(data.month.toString().length==1){
+          dataStr += ("-0"+data.month.toString());
+        }else{
+          dataStr += ("-"+data.month.toString());
+        }
+        dataStr += ("-"+data.year.toString());
+        DB_Handler_Reservations.newReservation(dataStr, oraInizioSel, oraFineSel, campo.n_c.toString(), circolo.id.toString());
+      },
+    );
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Confermare prenotazione?"),
+      content: Text("Data : "+data.day.toString()+"/"+data.month.toString()+"/"+data.year.toString()+"\nDalle "+oraInizioSel+" alle "+oraFineSel+"\nCircolo : "+circolo.nome+"\nCampo n° : "+campo.n_c.toString()),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
   }
-
 
 }
