@@ -53,10 +53,27 @@ class DB_Handler_Reservations {
     var doc = await myRef.collection("prenotazione").document(id_circolo.toString()+"-"+n_campo.toString()+"-"+data).get();
     if(doc.exists){
       //Registra la prenotazione
+      myRef.collection("prenotazione").document(id_circolo.toString()+"-"+n_campo.toString()+"-"+data).collection("prenotazioni").document(codedID).setData({
+        "oraFine" : tsFine,
+        "oraInizio" : tsInizio,
+        "prenotatore" : prenotatore
+      });
     }else{
       //Crea il documento (compreso il dummy text) e registra la prenotazione
-
+      myRef.collection("prenotazione").document(id_circolo.toString()+"-"+n_campo.toString()+"-"+data).setData({"dummy" : "dummyText"}).whenComplete((){
+        myRef.collection("prenotazione").document(id_circolo.toString()+"-"+n_campo.toString()+"-"+data).collection("prenotazioni").document(codedID).setData({
+          "oraFine" : tsFine,
+          "oraInizio" : tsInizio,
+          "prenotatore" : prenotatore
+        });
+      });
     }
+    myRef.collection("users").document(Auth_Handler.CURRENT_USER.email).collection("prenotazioni").document(codedID).setData(
+        {
+          "oraFine" : tsFine,
+          "oraInizio" : tsInizio,
+          "prenotatore" : prenotatore
+        });
 
   }
 
@@ -71,6 +88,41 @@ class DB_Handler_Reservations {
     });
     return result;
 
+  }
+
+  static Future<void> deleteReservation(String codPren) async {
+    String uncodedID = decrypt(codPren, 15);
+    var codSplit = uncodedID.split("&");
+    String resDoc = codSplit[0]+"-"+codSplit[1]+"-"+codSplit[2];
+
+
+    var prenotazione = await myRef.collection("prenotazione").document(resDoc).collection("prenotazioni").document(codPren).get();
+    String prenotatoreEmail = prenotazione.data["prenotatore"].documentID;
+    if(prenotatoreEmail==Auth_Handler.CURRENT_USER.email){
+      //A cancellare la prenotazione è il prenotatore quindi deve sparire ogni traccia
+      //Quindi -Prenotazione + Record di essa dai partecipanti
+
+      var partecipanti = await myRef.collection("prenotazione").document(resDoc).collection("prenotazioni").document(codPren).collection("partecipanti").getDocuments();
+      //Togliamo la partecipazione da ogni partecipante
+      partecipanti.documents.forEach((element) {
+        myRef.collection("users").document(element.documentID).collection("prenotazioni").document(codPren).delete();
+        //Cancelliamo prima i partecipanti dalla prenotazione e poi la eliminiamo (BUG dei partecipanti che restano anche se la prenotazione è sparita)
+        myRef.collection("prenotazione").document(resDoc).collection("prenotazioni").document(codPren).collection("partecipanti").document(element.documentID).delete();
+      });
+      //Togliamo la prenotazione dalla lista del prenotatore
+      myRef.collection("users").document(Auth_Handler.CURRENT_USER.email).collection("prenotazioni").document(codPren).delete();
+      //Cancelliamo la prenotazione
+      myRef.collection("prenotazione").document(resDoc).collection("prenotazioni").document(codPren).delete();
+
+
+    }else{
+      //Un partecipante si sta chiamando fuori ->
+      // Dobbiamo cancellare la sua partecipazione e levarlo dai partecipanti
+      await myRef.collection("users").document(Auth_Handler.CURRENT_USER.email).collection("prenotazioni").document(codPren).delete();
+      myRef.collection("prenotazione").document(resDoc).collection("prenotazioni").document(codPren).collection("partecipanti").document(Auth_Handler.CURRENT_USER.email).delete();
+
+
+    }
   }
 
   static String crypt(String text, int shift){

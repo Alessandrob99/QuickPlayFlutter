@@ -1,4 +1,6 @@
 import "package:flutter/material.dart";
+import 'package:quickplay/ViewModel/Auth_Handler.dart';
+import 'package:quickplay/ViewModel/DB_Handler_Reservations.dart';
 import 'package:quickplay/models/models.dart';
 import 'home_page_menu.dart';
 
@@ -50,7 +52,9 @@ class _ListState extends State<VisualizzaPrenotazioni> {
               ),
               Row(children: [
                 TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                        showCancelDialog(context, prenotazione);
+                    },
                     child: const Text(
                       'Cancella',
                       style: TextStyle(
@@ -140,5 +144,40 @@ class _ListState extends State<VisualizzaPrenotazioni> {
         return DrawerScreen();
       },
     ), (route) => false);
+  }
+
+  showCancelDialog(BuildContext context,LayoutInfo prenotazione) {
+    // set up the buttons
+    Widget cancelButton = FlatButton(
+      child: Text("No"),
+      onPressed:  () {
+        Navigator.of(context).pop();
+      },
+    );
+    Widget continueButton = FlatButton(
+      child: Text("Si"),
+      onPressed:  () {
+        Navigator.of(context).pop();
+        DB_Handler_Reservations.deleteReservation(prenotazione.codice);
+        layoutInfo.remove(prenotazione);
+        setState(() {});
+      },
+    );
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Sei sicuro?"),
+      content: Text("Cancellare la prenotazione"),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
   }
 }

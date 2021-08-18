@@ -18,7 +18,7 @@ class DB_Handler_Users{
         DocumentSnapshot snapshot) async {
       var result = snapshot.data;
       if(result!=null){
-        var foundUser = User(result["nome"], result["cognome"],  result["email"],  result["password"],  result["telefono"]);
+        var foundUser = User(result["nome"], result["cognome"],  result["email"],  result["telefono"]);
         callback(foundUser);
       }else{
         callback(null);
@@ -46,7 +46,6 @@ class DB_Handler_Users{
     if(telefono=="") telefono = Auth_Handler.CURRENT_USER.telefono;
     await  myRef.collection("users").document(Auth_Handler.CURRENT_USER.email).updateData({
       'email':Auth_Handler.CURRENT_USER.email,
-      'password':Auth_Handler.CURRENT_USER.password,
       'nome':nome.toLowerCase(),
       'cognome':cognome.toLowerCase(),
       'telefono':telefono

@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:quickplay/ViewModel/DB_Handler_Reservations.dart';
 import 'package:quickplay/models/models.dart';
+import 'package:quickplay/pages/home_page.dart';
 
 class SelezioneOrario extends StatefulWidget {
   const SelezioneOrario({Key key, this.campo, this.circolo, this.data})
@@ -490,6 +491,7 @@ class _SelezioneOrario extends State<SelezioneOrario> {
         }
         dataStr += ("-"+data.year.toString());
         DB_Handler_Reservations.newReservation(dataStr, oraInizioSel, oraFineSel, campo.n_c.toString(), circolo.id.toString());
+        backHomeAlert(context);
       },
     );
     // set up the AlertDialog
@@ -508,6 +510,25 @@ class _SelezioneOrario extends State<SelezioneOrario> {
         return alert;
       },
     );
+  }
+
+  void backHomeAlert(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          content: Text("Prenotazione Confermata"),
+          actions: [
+            FlatButton(
+              onPressed: (){
+                Navigator.pop(context, true);
+                Navigator.push(context,MaterialPageRoute(builder: (context)=>Home()));
+              }, // passing true
+              child: Text('Home'),
+            ),
+          ]
+        )).then((value){
+      Navigator.push(context,MaterialPageRoute(builder: (context)=>Home()));
+    });
   }
 
 }

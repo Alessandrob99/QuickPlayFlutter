@@ -46,7 +46,6 @@ class Auth_Handler{
             returnedUser.nome,
             returnedUser.cognome,
             returnedUser.email,
-            returnedUser.password,
             returnedUser.telefono,
         );
         myCallBack(true);
