@@ -1,5 +1,5 @@
+import 'package:clipboard_manager/clipboard_manager.dart';
 import "package:flutter/material.dart";
-import 'package:quickplay/ViewModel/Auth_Handler.dart';
 import 'package:quickplay/ViewModel/DB_Handler_Reservations.dart';
 import 'package:quickplay/models/models.dart';
 import 'home_page_menu.dart';
@@ -50,6 +50,24 @@ class _ListState extends State<VisualizzaPrenotazioni> {
                 color: Colors.black,
               ),
               ),
+              Row(
+                children: [
+                  Text("Codice : "),
+                  Text(prenotazione.codice,style: TextStyle(
+                    fontWeight: FontWeight.bold
+                  ),),
+                  TextButton(
+                    child: Text('Copia'),
+                    onPressed: () {
+                      ClipboardManager.copyToClipBoard(prenotazione.codice);
+                      final snackBar = SnackBar(
+                        content: Text('Copiato negli appunti'),
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    },
+                  ),
+                ],
+              ),
               Row(children: [
                 TextButton(
                     onPressed: () {
@@ -59,8 +77,9 @@ class _ListState extends State<VisualizzaPrenotazioni> {
                       'Cancella',
                       style: TextStyle(
                           decoration: TextDecoration.underline,
-                          color: Colors.black,
-                          fontSize: 14.0,
+                          color: Colors.red,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15.0,
                           fontFamily: 'WorkSansMedium'),
                     )),
                 TextButton(
@@ -70,7 +89,8 @@ class _ListState extends State<VisualizzaPrenotazioni> {
                       style: TextStyle(
                           decoration: TextDecoration.underline,
                           color: Colors.black,
-                          fontSize: 14.0,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15.0, 
                           fontFamily: 'WorkSansMedium'),
                     ))
               ])
@@ -95,7 +115,7 @@ class _ListState extends State<VisualizzaPrenotazioni> {
     return ListView.builder(
       scrollDirection: _direction,
       itemCount: layoutInfo.length,
-      itemExtent: 150.0,
+      itemExtent: 175.0,
       itemBuilder: (context, index) {
         return Container(
           alignment: AlignmentDirectional.center,

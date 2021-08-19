@@ -40,6 +40,7 @@ dependencies:
   flutter_polyline_points: ^0.2.6
   google_maps_flutter: ^2.0.2
   geolocator: ^7.4.0
+  clipboard_manager: ^0.0.4
 
 
 dev_dependencies:

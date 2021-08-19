@@ -125,6 +125,40 @@ class DB_Handler_Reservations {
     }
   }
 
+  static Future<String> newPartecipazione(String codPren) async{
+
+    if(codPren.length!=20){
+      return "Codice non valido";
+    }
+    try{
+      String uncodedId = decrypt(codPren, 15);
+      var codSplit = uncodedId.split("&");
+      String codGiorno = codSplit[0]+"-"+codSplit[1]+"-"+codSplit[2];
+      var prenotazione = await myRef.collection("prenotazione").document(codGiorno).collection("prenotazioni").document(codPren).get();
+      if(prenotazione==null){
+        return "Codice inesistente";
+      }else{
+        if(prenotazione.data["prenotatore"].documentID == Auth_Handler.CURRENT_USER.email){
+          return "Non puoi partecipare alla tua stessa prenotazione";
+        }else{
+          myRef.collection("prenotazione").document(codGiorno).collection("prenotazioni").document(codPren).collection("partecipanti").document(Auth_Handler.CURRENT_USER.email).setData({
+            "nome" : Auth_Handler.CURRENT_USER.nome,
+            "cognome" : Auth_Handler.CURRENT_USER.cognome
+          });
+          myRef.collection("users").document(Auth_Handler.CURRENT_USER.email).collection("prenotazioni").document(codPren).setData({
+            "oraInizio" : prenotazione.data["oraInizio"],
+            "oraFine" : prenotazione.data["oraFine"],
+            "prenotatore" : prenotazione.data["prenotatore"]
+          });
+          return "Partecipazione registrata con successo";
+        }
+      }
+    }catch(e){
+      return "Codice non valido";
+    }
+
+  }
+
   static String crypt(String text, int shift){
     List<int> codeStr = [];
     int xxx = "1".codeUnitAt(0);
