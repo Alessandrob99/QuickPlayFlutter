@@ -12,11 +12,30 @@ class DB_Handler_Reservations {
   static getReservationLayoutInfo(Prenotazione prenotazione) async{
       String codice = decrypt(prenotazione.id, 15);
       var codSplit = codice.split("&");
-      String oraFine = prenotazione.oraFine.hour.toString()+":"+prenotazione.oraFine.minute.toString();
+      String oraFine;
+      if(prenotazione.oraFine.minute.toString().length==1){
+        oraFine = prenotazione.oraFine.hour.toString()+":0"+prenotazione.oraFine.minute.toString();
+      }else{
+        oraFine = prenotazione.oraFine.hour.toString()+":"+prenotazione.oraFine.minute.toString();
+      }
+
+
+      String oraInizioSafe;
+      String oraFineSafe;
+      if(codSplit[3].length==4){
+        oraInizioSafe = "0"+codSplit[3];
+      }else{
+        oraInizioSafe = codSplit[3];
+      }
+      if(oraFine.length==4){
+        oraFineSafe = "0"+oraFine;
+      }else{
+        oraFineSafe = oraFine;
+      }
 
       Club _circolo =  await DB_Handler_Clubs.getClubById(codSplit[0]);
 
-      return LayoutInfo(_circolo.nome, codSplit[1], codSplit[2], codSplit[3], oraFine, prenotazione.id);
+      return LayoutInfo(_circolo.nome, codSplit[1], codSplit[2], oraInizioSafe, oraFineSafe, prenotazione.id);
   }
 
 
@@ -37,15 +56,28 @@ class DB_Handler_Reservations {
 
   static Future<void> newReservation(String data,String oraInizio,String oraFine,String n_campo,String id_circolo) async {
 
+
+
+    String oraInizioSafe;
+    String oraFineSafe;
+    if(oraInizio.length==4){
+      oraInizioSafe = "0"+oraInizio;
+    }else{
+      oraInizioSafe = oraInizio;
+    }
+    if(oraFine.length==4){
+      oraFineSafe = "0"+oraFine;
+    }else{
+      oraFineSafe = oraFine;
+    }
     String uncodedID = id_circolo+"&"+n_campo+"&"+data+"&"+oraInizio;
     String codedID = crypt(uncodedID, 15);
-
     var giornoSplit = data.split("-");
     String giornoFormatoAmericano = giornoSplit[2]+"-"+giornoSplit[1]+"-"+giornoSplit[0];
 
 
-    DateTime dtInizio = DateTime.parse(giornoFormatoAmericano+" "+oraInizio);
-    DateTime dtFine = DateTime.parse(giornoFormatoAmericano+" "+oraFine);
+    DateTime dtInizio = DateTime.parse(giornoFormatoAmericano+" "+oraInizioSafe);
+    DateTime dtFine = DateTime.parse(giornoFormatoAmericano+" "+oraFineSafe);
     Timestamp tsInizio = Timestamp.fromMillisecondsSinceEpoch(dtInizio.millisecondsSinceEpoch);
     Timestamp tsFine = Timestamp.fromMillisecondsSinceEpoch(dtFine.millisecondsSinceEpoch);
     DocumentReference prenotatore = myRef.document("/users/"+Auth_Handler.CURRENT_USER.email);
@@ -80,8 +112,21 @@ class DB_Handler_Reservations {
 
   static bool checkAvailability(String giorno,String oraInizio,String oraFine,List<Prenotazione> prenotazioni){
     bool result = false;
-    DateTime dtInizio = DateTime.parse(giorno+" "+oraInizio);
-    DateTime dtFine = DateTime.parse(giorno+" "+oraFine);
+    String oraInizioSafe;
+    String oraFineSafe;
+    if(oraInizio.length==4){
+      oraInizioSafe = "0"+oraInizio;
+    }else{
+      oraInizioSafe = oraInizio;
+    }
+    if(oraFine.length==4){
+      oraFineSafe = "0"+oraFine;
+    }else{
+      oraFineSafe = oraFine;
+    }
+
+    DateTime dtInizio = DateTime.parse(giorno+" "+oraInizioSafe);
+    DateTime dtFine = DateTime.parse(giorno+" "+oraFineSafe);
 
     prenotazioni.forEach((element) {
       if(element.oraInizio.millisecondsSinceEpoch<dtFine.millisecondsSinceEpoch && element.oraFine.millisecondsSinceEpoch>dtInizio.millisecondsSinceEpoch){ result = true;}
