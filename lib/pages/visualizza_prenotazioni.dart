@@ -1,13 +1,16 @@
-
 import 'package:clipboard_manager/clipboard_manager.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import "package:flutter/material.dart";
+import 'package:quickplay/ViewModel/Auth_Handler.dart';
 import 'package:quickplay/ViewModel/DB_Handler_Reservations.dart';
 import 'package:quickplay/models/models.dart';
 import 'home_page_menu.dart';
+import 'package:quickplay/pages/home_page.dart';
 
 
 class VisualizzaPrenotazioni extends StatefulWidget {
-  VisualizzaPrenotazioni(this.layoutInfo,{Key key, this.group}) : super(key: key);
+  VisualizzaPrenotazioni(this.layoutInfo, {Key key, this.group})
+      : super(key: key);
 
   final GroupType group;
 
@@ -27,8 +30,7 @@ class _ListState extends State<VisualizzaPrenotazioni> {
 
   List<LayoutInfo> layoutInfo = [];
 
-
-  _ListState(List<LayoutInfo> prenotazioni ){
+  _ListState(List<LayoutInfo> prenotazioni) {
     layoutInfo = prenotazioni;
   }
 
@@ -36,37 +38,34 @@ class _ListState extends State<VisualizzaPrenotazioni> {
     Color backgroung = getColor(prenotazione);
     return Container(
       decoration: BoxDecoration(
-        color: backgroung,
-        border: Border(
-          bottom: BorderSide(
-            color: Colors.black,
-            width: 3
-          )
-        )
-      ),
-
+          color: backgroung,
+          border: Border(bottom: BorderSide(color: Colors.black, width: 3))),
       child: ListTile(
         title: Padding(
             padding: const EdgeInsets.only(top: 10.0),
             child: Column(
               children: <Widget>[
-                Text(prenotazione.circolo,style: TextStyle(
-                  fontSize: 13.0,
-                  color: Colors.black,
+                Text(
+                  prenotazione.circolo,
+                  style: TextStyle(
+                    fontSize: 13.0,
+                    color: Colors.black,
+                  ),
                 ),
-                ),
-                Text("Campo n° "+prenotazione.campo),
+                Text("Campo n° " + prenotazione.campo),
                 Text(prenotazione.data),
-                Text("Dalle "+prenotazione.orainizio+" Alle "+prenotazione.oraFine,style: TextStyle(
-                  fontSize: 13.0,
-                  color: Colors.black,
-                ),
+                Text(
+                  "Dalle " +
+                      prenotazione.orainizio +
+                      " Alle " +
+                      prenotazione.oraFine,
+                  style: TextStyle(
+                    fontSize: 13.0,
+                    color: Colors.black,
+                  ),
                 ),
                 Row(
-                  children: [
-                    getCod(prenotazione),
-                    getCopyBtn(prenotazione)
-                  ],
+                  children: [getCod(prenotazione), getCopyBtn(prenotazione)],
                 ),
                 Row(children: [
                   TextButton(
@@ -83,9 +82,13 @@ class _ListState extends State<VisualizzaPrenotazioni> {
                             fontFamily: 'WorkSansMedium'),
                       )),
                   TextButton(
-                      onPressed: () {
-                        getColor(prenotazione);
-                      },
+                      onPressed: () async {
+                          showLoaderDialog(context);
+                          DB_Handler_Reservations.getPartecipanti(prenotazione.codice,).then((value){
+                            Navigator.of(context).pop();
+                            showPartecipanti(value);
+                          });
+                        },
                       child: const Text(
                         'Partecipanti',
                         style: TextStyle(
@@ -108,12 +111,11 @@ class _ListState extends State<VisualizzaPrenotazioni> {
         //onTap: () => ,
       ),
     );
-
   }
 
   Widget _bodyContent() {
     if (layoutInfo == []) {
-        return null;
+      return null;
     }
     var isVertical = _direction == Axis.vertical;
     return ListView.builder(
@@ -138,28 +140,28 @@ class _ListState extends State<VisualizzaPrenotazioni> {
 
   @override
   Widget build(BuildContext context) {
-      return WillPopScope(
-        child: Scaffold(
-          appBar: AppBar(
-            backgroundColor: Colors.indigo,
-            leading: Builder(
-              builder: (context) => IconButton(
-                icon: Icon(Icons.arrow_back_outlined),
-                onPressed: onBackPressed,
-              ),
-            ),
-          ),
-          body: Container(
-            constraints: _direction == Axis.vertical
-                ? null
-                : BoxConstraints.tightForFinite(height: 80.0),
-            child: Center(
-              child: _bodyContent(),
+    return WillPopScope(
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.indigo,
+          leading: Builder(
+            builder: (context) => IconButton(
+              icon: Icon(Icons.arrow_back_outlined),
+              onPressed: onBackPressed,
             ),
           ),
         ),
-        onWillPop: onBackPressed,
-      );
+        body: Container(
+          constraints: _direction == Axis.vertical
+              ? null
+              : BoxConstraints.tightForFinite(height: 80.0),
+          child: Center(
+            child: _bodyContent(),
+          ),
+        ),
+      ),
+      onWillPop: onBackPressed,
+    );
   }
 
   Future<bool> onBackPressed() {
@@ -170,17 +172,17 @@ class _ListState extends State<VisualizzaPrenotazioni> {
     ), (route) => false);
   }
 
-  showCancelDialog(BuildContext context,LayoutInfo prenotazione) {
+  showCancelDialog(BuildContext context, LayoutInfo prenotazione) {
     // set up the buttons
     Widget cancelButton = FlatButton(
       child: Text("No"),
-      onPressed:  () {
+      onPressed: () {
         Navigator.of(context).pop();
       },
     );
     Widget continueButton = FlatButton(
       child: Text("Si"),
-      onPressed:  () {
+      onPressed: () {
         Navigator.of(context).pop();
         DB_Handler_Reservations.deleteReservation(prenotazione.codice);
         layoutInfo.remove(prenotazione);
@@ -205,43 +207,48 @@ class _ListState extends State<VisualizzaPrenotazioni> {
     );
   }
 
-  Color getColor(LayoutInfo pren){
+  Color getColor(LayoutInfo pren) {
     var giornoSplit = pren.data.split("-");
-    String giornoFormatoAmericano = giornoSplit[2]+"-"+giornoSplit[1]+"-"+giornoSplit[0];
-    int tsFine = DateTime.parse(giornoFormatoAmericano+" "+pren.oraFine).millisecondsSinceEpoch;
+    String giornoFormatoAmericano =
+        giornoSplit[2] + "-" + giornoSplit[1] + "-" + giornoSplit[0];
+    int tsFine = DateTime.parse(giornoFormatoAmericano + " " + pren.oraFine)
+        .millisecondsSinceEpoch;
     int tsNow = DateTime.now().millisecondsSinceEpoch;
-    if(tsFine<tsNow){
-      return Color.fromRGBO(255, 102, 102,0.8);
+    if (tsFine < tsNow) {
+      return Color.fromRGBO(255, 102, 102, 0.8);
     }
     return Colors.white;
   }
-  Text getCod(LayoutInfo pren){
-    var giornoSplit = pren.data.split("-");
-    String giornoFormatoAmericano = giornoSplit[2]+"-"+giornoSplit[1]+"-"+giornoSplit[0];
-    int tsFine = DateTime.parse(giornoFormatoAmericano+" "+pren.oraFine).millisecondsSinceEpoch;
-    int tsNow = DateTime.now().millisecondsSinceEpoch;
-    if(tsFine<tsNow){
-      return Text("Prenotazione scaduta",style: TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 17,
-          color: Colors.black
-      ),);
 
+  Text getCod(LayoutInfo pren) {
+    var giornoSplit = pren.data.split("-");
+    String giornoFormatoAmericano =
+        giornoSplit[2] + "-" + giornoSplit[1] + "-" + giornoSplit[0];
+    int tsFine = DateTime.parse(giornoFormatoAmericano + " " + pren.oraFine)
+        .millisecondsSinceEpoch;
+    int tsNow = DateTime.now().millisecondsSinceEpoch;
+    if (tsFine < tsNow) {
+      return Text(
+        "Prenotazione scaduta",
+        style: TextStyle(
+            fontWeight: FontWeight.bold, fontSize: 17, color: Colors.black),
+      );
     }
-    return Text("Codice : "+pren.codice,style: TextStyle(
-        fontWeight: FontWeight.bold
-    ),);
+    return Text(
+      "Codice : " + pren.codice,
+      style: TextStyle(fontWeight: FontWeight.bold),
+    );
   }
 
-  TextButton getCopyBtn(LayoutInfo pren){
-
+  TextButton getCopyBtn(LayoutInfo pren) {
     var giornoSplit = pren.data.split("-");
-    String giornoFormatoAmericano = giornoSplit[2]+"-"+giornoSplit[1]+"-"+giornoSplit[0];
-    int tsFine = DateTime.parse(giornoFormatoAmericano+" "+pren.oraFine).millisecondsSinceEpoch;
+    String giornoFormatoAmericano =
+        giornoSplit[2] + "-" + giornoSplit[1] + "-" + giornoSplit[0];
+    int tsFine = DateTime.parse(giornoFormatoAmericano + " " + pren.oraFine)
+        .millisecondsSinceEpoch;
     int tsNow = DateTime.now().millisecondsSinceEpoch;
-    if(tsFine<tsNow){
-      return TextButton(onPressed: (){}, child: null);
-
+    if (tsFine < tsNow) {
+      return TextButton(onPressed: () {}, child: null);
     }
     return TextButton(
       child: Text('Copia'),
@@ -254,4 +261,90 @@ class _ListState extends State<VisualizzaPrenotazioni> {
       },
     );
   }
+
+  Widget _item(Partecipante partecipante) {
+    var ref = FirebaseStorage.instance.ref().child("usersPics/"+partecipante.email);
+    var url="https://www.google.com/imgres?imgurl=https%3A%2F%2Fldm360.altervista.org%2Fwp-content%2Fuploads%2F2020%2F08%2Fcristo-risorto-320x442.jpg&imgrefurl=https%3A%2F%2Fldm360.altervista.org%2Fche-cosa-o-chi-e-dio%2F&tbnid=QlhPsfyB5kEWKM&vet=12ahUKEwiErsC-s7_yAhWXNuwKHf2LADQQMygBegUIARCEAQ..i&docid=zqUrxZns7uGTbM&w=320&h=442&q=dio&ved=2ahUKEwiErsC-s7_yAhWXNuwKHf2LADQQMygBegUIARCEAQ";
+   /* ref.getDownloadURL().then((value){
+      url = value;
+      setState(() {
+      });
+    });*/
+    return Container(
+        decoration: BoxDecoration(
+            border: Border(bottom: BorderSide(color: Colors.black, width: 3))),
+        child: ListTile(
+            title: Padding(
+              padding: const EdgeInsets.only(top: 10.0),
+              child: Row(
+                children: [
+                  Text(partecipante.nome.capitalize()+" "+partecipante.cognome.capitalize()),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 20),
+                    child: CircleAvatar(
+                      radius: 22.0,
+                      backgroundImage: NetworkImage(url),
+                    ),
+                  )
+
+                ],
+              )
+
+
+            )
+        )
+    );
+  }
+
+  showPartecipanti(List<Partecipante> partecipanti) {
+    var isVertical = _direction == Axis.vertical;
+
+    AlertDialog alert = AlertDialog(
+        scrollable: true,
+        contentPadding: EdgeInsets.only(left: 25, right: 25),
+        title: Center(child: Text("Partecipanti")),
+        content: Container(
+          height: MediaQuery.of(context).size.width*0.8,
+          width: MediaQuery.of(context).size.width*0.8,
+          child: ListView.builder(
+            itemCount: partecipanti.length,
+            itemBuilder: (context, index) {
+              return _item(partecipanti[index]);
+            },
+          ),
+
+          ),
+        );
+
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+  showLoaderDialog(BuildContext context){
+    AlertDialog alert=AlertDialog(
+      content: new Row(
+        children: [
+          CircularProgressIndicator(),
+          Container(margin: EdgeInsets.only(left: 7),child:Text("Caricamento..." )),
+        ],),
+    );
+    showDialog(barrierDismissible: false,
+      context:context,
+      builder:(BuildContext context){
+        return alert;
+      },
+    );
+  }
+
 }
+
+
+/*
+
+          child:
+
+ */

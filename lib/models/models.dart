@@ -73,3 +73,10 @@ class Court{
   Court(this.n_c, this.codClub, this.superficie, this.sport, this.prezzo,
       this.riscaldamento, this.coperto);
 }
+
+class Partecipante{
+  String nome;
+  String cognome;
+  String email;
+  Partecipante(this.nome, this.cognome,this.email);
+}

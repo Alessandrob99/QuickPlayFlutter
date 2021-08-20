@@ -1,6 +1,8 @@
 
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:quickplay/ViewModel/Auth_Handler.dart';
 import 'package:quickplay/ViewModel/DB_Handler_Clubs.dart';
 import 'package:quickplay/models/models.dart';
@@ -202,6 +204,22 @@ class DB_Handler_Reservations {
       return "Codice non valido";
     }
 
+  }
+
+  static Future<List<Partecipante>> getPartecipanti(String codPren) async {
+    List<Partecipante> partecipanti = [];
+
+    String uncodedID = decrypt(codPren, 15);
+    var codSplit = uncodedID.split("&");
+    String resDoc = codSplit[0]+"-"+codSplit[1]+"-"+codSplit[2];
+
+    var records = await myRef.collection("prenotazione").document(resDoc).collection("prenotazioni").document(codPren).collection("partecipanti").getDocuments();
+    records.documents.forEach((element) {
+
+      partecipanti.add(Partecipante(element.data["nome"],element.data["cognome"],element.documentID));
+      } );
+
+    return partecipanti;
   }
 
   static String crypt(String text, int shift){
