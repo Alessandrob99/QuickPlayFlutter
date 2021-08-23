@@ -65,6 +65,7 @@ class _createSelezione1 extends State<Selezione1> {
                             HeaderWidget(
                                 title: "Seleziona lo sport",
                                 child: DropdownButton(
+                                  style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black),
                                   hint: Text('Sport '),
                                   // Not necessary for Option 1
                                   value: _selectedSport,
@@ -75,6 +76,7 @@ class _createSelezione1 extends State<Selezione1> {
                                   },
                                   items: _sports.map((location) {
                                     return DropdownMenuItem(
+
                                       child: new Text(location),
                                       value: location,
                                     );
