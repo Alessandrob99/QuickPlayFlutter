@@ -243,6 +243,7 @@ class _EffettuaPrenotazione extends State<EffettuaPrenotazione> {
               CustomSnackBar(context, const Text("Filtri non validi"));
               return null;
             }
+            showLoaderDialog(context);
             await DB_Handler_Clubs.getFilteredClubsAndCourt(
                 distanza,
                 prezzo,
@@ -282,7 +283,6 @@ class _EffettuaPrenotazione extends State<EffettuaPrenotazione> {
               var myPos = await Geolocator.getCurrentPosition();
 
               _center = LatLng(myPos.latitude, myPos.longitude);
-
               clubMarkers.add(Marker(
                 markerId: MarkerId("tu"),
                 infoWindow: InfoWindow(title: "Tu"),
@@ -290,6 +290,10 @@ class _EffettuaPrenotazione extends State<EffettuaPrenotazione> {
                     BitmapDescriptor.hueBlue),
                 position: _center,
               ));
+              Navigator.pop(context);
+              if(circoli.isEmpty){
+                CustomSnackBar(context, const Text("Nessun campo trovato."));
+              }
               setState(() {});
             });
           }
@@ -345,6 +349,26 @@ class _EffettuaPrenotazione extends State<EffettuaPrenotazione> {
           child: const Text('Impostazioni'),
         ),
       ],
+    );
+  }
+
+  showLoaderDialog(BuildContext context) {
+    AlertDialog alert = AlertDialog(
+      content: new Row(
+        children: [
+          CircularProgressIndicator(),
+          Container(
+              margin: EdgeInsets.only(left: 7),
+              child: Text("Cercando i campi...")),
+        ],
+      ),
+    );
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
     );
   }
 }

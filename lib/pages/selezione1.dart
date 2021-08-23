@@ -116,7 +116,7 @@ class _createSelezione1 extends State<Selezione1> {
                                     borderRadius: BorderRadius.circular(30.0),
                                     side: BorderSide(
                                         color: Colors.black26, width: 2.0)),
-                                color: Colors.white,
+                                color: Colors.grey,
                                 child: Text(
                                   'Conferma',
                                   style: TextStyle(
