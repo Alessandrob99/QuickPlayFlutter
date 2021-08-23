@@ -1,5 +1,6 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:quickplay/models/models.dart';
 import 'package:geolocator/geolocator.dart';
@@ -44,11 +45,7 @@ class DB_Handler_Clubs{
     });
 
     List<Club> filteredClubs = [];
-    try {
-      LocationPermission permission = await Geolocator.checkPermission();
-    }catch(e){
-      print("Errore : "+e.code);
-    }
+
 
     myPosition = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.medium);

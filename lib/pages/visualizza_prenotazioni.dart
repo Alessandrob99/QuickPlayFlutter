@@ -264,7 +264,7 @@ class _ListState extends State<VisualizzaPrenotazioni> {
 
   Widget _item(Partecipante partecipante) {
     var ref = FirebaseStorage.instance.ref().child("usersPics/"+partecipante.email);
-    var url="https://www.google.com/imgres?imgurl=https%3A%2F%2Fldm360.altervista.org%2Fwp-content%2Fuploads%2F2020%2F08%2Fcristo-risorto-320x442.jpg&imgrefurl=https%3A%2F%2Fldm360.altervista.org%2Fche-cosa-o-chi-e-dio%2F&tbnid=QlhPsfyB5kEWKM&vet=12ahUKEwiErsC-s7_yAhWXNuwKHf2LADQQMygBegUIARCEAQ..i&docid=zqUrxZns7uGTbM&w=320&h=442&q=dio&ved=2ahUKEwiErsC-s7_yAhWXNuwKHf2LADQQMygBegUIARCEAQ";
+    var url="";
    /* ref.getDownloadURL().then((value){
       url = value;
       setState(() {

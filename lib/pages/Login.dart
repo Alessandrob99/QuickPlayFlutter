@@ -12,10 +12,7 @@ import 'home_page_menu.dart';
 class LoginScreen extends StatefulWidget {
   @override
   _LoginScreenState createState() => _LoginScreenState();
-
-
 }
-
 
 class _LoginScreenState extends State<LoginScreen> {
   bool _rememberMe = false;
@@ -26,10 +23,8 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController loginEmailController = TextEditingController();
   TextEditingController loginPasswordController = TextEditingController();
 
-
   final FocusNode focusNodeEmail = FocusNode();
   final FocusNode focusNodePassword = FocusNode();
-
 
   bool _obscureTextPassword = true;
 
@@ -46,8 +41,7 @@ class _LoginScreenState extends State<LoginScreen> {
     check();
   }
 
-  void check() async
-  {
+  void check() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (prefs.getString("email") != "") {
       _rememberMe = true;
@@ -56,7 +50,6 @@ class _LoginScreenState extends State<LoginScreen> {
       setState(() {});
     }
   }
-
 
   Widget _buildEmailTF() {
     return Column(
@@ -170,8 +163,8 @@ class _LoginScreenState extends State<LoginScreen> {
               activeColor: Colors.white,
               onChanged: (value) async {
                 if (!value) {
-                  SharedPreferences prefs = await SharedPreferences
-                      .getInstance();
+                  SharedPreferences prefs =
+                      await SharedPreferences.getInstance();
                   prefs.setString("email", "");
                   prefs.setString("password", "");
                 }
@@ -228,12 +221,29 @@ class _LoginScreenState extends State<LoginScreen> {
             fontWeight: FontWeight.w500,
           ),
         ),
-        SizedBox(height: 20.0),
-        FlatButton(
-          onPressed: () =>
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => Register())),
-          child: Text('REGISTRATI', style: kLabelStyle),
+        Container(
+          padding: EdgeInsets.symmetric(vertical: 25.0),
+          width: double.infinity,
+          child: RaisedButton(
+            elevation: 5.0,
+            onPressed: () => Navigator.push(
+                context, MaterialPageRoute(builder: (context) => Register())),
+            padding: EdgeInsets.all(15.0),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30.0),
+                side: BorderSide(color: Colors.black26, width: 2.0)),
+            color: Colors.white,
+            child: Text(
+              'REGISTRATI',
+              style: TextStyle(
+                color: Colors.black,
+                letterSpacing: 1.5,
+                fontSize: 18.0,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'OpenSans',
+              ),
+            ),
+          ),
         )
       ],
     );
@@ -263,7 +273,6 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -291,21 +300,18 @@ class _LoginScreenState extends State<LoginScreen> {
                     children: <Widget>[
                       SizedBox(height: 30.0),
                       Image(
-                          height: MediaQuery
-                              .of(context)
-                              .size
-                              .height > 800
+                          height: MediaQuery.of(context).size.height > 800
                               ? 191.0
                               : 150,
                           fit: BoxFit.fill,
                           image:
-                          const AssetImage('assets/img/quickplaylogo.PNG')),
+                              const AssetImage('assets/img/quickplaylogo.PNG')),
                       SizedBox(height: 30.0),
                       Card(
                           elevation: 2.0,
                           color: Colors.white, //Colore interno
                           shape: new RoundedRectangleBorder(
-                            //Colore del bordo
+                              //Colore del bordo
                               side: new BorderSide(
                                   color: Colors.black26, width: 2.0),
                               borderRadius: BorderRadius.circular(8.0)),
@@ -340,7 +346,9 @@ class _LoginScreenState extends State<LoginScreen> {
         barrierDismissible: true,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text("Errore",),
+            title: Text(
+              "Errore",
+            ),
             content: Text(msg),
             //buttons?
             actions: <Widget>[
@@ -352,22 +360,22 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ],
           );
-        }
-    );
+        });
   }
 
   _displayTextInputDialog(BuildContext context) {
+    TextEditingController emailResetPasswordController =
+        TextEditingController();
 
-    TextEditingController emailResetPasswordController = TextEditingController();
-
-    showDialog(context: context, barrierDismissible: true,
+    showDialog(
+        context: context,
+        barrierDismissible: true,
         builder: (context) {
           return AlertDialog(
             title: Text('Inserisci email di recupero'),
             content: Column(
               children: [
                 TextField(
-
                   controller: emailResetPasswordController,
                   decoration: InputDecoration(hintText: "Email"),
                 ),
@@ -376,10 +384,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     Navigator.pop(context);
                     sendValidationEmail(emailResetPasswordController.text);
                   },
-                  child: Text("Invia"),)
+                  child: Text("Invia"),
+                )
               ],
             ),
-
           );
         });
   }
@@ -389,11 +397,14 @@ class _LoginScreenState extends State<LoginScreen> {
       content: new Row(
         children: [
           CircularProgressIndicator(),
-          Container(margin: EdgeInsets.only(left: 7),
+          Container(
+              margin: EdgeInsets.only(left: 7),
               child: Text("Controllando le credenziali...")),
-        ],),
+        ],
+      ),
     );
-    showDialog(barrierDismissible: false,
+    showDialog(
+      barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
         return alert;
@@ -403,7 +414,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   //Metodo per l'invio dalla tastiera.
   void _toggleSignInButton() {
-    if (loginEmailController.text == "" || loginPasswordController.text == "" ||
+    if (loginEmailController.text == "" ||
+        loginPasswordController.text == "" ||
         (loginEmailController.text == "" &&
             loginPasswordController.text == "")) {
       CustomSnackBar(context, const Text("Inserisci le credenziali d'accesso"));
@@ -414,7 +426,9 @@ class _LoginScreenState extends State<LoginScreen> {
         showCheckCredenzialiDialog(context);
         //CheckCredenziali corrette
         Auth_Handler.FireBaseLogin(
-            _rememberMe, context, loginEmailController.text,
+            _rememberMe,
+            context,
+            loginEmailController.text,
             loginPasswordController.text, (result, msg) {
           if (result) {
             //Credenziali corrette -> Facciamo partire la homePage
@@ -434,7 +448,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   //Metodo per il click del bottone da touch
   Future<void> _LoginButton() async {
-    if (loginEmailController.text == "" || loginPasswordController.text == "" ||
+    if (loginEmailController.text == "" ||
+        loginPasswordController.text == "" ||
         (loginEmailController.text == "" &&
             loginPasswordController.text == "")) {
       CustomSnackBar(context, const Text("Inserisci le credenziali d'accesso"));
@@ -445,7 +460,9 @@ class _LoginScreenState extends State<LoginScreen> {
         showCheckCredenzialiDialog(context);
         //CheckCredenziali corrette
         Auth_Handler.FireBaseLogin(
-            _rememberMe, context, loginEmailController.text,
+            _rememberMe,
+            context,
+            loginEmailController.text,
             loginPasswordController.text, (result, msg) {
           if (result) {
             //Credenziali corrette -> Facciamo partire la homePage
@@ -469,23 +486,23 @@ class _LoginScreenState extends State<LoginScreen> {
     });
   }
 
-
   Future<void> sendValidationEmail(String email) async {
     try {
-      await Auth_Handler.firebaseAuth.sendPasswordResetEmail(email : email);
+      await Auth_Handler.firebaseAuth.sendPasswordResetEmail(email: email);
     } catch (e) {
       switch (e.code) {
-        case "ERROR_INVALID_EMAIL" :
+        case "ERROR_INVALID_EMAIL":
           CustomSnackBar(context, const Text("Indirizzo email non valido."));
           break;
         case "ERROR_USER_NOT_FOUND":
-          CustomSnackBar(context, const Text("La mail inserita non è legata a nessun account."));
+          CustomSnackBar(context,
+              const Text("La mail inserita non è legata a nessun account."));
           break;
-        default :
-          CustomSnackBar(context, const Text("Errore durante l'invio della mail."));
+        default:
+          CustomSnackBar(
+              context, const Text("Errore durante l'invio della mail."));
           break;
       }
     }
   }
-
 }

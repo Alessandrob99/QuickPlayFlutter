@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:quickplay/pages/Login.dart';
-import 'package:quickplay/pages/login_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ExitConfirmationDialog extends StatelessWidget {
