@@ -196,6 +196,7 @@ class _MyHomePageState extends State<Home> {
         createTile(0,_selectedIndex,false, 'Effettua Prenotazione', Colors.purple, Icons.sports_football),
         createTile(1,_selectedIndex,true, 'Visualizza Prenotazione', Colors.yellow, Icons.local_activity),
         createTile(2,_selectedIndex,false, 'Unisciti alla Prenotazione', Colors.red, Icons.app_settings_alt),
+
       ],
     );
   }

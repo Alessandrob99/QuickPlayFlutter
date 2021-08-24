@@ -58,12 +58,20 @@ class DB_Handler_Clubs{
 
 
     //Filtraggio sui campi trovati
-    if(superficie!="") {
-      campiPerSportNonFiltrati.forEach((element) {
-        if (element.superficie != superficie.toLowerCase()) {
-          campiPerSportFiltrati.remove(element);
-        }
-      });
+    if(superficie!="Tutte") {
+      if(superficie=="Altro"){
+        campiPerSportNonFiltrati.forEach((element) {
+          if (element.superficie=="erba" || element.superficie=="terra rossa" || element.superficie=="cemento" || element.superficie=="erba sintetica"){
+            campiPerSportFiltrati.remove(element);
+          }
+        });
+      }else{
+        campiPerSportNonFiltrati.forEach((element) {
+          if (element.superficie != superficie.toLowerCase()) {
+            campiPerSportFiltrati.remove(element);
+          }
+        });
+      }
     }
       if(coperto==true){
         campiPerSportNonFiltrati.forEach((element) {

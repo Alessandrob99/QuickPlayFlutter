@@ -7,6 +7,8 @@ import 'package:quickplay/models/models.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:quickplay/pages/ClubDetails.dart';
 import 'package:quickplay/widgets/snackbar.dart';
+import 'package:quickplay/widgets/FiltersPopup.dart';
+import 'package:quickplay/widgets/HelpPopup.dart';
 
 class EffettuaPrenotazione extends StatefulWidget {
   const EffettuaPrenotazione({Key key, this.campiPerSport, this.data})
@@ -21,14 +23,27 @@ class EffettuaPrenotazione extends StatefulWidget {
 
 class _EffettuaPrenotazione extends State<EffettuaPrenotazione> {
   List<Court> campiPerSport = [];
+
+  List<String> _surfaces = [
+    'Tutte',
+    'Erba',
+    'Cemento',
+    'Terra rossa',
+    'Erba sintetica',
+    "Altro"
+  ]; // Option 2
+
   DateTime data;
+
 
   bool coperto = false;
   bool riscaldamento = false;
   bool docce = false;
-  TextEditingController maxDistance = TextEditingController();
-  TextEditingController maxPrice = TextEditingController();
-  TextEditingController superficie = TextEditingController();
+  String distanza;
+  String prezzo;
+  String _selectedSurface = "Tutte";
+
+
   Set<Marker> clubMarkers = Set();
   LatLng _center = LatLng(43.586751779797915, 13.51659500105265);
 
@@ -44,8 +59,8 @@ class _EffettuaPrenotazione extends State<EffettuaPrenotazione> {
 
   @override
   void initState() {
-    maxDistance.text = "20";
-    maxPrice.text = "";
+    distanza = "20";
+    prezzo = "";
     super.initState();
   }
 
@@ -57,7 +72,6 @@ class _EffettuaPrenotazione extends State<EffettuaPrenotazione> {
 
     return Scaffold(
       body: Stack(
-        fit: StackFit.expand,
         children: [
           GoogleMap(
             onMapCreated: _onMapCreated,
@@ -67,140 +81,43 @@ class _EffettuaPrenotazione extends State<EffettuaPrenotazione> {
               zoom: 11.0,
             ),
           ),
-          SizedBox.expand(
-            child: DraggableScrollableSheet(
-                initialChildSize: 0.6,
-                minChildSize: 0.2,
-                maxChildSize: 0.6,
-                builder: (context, scrollcontroller) => Container(
-                      color: Colors.white,
-                      child: Column(
-                        children: [
-                          Center(
-                            child: Text(
-                              "FILTRI",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  decoration: TextDecoration.underline,
-                                  fontSize: 28),
-                            ),
-                          ),
-                          Row(
-                            children: [
-                              Expanded(
-                                  child: CheckboxListTile(
-                                title: Text("Coperto"),
-                                value: coperto,
-                                onChanged: (value) {
-                                  setState(() {
-                                    coperto = value;
-                                  });
-                                  print("Vuoi un campo coperto.");
-                                },
-                              ))
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Expanded(
-                                  child: CheckboxListTile(
-                                title: Text("Riscaldamento"),
-                                value: riscaldamento,
-                                onChanged: (value) {
-                                  setState(() {
-                                    riscaldamento = value;
-                                  });
-                                  print("Vuoi un campo con il Riscaldamento.");
-                                },
-                              ))
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Expanded(
-                                  child: CheckboxListTile(
-                                title: Text("Docce"),
-                                value: docce,
-                                onChanged: (value) {
-                                  setState(() {
-                                    docce = value;
-                                  });
-                                  print("Vuoi un campo con le docce.");
-                                },
-                              ))
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: Text("Distanza massima da te : "),
-                              ),
-                              Expanded(
-                                  child: TextField(
-                                controller: maxDistance,
-                                keyboardType: TextInputType.number,
-                              ))
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: Text("Prezzo massimo : "),
-                              ),
-                              Expanded(
-                                  child: TextField(
-                                controller: maxPrice,
-                                keyboardType: TextInputType.number,
-                              )),
-                              Expanded(
-                                child: Text("€/h"),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: Text("Superficie : "),
-                              ),
-                              Expanded(
-                                  child: TextField(
-                                controller: superficie,
-                                keyboardType: TextInputType.text,
-                              )),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Center(
-                                child: RaisedButton(
-                                  elevation: 5.0,
-                                  onPressed: () {
-                                    aggiornaFiltri();
-                                    setState(() {});
-                                  },
-                                  padding: EdgeInsets.all(15.0),
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(30.0),
-                                      side: BorderSide(
-                                          color: Colors.black26, width: 2.0)),
-                                  color: Colors.white,
-                                  child: Text(
-                                    'AGGIORNA',
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      letterSpacing: 1.5,
-                                      fontSize: 14.0,
-                                      fontWeight: FontWeight.bold,
-                                      fontFamily: 'OpenSans',
-                                    ),
-                                  ),
-                                ),
-                              )
-                            ],
-                          )
-                        ],
-                      ),
-                    )),
+          Positioned(
+            top: MediaQuery.of(context).size.height * 0.8,
+            right: MediaQuery.of(context).size.width * 0.65,
+            child: FloatingActionButton.extended(
+              backgroundColor: const Color.fromRGBO(97, 93, 93, 1),
+              foregroundColor: Colors.black,
+              onPressed: () async {
+                var returnedFilters = await showDialog(context: context, builder: (BuildContext context)=>
+                  FilterPopup(_selectedSurface, prezzo, distanza, coperto, docce, riscaldamento));
+                if(returnedFilters!=null){
+                  coperto = returnedFilters["coperto"];
+                  riscaldamento = returnedFilters["riscaldamento"];
+                  docce = returnedFilters["docce"];
+                  distanza = returnedFilters["distanza"];
+                  prezzo = returnedFilters["prezzo"];
+                  _selectedSurface = returnedFilters["superficie"];
+                  aggiornaFiltri();
+                }
+              },
+              icon: Icon(Icons.filter_alt),
+              label: Text('FILTRI'),
+            ),
+          ),
+          Positioned(
+            top: MediaQuery.of(context).size.height * 0.9,
+            right: MediaQuery.of(context).size.width * 0.65,
+            child: FloatingActionButton.extended(
+              backgroundColor: const Color.fromRGBO(114, 180, 71, 1),
+              foregroundColor: Colors.black,
+              onPressed: () {
+
+                showDialog(context: context, builder: (BuildContext context)=> HelpPopup());
+
+              },
+              icon: Icon(Icons.help),
+              label: Text('AIUTO'),
+            ),
           )
         ],
       ),
@@ -225,19 +142,19 @@ class _EffettuaPrenotazione extends State<EffettuaPrenotazione> {
           } else {
             //Usiamo una callback in quanto dobbiamo ritornare sia i circoli che i campi corrispondenti
             // ( Per ogni circolo non è detto che tutti i campi siano accettabili )
-            var prezzo;
-            var distanza;
+            var prezzoInt;
+            var distanzaInt;
             clubMarkers.clear();
             try {
-              if (maxPrice.text != "") {
-                prezzo = int.parse(maxPrice.text);
+              if (prezzo!= "") {
+                prezzoInt = int.parse(prezzo);
               } else {
-                prezzo = 100000000;
+                prezzoInt = 100000000;
               }
-              if (maxDistance != "") {
-                distanza = int.parse(maxDistance.text);
+              if (distanza != "") {
+                distanzaInt = int.parse(distanza);
               } else {
-                distanza = 100000000;
+                distanzaInt = 100000000;
               }
             } catch (e) {
               CustomSnackBar(context, const Text("Filtri non validi"));
@@ -245,12 +162,12 @@ class _EffettuaPrenotazione extends State<EffettuaPrenotazione> {
             }
             showLoaderDialog(context);
             await DB_Handler_Clubs.getFilteredClubsAndCourt(
-                distanza,
-                prezzo,
+                distanzaInt,
+                prezzoInt,
                 docce,
                 riscaldamento,
                 coperto,
-                superficie.text,
+                _selectedSurface,
                 campiPerSport, (circoli, campi) async {
               Position clubPos;
               circoli.forEach((element) {
@@ -281,7 +198,7 @@ class _EffettuaPrenotazione extends State<EffettuaPrenotazione> {
               });
 
               var myPos = await Geolocator.getCurrentPosition();
-
+              Navigator.pop(context);
               _center = LatLng(myPos.latitude, myPos.longitude);
               clubMarkers.add(Marker(
                 markerId: MarkerId("tu"),
@@ -290,17 +207,24 @@ class _EffettuaPrenotazione extends State<EffettuaPrenotazione> {
                     BitmapDescriptor.hueBlue),
                 position: _center,
               ));
-              Navigator.pop(context);
-              if(circoli.isEmpty){
+
+              if (circoli.isEmpty) {
                 CustomSnackBar(context, const Text("Nessun campo trovato."));
               }
-              setState(() {});
+              mapController.moveCamera(CameraUpdate.newCameraPosition(CameraPosition(bearing: 0.0,target: _center,tilt: 45,zoom: 10)));
+              setState(() {
+
+              });
             });
           }
         });
       }
     });
   }
+
+
+
+}
 
   Widget buildGeolocatorAlert1(BuildContext context) {
     return new AlertDialog(
@@ -371,4 +295,150 @@ class _EffettuaPrenotazione extends State<EffettuaPrenotazione> {
       },
     );
   }
-}
+
+
+/*
+
+DraggableScrollableSheet(
+              initialChildSize: 0.6,
+              minChildSize: 0.2,
+              maxChildSize: 0.6,
+              builder: (context, scrollcontroller) => Container(
+                    color: Colors.white,
+                    child: Column(
+                      children: [
+                        Center(
+                          child: Text(
+                            "FILTRI",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                decoration: TextDecoration.underline,
+                                fontSize: 28),
+                          ),
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                                child: CheckboxListTile(
+                                 title: Text("Coperto"),
+                                 value: coperto,
+                                onChanged: (value) {
+                                setState(() {
+                                  coperto = value;
+                                });
+                              },
+                            ))
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                                child: CheckboxListTile(
+                                  title: Text("Riscaldamento"),
+                                  value: riscaldamento,
+                                onChanged: (value) {
+                                setState(() {
+                                  riscaldamento = value;
+                                });
+                              },
+                            ))
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                                child: CheckboxListTile(
+                                  title: Text("Docce"),
+                                  value: docce,
+                                onChanged: (value) {
+                                  setState(() {
+                                    docce = value;
+                                  });
+                              },
+                            ))
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text("Distanza massima da te : "),
+                            ),
+                            Expanded(
+                                child: TextField(
+                              controller: maxDistance,
+                              keyboardType: TextInputType.number,
+                            ))
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text("Prezzo massimo : "),
+                            ),
+                            Expanded(
+                                child: TextField(
+                              controller: maxPrice,
+                              keyboardType: TextInputType.number,
+                            )),
+                            Expanded(
+                              child: Text("€/h"),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text("Superficie : "),
+                            ),
+                            DropdownButton(
+                              style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black),
+                              value: _selectedSurface,
+                              onChanged: (newValue) {
+                                setState(() {
+                                  _selectedSurface = newValue;
+                                });
+                              },
+                              items: _surfaces.map((location) {
+                                return DropdownMenuItem(
+
+                                  child: new Text(location),
+                                  value: location,
+                                );
+                              }).toList(),
+                            )
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Center(
+                              child: RaisedButton(
+                                elevation: 5.0,
+                                onPressed: () {
+                                  aggiornaFiltri();
+                                  setState(() {});
+                                },
+                                padding: EdgeInsets.all(15.0),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(30.0),
+                                    side: BorderSide(
+                                        color: Colors.black26, width: 2.0)),
+                                color: Colors.white,
+                                child: Text(
+                                  'AGGIORNA',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    letterSpacing: 1.5,
+                                    fontSize: 14.0,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: 'OpenSans',
+                                  ),
+                                ),
+                              ),
+                            )
+                          ],
+                        )
+                      ],
+                    ),
+                  )),
+
+ */
