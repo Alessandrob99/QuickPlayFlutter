@@ -43,7 +43,7 @@ class _createSelezione1 extends State<Selezione1> {
                     child: Text(
                       "A COSA VUOI GIOCARE E QUANDO?",
                       style: TextStyle(
-                        color: Color.fromRGBO(100, 100, 100, 1),
+                        color: Color.fromRGBO(0, 6, 117, 1),
                         fontSize: 22,
                         fontWeight: FontWeight.bold,
                       ),
@@ -92,7 +92,7 @@ class _createSelezione1 extends State<Selezione1> {
                                     onClicked: () => pickDate(context),
                                   ),
                                 )),
-                            SizedBox(height: 50.0),
+                            SizedBox(height: 70.0),
                             Container(
                               margin: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.20,right: MediaQuery.of(context).size.width*0.20),
                               padding: EdgeInsets.symmetric(vertical: 25.0),
@@ -118,7 +118,7 @@ class _createSelezione1 extends State<Selezione1> {
                                     borderRadius: BorderRadius.circular(30.0),
                                     side: BorderSide(
                                         color: Colors.black26, width: 2.0)),
-                                color: Colors.grey,
+                                color: Color.fromRGBO(54, 64, 255, 1),
                                 child: Text(
                                   'Conferma',
                                   style: TextStyle(
