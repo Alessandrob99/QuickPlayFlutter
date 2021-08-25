@@ -107,10 +107,8 @@ class _createSelezione1 extends State<Selezione1> {
                                       //Trova i campi per quello sport
                                       List<Court> campiPerSport = await DB_Handler_Courts.getCourtsBySport(_selectedSport.toLowerCase());
                                       //cambia page
-
                                       Navigator.push(context,
                                           MaterialPageRoute(builder: (context)=>EffettuaPrenotazione(campiPerSport: campiPerSport,data: date,)));
-
                                     }
                                   },
                                 padding: EdgeInsets.all(10.0),

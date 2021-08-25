@@ -372,21 +372,45 @@ class _LoginScreenState extends State<LoginScreen> {
         barrierDismissible: true,
         builder: (context) {
           return AlertDialog(
-            title: Text('Inserisci email di recupero'),
-            content: Column(
-              children: [
-                TextField(
-                  controller: emailResetPasswordController,
-                  decoration: InputDecoration(hintText: "Email"),
-                ),
-                FlatButton(
-                  onPressed: () async {
-                    Navigator.pop(context);
-                    sendValidationEmail(emailResetPasswordController.text);
-                  },
-                  child: Text("Invia"),
-                )
-              ],
+            shape: RoundedRectangleBorder(
+              side: BorderSide(
+                color: Colors.black45,
+                width: 5,
+              )
+            ),
+            title: Center(
+              child: Text('Inserisci E-mail di recupero'),
+            ),
+            content: Container(
+              height: MediaQuery.of(context).size.height*0.2,
+              width: MediaQuery.of(context).size.width*0.8,
+
+              child: Column(
+                children: [
+                  SizedBox(height: 20),
+                  Container(
+                    margin: EdgeInsets.only(left: 10,right: 10),
+                    child: TextField(
+                      controller: emailResetPasswordController,
+                      decoration: InputDecoration(hintText: "Email"),
+                    ),
+                  ),
+                  SizedBox(height: 30),
+                  FlatButton(
+                    onPressed: () async {
+                      Navigator.pop(context);
+                      sendValidationEmail(emailResetPasswordController.text);
+                    },
+                    child: Text(
+                        "Invia",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                        ),
+                    ),
+                  )
+                ],
+              ),
             ),
           );
         });
@@ -487,8 +511,9 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> sendValidationEmail(String email) async {
+    String emailSafe = email.replaceAll(" ", "");
     try {
-      await Auth_Handler.firebaseAuth.sendPasswordResetEmail(email: email);
+      await Auth_Handler.firebaseAuth.sendPasswordResetEmail(email: emailSafe);
     } catch (e) {
       switch (e.code) {
         case "ERROR_INVALID_EMAIL":
