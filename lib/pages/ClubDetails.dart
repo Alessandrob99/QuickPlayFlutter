@@ -60,70 +60,75 @@ class _ClubDetails extends State<ClubDetails> {
         Row(
           children: [
             Container(
-              decoration: BoxDecoration(color: Colors.white),
-              height: MediaQuery.of(context).size.height * 0.3,
-              width: MediaQuery.of(context).size.width,
-              child: Column(children: [
-                Container(
-                  margin: EdgeInsets.only(
-                      top: MediaQuery.of(context).size.height * 0.06),
-                  child: Text(
-                    circolo.nome,
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      decoration: TextDecoration.underline
+                decoration: BoxDecoration(color: Color.fromRGBO(255, 238, 191, 1)),
+                height: MediaQuery.of(context).size.height * 0.3,
+                width: MediaQuery.of(context).size.width,
+                child: Container(
+                  margin: EdgeInsets.only(left: 8),
+                  child: Column(children: [
+                    Container(
+                      alignment: Alignment.centerLeft,
+                        margin: EdgeInsets.only(
+                            top: MediaQuery.of(context).size.height * 0.06),
+                        child: Text(
+                          circolo.nome,
+                          style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              decoration: TextDecoration.underline),
+                        )),
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      margin: EdgeInsets.only(
+                          top: MediaQuery.of(context).size.height * 0.02),
+                      child: RichText(
+                          text: TextSpan(
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 18,
+                        ),
+                        text: "Docce : ",
+                        children: [getIcon(circolo.docce)],
+                      )),
                     ),
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(
-                      top: MediaQuery.of(context).size.height * 0.02),
-                  child: RichText(
-                      text: TextSpan(
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 18,
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      margin: EdgeInsets.only(
+                          top: MediaQuery.of(context).size.height * 0.02),
+                      child: Text(
+                        "tel. " + circolo.telefono,
+                        style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                            fontStyle: FontStyle.italic),
+                      ),
                     ),
-                    text: "Docce : ",
-                    children: [getIcon(circolo.docce)],
-                  )),
-                ),
-                Container(
-                  margin: EdgeInsets.only(
-                      top: MediaQuery.of(context).size.height * 0.02),
-                  child: Text(
-                    "tel. " + circolo.telefono,
-                    style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                        fontStyle: FontStyle.italic),
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(
-                      top: MediaQuery.of(context).size.height * 0.02),
-                  child: Text(
-                    "email :",
-                    style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                        fontStyle: FontStyle.italic),
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(
-                      top: MediaQuery.of(context).size.height * 0.01),
-                  child: Text(
-                    circolo.email,
-                    style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                        fontStyle: FontStyle.italic),
-                  ),
-                ),
-              ]),
-            ),
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      margin: EdgeInsets.only(
+                          top: MediaQuery.of(context).size.height * 0.02),
+                      child: Text(
+                        "email :",
+                        style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                            fontStyle: FontStyle.italic),
+                      ),
+                    ),
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      margin: EdgeInsets.only(
+                          top: MediaQuery.of(context).size.height * 0.01),
+                      child: Text(
+                        circolo.email,
+                        style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                            fontStyle: FontStyle.italic),
+                      ),
+                    ),
+                  ]),
+                )),
           ],
         ),
         Container(
@@ -183,7 +188,7 @@ class _ClubDetails extends State<ClubDetails> {
                               color: Colors.black,
                               width: 4,
                             ),
-                            color: Color.fromRGBO(255, 240, 143, 1)),
+                            color: Color.fromRGBO(252, 224, 144, 1)),
                         child: Column(children: [
                           Row(
                             children: [

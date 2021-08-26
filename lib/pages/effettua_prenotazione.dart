@@ -85,6 +85,7 @@ class _EffettuaPrenotazione extends State<EffettuaPrenotazione> {
             top: MediaQuery.of(context).size.height * 0.8,
             right: MediaQuery.of(context).size.width * 0.65,
             child: FloatingActionButton.extended(
+              heroTag: "btn1",
               backgroundColor: const Color.fromRGBO(97, 93, 93, 1),
               foregroundColor: Colors.black,
               onPressed: () async {
@@ -108,6 +109,7 @@ class _EffettuaPrenotazione extends State<EffettuaPrenotazione> {
             top: MediaQuery.of(context).size.height * 0.9,
             right: MediaQuery.of(context).size.width * 0.65,
             child: FloatingActionButton.extended(
+              heroTag: "btn2",
               backgroundColor: const Color.fromRGBO(114, 180, 71, 1),
               foregroundColor: Colors.black,
               onPressed: () {

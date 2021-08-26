@@ -55,9 +55,11 @@ class LayoutInfo {
   String orainizio;
   String oraFine;
   String codice;
+  String prenotatoreNome;
+  String prenotatoreEmail;
 
   LayoutInfo(this.circolo, this.campo, this.data, this.orainizio,
-      this.oraFine, this.codice);
+      this.oraFine, this.codice,this.prenotatoreEmail,this.prenotatoreNome);
 
 }
 

@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:quickplay/ViewModel/Auth_Handler.dart';
 import 'package:quickplay/ViewModel/DB_Handler_Clubs.dart';
 import 'package:quickplay/models/models.dart';
+import 'package:quickplay/pages/home_page.dart';
 
 class DB_Handler_Reservations {
 
@@ -35,9 +36,12 @@ class DB_Handler_Reservations {
         oraFineSafe = oraFine;
       }
 
+      var org =await myRef.collection("users").document(prenotazione.prenotatore).get();
+      String organizzatore = org.data["nome"].toString().capitalize() + " "+org.data["cognome"].toString().capitalize();
+
       Club _circolo =  await DB_Handler_Clubs.getClubById(codSplit[0]);
 
-      return LayoutInfo(_circolo.nome, codSplit[1], codSplit[2], oraInizioSafe, oraFineSafe, prenotazione.id);
+      return LayoutInfo(_circolo.nome, codSplit[1], codSplit[2], oraInizioSafe, oraFineSafe, prenotazione.id,prenotazione.prenotatore,organizzatore);
   }
 
 
@@ -174,7 +178,7 @@ class DB_Handler_Reservations {
 
   static Future<String> newPartecipazione(String codPren) async{
 
-    if(codPren.length!=20){
+    if(codPren.length!=20 && codPren.length!=19){
       return "Codice non valido";
     }
     try{
@@ -218,7 +222,6 @@ class DB_Handler_Reservations {
 
       partecipanti.add(Partecipante(element.data["nome"],element.data["cognome"],element.documentID));
       } );
-
     return partecipanti;
   }
 
