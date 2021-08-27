@@ -30,8 +30,21 @@ class Auth_Handler{
     LOGGED_IN = true;
     if (ricordami) {
       prefs = await SharedPreferences.getInstance();
-      var ref = FirebaseStorage.instance.ref().child("usersPics/"+email);
-      String location = await ref.getDownloadURL();
+      var ref;
+      String location;
+      try{
+
+        ref = FirebaseStorage.instance.ref().child("usersPics/"+email);
+        location = await ref.getDownloadURL();
+
+      }catch(Exception){
+
+        ref = FirebaseStorage.instance.ref().child("usersPics/Sample_User_Icon.png");
+        location = await ref.getDownloadURL();
+
+      }
+
+
       profileImg = location;
       await prefs.setBool("ricordami", true);
       await prefs.setString("email", email);

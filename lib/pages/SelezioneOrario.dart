@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:quickplay/ViewModel/DB_Handler_Reservations.dart';
 import 'package:quickplay/models/models.dart';
 import 'package:quickplay/pages/home_page.dart';
+import 'package:quickplay/widgets/snackbar.dart';
 
 class SelezioneOrario extends StatefulWidget {
   const SelezioneOrario({Key key, this.campo, this.circolo, this.data})
@@ -127,113 +128,139 @@ class _SelezioneOrario extends State<SelezioneOrario> {
       initialize();
     }
 
-    return SizedBox(
-      height: MediaQuery.of(context).size.height*0.8,
-      width: MediaQuery.of(context).size.width,
-     child: Column(
-       mainAxisAlignment: MainAxisAlignment.center,
-       crossAxisAlignment: CrossAxisAlignment.center,
-       children: [
-         Row(
-           children: [
-             _buildCounterButton('6:30'),
-             _buildCounterButton('11:00'),
-             _buildCounterButton('15:30'),
-             _buildCounterButton('20:00'),
-           ],
-         ),
-         Row(
-           children: [
-             _buildCounterButton('7:00'),
-             _buildCounterButton('11:30'),
-             _buildCounterButton('16:00'),
-             _buildCounterButton('20:30'),
-           ],
-         ),
-         Row(
-           children: [
-             _buildCounterButton('7:30'),
-             _buildCounterButton('12:00'),
-             _buildCounterButton('16:30'),
-             _buildCounterButton('21:00'),
-           ],
-         ),
-         Row(
-           children: [
-             _buildCounterButton('8:00'),
-             _buildCounterButton('12:30'),
-             _buildCounterButton('17:00'),
-             _buildCounterButton('21:30'),
-           ],
-         ),
-         Row(
-           children: [
-             _buildCounterButton('8:30'),
-             _buildCounterButton('13:00'),
-             _buildCounterButton('17:30'),
-             _buildCounterButton('22:00'),
-           ],
-         ),Row(
-           children: [
-             _buildCounterButton('9:00'),
-             _buildCounterButton('13:30'),
-             _buildCounterButton('18:00'),
-             _buildCounterButton('22:30'),
-           ],
-         ),Row(
-           children: [
-             _buildCounterButton('9:30'),
-             _buildCounterButton('14:00'),
-             _buildCounterButton('18:30'),
-             _buildCounterButton('23:00'),
-           ],
-         ),Row(
-           children: [
-             _buildCounterButton('10:00'),
-             _buildCounterButton('14:30'),
-             _buildCounterButton('19:00'),
-             _buildCounterButton('23:30'),
-           ],
-         ),Row(
-           children: [
-             _buildCounterButton('10:30'),
-             _buildCounterButton('15:00'),
-             _buildCounterButton('19:30'),
-             _buildCounterButton('24:00'),
-           ],
-         ),
-         Row(
-            children: [
-              RaisedButton(
-                  child: Text("Annulla"),
-                  onPressed: initialize
-              )
-            ],
-         )
-       ],
-     ),
+    var size = MediaQuery.of(context).size;
+
+    /*24 is for notification bar on Android*/
+    final double itemHeight = (size.height*0.69) / 9;
+    final double itemWidth = size.width / 4;
+
+    return Container(
+      color: Colors.white,
+      child: Column(
+        children: [
+          Container(
+            margin: EdgeInsets.only(top: MediaQuery.of(context).size.height*0.05 ),
+            color: Colors.white,
+            child: Center(
+              child: Text(
+                "SELEZIONA ORA INIZIO E FINE",
+                style: TextStyle(fontWeight: FontWeight.bold,fontSize: 22,color: Colors.black),
+              ),
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.only(top: MediaQuery.of(context).size.height*0.05),
+            height: MediaQuery.of(context).size.height*0.71,
+            width: MediaQuery.of(context).size.width,
+            color: Colors.white,
+            child: GridView.count(
+                crossAxisCount: 4,
+                childAspectRatio: (itemWidth/itemHeight),
+                padding: const EdgeInsets.all(8.0),
+                mainAxisSpacing: 6.0,
+                crossAxisSpacing: 6.0,
+                children: [
+                  _buildCounterButton('6:30'),
+                  _buildCounterButton('11:00'),
+                  _buildCounterButton('15:30'),
+                  _buildCounterButton('20:00'),
+                  _buildCounterButton('7:00'),
+                  _buildCounterButton('11:30'),
+                  _buildCounterButton('16:00'),
+                  _buildCounterButton('20:30'),
+                  _buildCounterButton('7:30'),
+                  _buildCounterButton('12:00'),
+                  _buildCounterButton('16:30'),
+                  _buildCounterButton('21:00'),
+                  _buildCounterButton('8:00'),
+                  _buildCounterButton('12:30'),
+                  _buildCounterButton('17:00'),
+                  _buildCounterButton('21:30'),
+                  _buildCounterButton('8:30'),
+                  _buildCounterButton('13:00'),
+                  _buildCounterButton('17:30'),
+                  _buildCounterButton('22:00'),
+                  _buildCounterButton('9:00'),
+                  _buildCounterButton('13:30'),
+                  _buildCounterButton('18:00'),
+                  _buildCounterButton('22:30'),
+                  _buildCounterButton('9:30'),
+                  _buildCounterButton('14:00'),
+                  _buildCounterButton('18:30'),
+                  _buildCounterButton('23:00'),
+                  _buildCounterButton('10:00'),
+                  _buildCounterButton('14:30'),
+                  _buildCounterButton('19:00'),
+                  _buildCounterButton('23:30'),
+                  _buildCounterButton('10:30'),
+                  _buildCounterButton('15:00'),
+                  _buildCounterButton('19:30'),
+                  _buildCounterButton('24:00'),
+                ].map((Widget btn) {
+                  return GridTile(
+                      child: btn);
+                }).toList()),
+          ),
+          Container(
+            margin: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.20,right: MediaQuery.of(context).size.width*0.20),
+            padding: EdgeInsets.symmetric(vertical: 25.0),
+            width: double.infinity,
+            child: RaisedButton(
+              elevation: 5.0,
+              onPressed: (){
+                initialize();
+              },
+              padding: EdgeInsets.all(10.0),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30.0),
+                  side: BorderSide(
+                      color: Colors.black26, width: 2.0)),
+              color: Colors.white38,
+              child: Text(
+                'RESETTA',
+                style: TextStyle(
+                  color: Colors.black,
+                  letterSpacing: 1.5,
+                  fontSize: 15.0,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'OpenSans',
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
+
   }
 
 
   Widget _buildCounterButton(String btn) {
-    return new RaisedButton(
-      color: buttonsColour[btn],
-      child: new Text(
-          btn
-      ),
-      onPressed: (){
-        if(buttonsEnabled[btn]){
-          if(!clickFlag){
-            firstClick(btn);
-          }else{
-            secondClick(btn);
-          }
-        }else{
-          print("Orario occupato");
-        }
+    return  SizedBox(
+      height: MediaQuery.of(context).size.height*0.02,
+      width: MediaQuery.of(context).size.width*0.08,
+      child: RaisedButton(
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30.0),
+              side: BorderSide(
+                  color: Colors.black26, width: 2.0)),
+          color: buttonsColour[btn],
+          child: Text(
+              btn
+          ),
+          onPressed: (){
+            if(buttonsEnabled[btn]){
+              if(!clickFlag){
+                firstClick(btn);
+              }else{
+                secondClick(btn);
+              }
+            }else{
+              CustomSnackBar(context,const Text("Orario occupato"));
+            }
 
-      }
+          }
+      ),
     );
   }
 
@@ -320,6 +347,32 @@ class _SelezioneOrario extends State<SelezioneOrario> {
     var splitStr = data.toString().split(" ");
     splitStr = splitStr[0].split("-");
     String giorno = splitStr[2]+"-"+splitStr[1]+"-"+splitStr[0];
+
+    var split =  DateTime.now().toString().split(" ");
+    var oggi = split[0];
+
+
+
+    if(oggi == splitStr[0]+"-"+splitStr[1]+"-"+splitStr[2]){
+      String oraNow = ((DateTime.now().hour)).toString();
+      buttonsEnabled["6:30"] = false;
+      buttonsColour["6:30"] = Colors.red;
+      int ora = 7;
+      while(ora.toString()!=oraNow){
+        buttonsEnabled[ora.toString()+":00"] = false;
+        buttonsColour[ora.toString()+":00"] = Colors.red;
+        buttonsEnabled[ora.toString()+":30"] = false;
+        buttonsColour[ora.toString()+":30"] = Colors.red;
+        ora+=1;
+      }
+      buttonsEnabled[ora.toString()+":00"] = false;
+      buttonsColour[ora.toString()+":00"] = Colors.red;
+      buttonsEnabled[ora.toString()+":30"] = false;
+      buttonsColour[ora.toString()+":30"] = Colors.red;
+    }
+
+
+
     DB_Handler_Reservations.getListOfReservations(giorno, campo.n_c, circolo.id,(returnedPrenotazioni){
       returnedPrenotazioni.forEach((element) {
         String ora = element.oraInizio.hour.toString();
@@ -424,7 +477,7 @@ class _SelezioneOrario extends State<SelezioneOrario> {
     if(btn=="24:00"){oraFine = "23:59";}else{oraFine = btn;}
     bool result = DB_Handler_Reservations.checkAvailability(giorno, oraInizioSel, oraFine, prenotazioni);
     if(result){
-      print("Collisione!");
+      CustomSnackBar(context, const Text("Orario non disponibile"));
       initialize();
     }else{
       oraFineSel = oraFine;
@@ -532,3 +585,87 @@ class _SelezioneOrario extends State<SelezioneOrario> {
   }
 
 }
+
+
+/*
+
+Row(
+           children: [
+             _buildCounterButton('6:30'),
+             _buildCounterButton('11:00'),
+             _buildCounterButton('15:30'),
+             _buildCounterButton('20:00'),
+           ],
+         ),
+         Row(
+           children: [
+             _buildCounterButton('7:00'),
+             _buildCounterButton('11:30'),
+             _buildCounterButton('16:00'),
+             _buildCounterButton('20:30'),
+           ],
+         ),
+         Row(
+           children: [
+             _buildCounterButton('7:30'),
+             _buildCounterButton('12:00'),
+             _buildCounterButton('16:30'),
+             _buildCounterButton('21:00'),
+           ],
+         ),
+         Row(
+           children: [
+             _buildCounterButton('8:00'),
+             _buildCounterButton('12:30'),
+             _buildCounterButton('17:00'),
+             _buildCounterButton('21:30'),
+           ],
+         ),
+         Row(
+           children: [
+             _buildCounterButton('8:30'),
+             _buildCounterButton('13:00'),
+             _buildCounterButton('17:30'),
+             _buildCounterButton('22:00'),
+
+           ],
+         ),Row(
+           children: [
+             _buildCounterButton('9:00'),
+             _buildCounterButton('13:30'),
+             _buildCounterButton('18:00'),
+             _buildCounterButton('22:30'),
+           ],
+         ),Row(
+           children: [
+             _buildCounterButton('9:30'),
+             _buildCounterButton('14:00'),
+             _buildCounterButton('18:30'),
+             _buildCounterButton('23:00'),
+           ],
+         ),Row(
+           children: [
+             _buildCounterButton('10:00'),
+             _buildCounterButton('14:30'),
+             _buildCounterButton('19:00'),
+             _buildCounterButton('23:30'),
+           ],
+         ),Row(
+           children: [
+             _buildCounterButton('10:30'),
+             _buildCounterButton('15:00'),
+             _buildCounterButton('19:30'),
+             _buildCounterButton('24:00'),
+           ],
+         ),
+
+
+
+
+
+
+
+
+
+
+ */

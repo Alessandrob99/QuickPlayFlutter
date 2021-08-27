@@ -8,6 +8,8 @@ import 'package:quickplay/pages/home_profile.dart';
 import 'package:quickplay/utils/dialog_helper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'Circoli.dart';
+
 class DrawerScreen extends StatefulWidget {
   @override
   _DrawerScreenState createState() => _DrawerScreenState();
@@ -46,7 +48,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
           text: Text('Circoli',
               style: TextStyle(color: Colors.white, fontSize: 18)),
           icon: Icon(Icons.map, color: Colors.white),
-          //page: Circoli(),
+          page: Circoli(),
         ),
         KFDrawerItem.initWithPage(
           text: Text('_________________________________________________________',
