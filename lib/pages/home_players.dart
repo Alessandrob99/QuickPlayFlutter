@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:kf_drawer/kf_drawer.dart';
 
+import 'home_page_menu.dart';
+
 class Players extends KFDrawerContent {
 
 
@@ -16,10 +18,27 @@ class _Players extends State<Players> {
   Widget build(BuildContext context) {
     return WillPopScope(
         child: Scaffold(
-        appBar: AppBar(
-          title: Text("Cane"),
-        ))
+          appBar: AppBar(
+            backgroundColor: Colors.indigo,
+            leading: Builder(
+              builder: (context) => IconButton(
+                icon: Icon(Icons.menu_rounded),
+                onPressed: widget.onMenuPressed,
+              ),
+            ),
+          ),
+        ),
+      onWillPop: onBackPressed,
     );
+  }
+
+
+  Future<bool> onBackPressed() {
+    return Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
+      builder: (context) {
+        return DrawerScreen();
+      },
+    ), (route) => false);
   }
 
 }
