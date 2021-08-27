@@ -33,8 +33,8 @@ class DB_Handler_Users{
     myRef.collection("users").document(email).setData({
       'email':email,
       'password':password,
-      'nome':nomeSafe,
-      'cognome':cognomeSafe,
+      'nome':nomeSafe.toLowerCase(),
+      'cognome':cognomeSafe.toLowerCase(),
       'telefono':telefono
     });
   }
@@ -54,6 +54,36 @@ class DB_Handler_Users{
     Auth_Handler.CURRENT_USER.cognome = cognome;
     Auth_Handler.CURRENT_USER.telefono = telefono;
     callBack();
+  }
+
+  static Future<List<User>> searchUsers(String nome,String cognome) async{
+    var usersList = await myRef.collection("users").getDocuments();
+    List<User> returnedUsers = [];
+    if(nome!="" && cognome!=""){
+      usersList.documents.forEach((element) {
+        if(element.data["nome"]==nome && element.data["cognome"]==cognome){
+          returnedUsers.add(User(element.data["nome"],element.data["cognome"],element.documentID,element.data["telefono"]));
+        }
+      });
+    }else{
+      if(nome!=""){
+        usersList.documents.forEach((element) {
+          if(element.data["nome"]==nome){
+            returnedUsers.add(User(element.data["nome"],element.data["cognome"],element.documentID,element.data["telefono"]));
+          }
+        });
+      }
+      if(cognome!=""){
+        usersList.documents.forEach((element) {
+          if(element.data["cognome"]==cognome){
+            returnedUsers.add(User(element.data["nome"],element.data["cognome"],element.documentID,element.data["telefono"]));
+          }
+        });
+      }
+
+    }
+    return returnedUsers;
+
   }
 
 
