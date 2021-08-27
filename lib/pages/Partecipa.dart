@@ -4,6 +4,8 @@ import 'package:flutter/services.dart';
 import 'package:quickplay/ViewModel/DB_Handler_Reservations.dart';
 import 'package:quickplay/pages/selezione1.dart';
 
+import 'home_page_menu.dart';
+
 class Partecipa extends StatefulWidget {
   Partecipa({Key key}) : super(key: key);
 
@@ -14,9 +16,26 @@ class Partecipa extends StatefulWidget {
 class _Partecipa extends State<Partecipa> {
   TextEditingController codPren = TextEditingController();
 
+  Future<bool> onBackPressed() {
+    return Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
+      builder: (context) {
+        return DrawerScreen();
+      },
+    ), (route) => false);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.indigo,
+          leading: Builder(
+            builder: (context) => IconButton(
+              icon: Icon(Icons.arrow_back_outlined),
+              onPressed: onBackPressed,
+            ),
+          ),
+        ),
         body: AnnotatedRegion<SystemUiOverlayStyle>(
             value: SystemUiOverlayStyle.light,
             child: Container(

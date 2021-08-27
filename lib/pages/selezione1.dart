@@ -7,6 +7,7 @@ import 'package:quickplay/widgets/snackbar.dart';
 
 
 import 'effettua_prenotazione.dart';
+import 'home_page_menu.dart';
 
 class Selezione1 extends StatefulWidget {
   const Selezione1({Key key}) : super(key: key);
@@ -28,9 +29,26 @@ class _createSelezione1 extends State<Selezione1> {
     }
   }
 
+  Future<bool> onBackPressed() {
+    return Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
+      builder: (context) {
+        return DrawerScreen();
+      },
+    ), (route) => false);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.indigo,
+          leading: Builder(
+            builder: (context) => IconButton(
+              icon: Icon(Icons.arrow_back_outlined),
+              onPressed: onBackPressed,
+            ),
+          ),
+        ),
         body: AnnotatedRegion<SystemUiOverlayStyle>(
             value: SystemUiOverlayStyle.light,
             child: Container(
