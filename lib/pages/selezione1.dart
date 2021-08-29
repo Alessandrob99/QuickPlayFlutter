@@ -122,13 +122,14 @@ class _createSelezione1 extends State<Selezione1> {
         ),
         Flexible(
           flex: 1,
-          fit: FlexFit.tight,
+          fit: FlexFit.loose,
           child: Container(
-            width: 150,
+            width: 170,
+            height: 75,
             child: TextButton(
               child: Text(
                 "CONFERMA".toUpperCase(),
-                style: TextStyle(fontSize: 14, color: Colors.black),
+                style: TextStyle(fontSize: 16, color: Colors.black),
               ),
               style: ButtonStyle(
                   padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.all(15)),

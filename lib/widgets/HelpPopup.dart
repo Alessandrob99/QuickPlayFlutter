@@ -48,7 +48,7 @@ class _HelpPopup extends State<HelpPopup> {
               ),
               TextSpan(
                   style: TextStyle(color: Colors.black, fontSize: 18),
-                  text: "La tua posizione invece sarà marcata in "),
+                  text: "La tua posizione invece sarà marcata in"),
               TextSpan(
                 style: TextStyle(
                     color: Colors.indigo,
@@ -56,7 +56,8 @@ class _HelpPopup extends State<HelpPopup> {
                     fontSize: 20),
                 text: "BLU",
               ),
-            ]),
+            ]
+        ),
       ),
     ),
     Container(
@@ -92,7 +93,7 @@ class _HelpPopup extends State<HelpPopup> {
               elevation: 2.0,
               color: Colors.white, //Colore interno
               shape: new RoundedRectangleBorder(
-                  side: new BorderSide(color: Colors.black, width: 5.0),
+                  side: new BorderSide(color: Colors.black, width: 3.0),
                   borderRadius: BorderRadius.circular(8.0)),
               child: Column(children: [
                 SizedBox(height: 20),
@@ -113,7 +114,7 @@ class _HelpPopup extends State<HelpPopup> {
                 ),
                 SizedBox(height: 40),
                 Align(
-                  alignment: Alignment.centerRight,
+                  alignment: FractionalOffset.bottomRight,
                   child: TextButton(
                     child: Container(
                       margin: EdgeInsets.only(right: 20),
