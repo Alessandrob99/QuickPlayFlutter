@@ -23,7 +23,7 @@ class _createSelezione1 extends State<Selezione1> {
 
   String getText() {
     if (date == null) {
-      return "Data";
+      return "Seleziona";
     } else {
       return '${date.day}/${date.month}/${date.year}';
     }
@@ -40,128 +40,46 @@ class _createSelezione1 extends State<Selezione1> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.indigo,
-          leading: Builder(
-            builder: (context) => IconButton(
-              icon: Icon(Icons.arrow_back_outlined),
-              onPressed: onBackPressed,
+      appBar: AppBar(
+        backgroundColor: Colors.indigo,
+        leading: Builder(
+          builder: (context) => IconButton(
+            icon: Icon(Icons.arrow_back_outlined),
+            onPressed: onBackPressed,
+          ),
+        ),
+      ),
+      body: Column(children: [
+        Flexible(
+            fit: FlexFit.loose,
+            flex: 1,
+            child: Container()
+        ),
+        Flexible(
+          flex: 1,
+          fit: FlexFit.tight,
+          child: Text('Seleziona uno sport',
+            textAlign: TextAlign.end,
+            style: TextStyle(
+                fontSize: 30,
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'OpenSans'
             ),
           ),
         ),
-        body: AnnotatedRegion<SystemUiOverlayStyle>(
-            value: SystemUiOverlayStyle.light,
-            child: Container(
-              alignment: Alignment.center,
-              child: Column(
-                children: [
-                  Container(
-                    height: MediaQuery.of(context).size.height * 0.20,
-                    alignment: Alignment.bottomCenter,
-                    child: Text(
-                      "A COSA VUOI GIOCARE E QUANDO?",
-                      style: TextStyle(
-                        color: Color.fromRGBO(0, 6, 117, 1),
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 20),
-                  Wrap(
-                    children: [
-                      Card(
-                          elevation: 2.0,
-                          color: Colors.white, //Colore interno
-                          shape: new RoundedRectangleBorder(
-                              //Colore del bordo
-                              side: new BorderSide(
-                                  color: Colors.black26, width: 2.0),
-                              borderRadius: BorderRadius.circular(8.0)),
-                          child: Column(children: [
-                            SizedBox(height: 70),
-                            HeaderWidget(
-                                title: "Seleziona lo sport",
-                                child: DropdownButton(
-                                  style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black),
-                                  hint: Text('Sport '),
-                                  // Not necessary for Option 1
-                                  value: _selectedSport,
-                                  onChanged: (newValue) {
-                                    setState(() {
-                                      _selectedSport = newValue;
-                                    });
-                                  },
-                                  items: _sports.map((location) {
-                                    return DropdownMenuItem(
-
-                                      child: new Text(location),
-                                      value: location,
-                                    );
-                                  }).toList(),
-                                )),
-                            SizedBox(height: 100),
-                            Container(
-                                color: Colors.white,
-                                child: Expanded(
-                                  child: ButtonHeaderWidget(
-                                    title: "Seleziona la data",
-                                    text: getText(),
-                                    onClicked: () => pickDate(context),
-                                  ),
-                                )),
-                            SizedBox(height: 70.0),
-                            Container(
-                              margin: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.20,right: MediaQuery.of(context).size.width*0.20),
-                              padding: EdgeInsets.symmetric(vertical: 25.0),
-                              width: double.infinity,
-                              child: RaisedButton(
-                                elevation: 5.0,
-                                  onPressed: () async {
-                                    if(date==null || _selectedSport==null){
-                                      //Errore
-                                      CustomSnackBar(context, const Text("Inserisci tutti i campi"));
-                                    }else{
-                                      //Trova i campi per quello sport
-                                      List<Court> campiPerSport = await DB_Handler_Courts.getCourtsBySport(_selectedSport.toLowerCase());
-                                      //cambia page
-                                      Navigator.push(context,
-                                          MaterialPageRoute(builder: (context)=>EffettuaPrenotazione(campiPerSport: campiPerSport,data: date,)));
-                                    }
-                                  },
-                                padding: EdgeInsets.all(10.0),
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(30.0),
-                                    side: BorderSide(
-                                        color: Colors.black26, width: 2.0)),
-                                color: Color.fromRGBO(0, 229, 255, 1),
-                                child: Text(
-                                  'Conferma',
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    letterSpacing: 1.5,
-                                    fontSize: 15.0,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: 'OpenSans',
-                                  ),
-                                ),
-                              ),
-                            )
-                          ])),
-                    ],
-                  ),
-                ],
-              ),
-            )));
-
-    /*Column(children: <Widget>[
-      Container(
-          height: MediaQuery.of(context).size.height * 0.4,
-          child: (MaterialApp(
-            home: Scaffold(
-              body: Center(
+        Flexible(
+          flex: 2,
+          fit: FlexFit.tight,
+          child: Container(
+            child: HeaderWidget(
+                title: "",
                 child: DropdownButton(
-                  hint: Text('Sport '), // Not necessary for Option 1
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,color: Colors.black
+                  ),
+                  hint: Text('Sport '),
+                  // Not necessary for Option 1
                   value: _selectedSport,
                   onChanged: (newValue) {
                     setState(() {
@@ -170,52 +88,84 @@ class _createSelezione1 extends State<Selezione1> {
                   },
                   items: _sports.map((location) {
                     return DropdownMenuItem(
+
                       child: new Text(location),
                       value: location,
                     );
                   }).toList(),
-                ),
-              ),
-            ),
-          ))),
-      Container(
-          color: Colors.white,
-          height: MediaQuery.of(context).size.height * 0.4,
-          child: ButtonWithHeader(
-            title: "Data",
-            text: getText(),
-            onClicked: ()=> pickDate(context),
+                )),
           ),
-
-          ),
-      Container(
-        color: Colors.white,
-        height: MediaQuery.of(context).size.height * 0.2,
-        child: ElevatedButton(
-
-          child: FittedBox(
-
-            child:
-            Text("Conferma"),
-          ),
-          onPressed: () async {
-            if(date==null || _selectedSport==null){
-              //Errore
-              print("Inserisci tutti i campi!!!");
-            }else{
-              //Trova i campi per quello sport
-              List<Court> campiPerSport = await DB_Handler_Courts.getCourtsBySport(_selectedSport.toLowerCase());
-              //cambia page
-
-              Navigator.push(context,
-              MaterialPageRoute(builder: (context)=>EffettuaPrenotazione(campiPerSport: campiPerSport,data: date,)));
-
-            }
-          },
         ),
-      )
-    ]);*/
+        Flexible(
+          flex: 1,
+          fit: FlexFit.tight,
+          child: Text('Inserisci una data',
+            textAlign: TextAlign.end,
+            style: TextStyle(
+                fontSize: 30,
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'OpenSans'
+            ),
+          ),
+        ),
+        Flexible(
+          flex: 2,
+          fit: FlexFit.tight,
+          child: Container(
+            child: ButtonHeaderWidget(
+              title: "",
+              text: getText(),
+              onClicked: () => pickDate(context),
+            ),
+          ),
+        ),
+        Flexible(
+          flex: 1,
+          fit: FlexFit.tight,
+          child: Container(
+            width: 150,
+            child: TextButton(
+              child: Text(
+                "CONFERMA".toUpperCase(),
+                style: TextStyle(fontSize: 14, color: Colors.black),
+              ),
+              style: ButtonStyle(
+                  padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.all(15)),
+                  foregroundColor: MaterialStateProperty.all<Color>(Colors.black26),
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18.0),
+                          side: BorderSide(color: Colors.black)
+                      )
+                  )
+              ),
+              onPressed: () async {
+                if(date==null || _selectedSport==null){
+                  //Errore
+                  CustomSnackBar(context, const Text("Inserisci tutti i campi"));
+                }else{
+                  //Trova i campi per quello sport
+                  List<Court> campiPerSport = await DB_Handler_Courts.getCourtsBySport(_selectedSport.toLowerCase());
+                  //cambia page
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context)=>EffettuaPrenotazione(campiPerSport: campiPerSport,data: date,)));
+                }
+              },
+            ),
+          ),
+        ),
+        Flexible(
+            fit: FlexFit.loose,
+            flex: 1,
+            child: Container()
+        ),
+      ],
+      ),
+    );
   }
+
+
 
   Future pickDate(BuildContext context) async {
     final initialDate = DateTime.now();
@@ -236,6 +186,7 @@ class _createSelezione1 extends State<Selezione1> {
   }
 }
 
+
 class ButtonHeaderWidget extends StatelessWidget {
   final String title;
   final String text;
@@ -250,12 +201,12 @@ class ButtonHeaderWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => HeaderWidget(
-        title: title,
-        child: ButtonWidget(
-          text: text,
-          onClicked: onClicked,
-        ),
-      );
+    title: title,
+    child: ButtonWidget(
+      text: text,
+      onClicked: onClicked,
+    ),
+  );
 }
 
 class ButtonWidget extends StatelessWidget {
@@ -303,18 +254,18 @@ class HeaderWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Text(
-            title,
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 8),
-          child,
-        ],
-      );
+    crossAxisAlignment: CrossAxisAlignment.center,
+    children: [
+      Text(
+        title,
+        style: TextStyle(
+          color: Colors.black,
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      const SizedBox(height: 8),
+      child,
+    ],
+  );
 }
