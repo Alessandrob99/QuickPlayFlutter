@@ -11,6 +11,25 @@ class DB_Handler_Clubs{
   static Firestore myRef = Firestore.instance;
 
 
+  static Future<List<Club>> getAllClubs() async {
+    List<Club> clubs = [];
+
+    var data = await myRef.collection("clubs").getDocuments();
+    data.documents.forEach((element) {
+      double lat = element.data["posizione"].latitude;
+      double lng = element.data["posizione"].longitude;
+      clubs.add(Club(
+          element.data["id_circolo"],
+          element.data["nome"],
+          element.data["telefono"],
+          element.data["email"],
+          element.data["docce"],
+          lat,
+          lng));
+    });
+    return clubs;
+  }
+
   static Future<List<Club>> getAllClubsInRange(int range,LatLng position) async{
     List<Club> clubsInRange = [];
     var data = await myRef.collection("clubs").getDocuments();
