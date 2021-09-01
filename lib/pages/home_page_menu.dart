@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:kf_drawer/kf_drawer.dart';
 import 'package:quickplay/ViewModel/Auth_Handler.dart';
 import 'package:quickplay/pages/home_page.dart';
-import 'package:quickplay/pages/home_players.dart';
 import 'package:quickplay/pages/home_profile.dart';
 import 'package:quickplay/utils/dialog_helper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'Circoli.dart';
+import 'InfoPage.dart';
 
 class DrawerScreen extends StatefulWidget {
   @override
@@ -38,12 +38,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
           icon: Icon(Icons.person, color: Colors.white),
           page: Profile(),
         ),
-        KFDrawerItem.initWithPage(
-          text: Text('Giocatori',
-              style: TextStyle(color: Colors.white, fontSize: 18)),
-          icon: Icon(Icons.people, color: Colors.white),
-          page: Players(),
-        ),
+
         KFDrawerItem.initWithPage(
           text: Text('Circoli',
               style: TextStyle(color: Colors.white, fontSize: 18)),
@@ -58,7 +53,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
           text: Text('Info App',
               style: TextStyle(color: Colors.white, fontSize: 18)),
           icon: Icon(Icons.perm_device_info, color: Colors.white),
-          //page: InfoApp(),
+          page: Info(),
         ),
         KFDrawerItem.initWithPage(
           text: Text('Contattaci',

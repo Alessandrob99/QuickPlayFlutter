@@ -31,6 +31,8 @@ class EmptyAppBar extends StatelessWidget implements PreferredSizeWidget {
 class _MyHomePageState extends State<Home> {
 
 
+
+
   @override
   Widget build(BuildContext context) {
 
@@ -43,7 +45,11 @@ class _MyHomePageState extends State<Home> {
       appBar:PreferredSize(
         preferredSize: Size.fromHeight(85.0),
         child: AppBar(
-          backgroundColor: Colors.indigo,
+          title: Container(
+            margin: EdgeInsets.only(right: MediaQuery.of(context).size.width*0.29,left: MediaQuery.of(context).size.width*0.11),
+            child: Image.asset('assets/img/appLogo.png', fit: BoxFit.contain,),
+          ),
+          backgroundColor: Color.fromRGBO(0, 136, 255, 1),
           leading: Builder(
             builder: (context) => IconButton(
               icon: Icon(Icons.menu_rounded),
@@ -52,130 +58,82 @@ class _MyHomePageState extends State<Home> {
           ),
         ),
       ),
-      body: ListView(
-        children: <Widget>[
-          Stack(
-            children: <Widget>[
-              Container(
-                height: 200.0,
-                width: double.infinity,
-                color: Colors.indigo, //Colore in basso del drawer menu
-              ),
-              Positioned(
-                //Cerchi del layout
-                  bottom: 180,
-                  left: -40,
-                  child: Container(
-                    height: 140,
-                    width: 140,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(70),
-                        color: Colors.yellowAccent[100].withOpacity(0.1)),
-                  )),
-              Positioned(
-                //Cerchi del layout
-                  top: -120,
-                  left: 100,
-                  child: Container(
-                    height: 300,
-                    width: 300,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(150),
-                        color: Colors.yellowAccent[100].withOpacity(0.1)),
-                  )),
-              Positioned(
-                //Cerchi del layout
-                  top: -50,
-                  left: 0,
-                  child: Container(
-                    height: 200,
-                    width: 200,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(100),
-                        color: Colors.yellowAccent[100].withOpacity(0.1)),
-                  )),
-              Positioned(
-                //Cerchi del layout
-                  top: 0,
-                  right: 0,
-                  child: Container(
-                    height: 150,
-                    width: 150,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(75),
-                        color: Colors.yellowAccent[100].withOpacity(0.1)),
-                  )),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  SizedBox(
-                    //Distanza dalla top bar al "Benvenuto"
-                    height: 70.0,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Text(
-                          "Benvenuto",
-                          style: TextStyle(
-                              fontSize: 30,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w500),
-                        ),
-                        Expanded(
-                          flex: 1,
-                          child: Container(),
-                        ),
-                      ],
+      body: Container(
+        color: Colors.white,
+        child: ListView(
+          children: <Widget>[
+            Stack(
+              children: <Widget>[
+                Container(
+                  height: MediaQuery.of(context).size.height*0.22,
+                  width: double.infinity,
+                  child: Image.asset('assets/img/sportsBackground.jpg', fit: BoxFit.contain,), //Colore in basso del drawer menu
+                ),
+
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    SizedBox(
+                      //Distanza dalla top bar al "Benvenuto"
+                      height: MediaQuery.of(context).size.height*0.22,
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
-                    //Distanza tra il "Benvenuto" ed il blocco "Nome-Cognome"
-                    child: Text(
-                      "",
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
+                      //Distanza tra il "Benvenuto" ed il blocco "Nome-Cognome"
+                      child: Text(
+                        "",
+                      ),
                     ),
-                  ),
-                  SizedBox(
-                    height: 25,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
-                    child: Container(
-                      height: 100,
-                      width: MediaQuery.of(context).size.width,
-                      child: Material(
-                        elevation: 2.0,
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(5.0),
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 25),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                Auth_Handler.CURRENT_USER.nome.capitalize()+"  "+Auth_Handler.CURRENT_USER.cognome.capitalize(),
-                                style: TextStyle(
-                                    fontSize: 24,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black54),
-                              ),
-                            ],
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
+                      child: Container(
+                        height: 100,
+                        width: MediaQuery.of(context).size.width,
+                        child: Material(
+                          elevation: 2.0,
+                          color: Color.fromRGBO(217, 217, 217,1),
+                          borderRadius: BorderRadius.circular(5.0),
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 25),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                RichText(
+                                    text: TextSpan(
+                                        text: "Benvenuto :\n",
+                                        style: TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                            color: Color.fromRGBO(0, 136, 255, 1),),
+                                        children: [
+                                          TextSpan(
+                                            text: Auth_Handler.CURRENT_USER.nome.capitalize()+"  "+Auth_Handler.CURRENT_USER.cognome.capitalize(),
+                                            style: TextStyle(
+                                                fontSize: 24,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.black),
+                                          )
+                                        ]
+                                    )
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  )
-                ],
-              ),
-            ],
-          ),
-          getGridView()
-        ],
-      ),
+                    )
+                  ],
+                ),
+              ],
+            ),
+            getGridView()
+          ],
+        ),
+      )
       ),
       );
   }
