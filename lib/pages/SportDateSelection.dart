@@ -6,7 +6,7 @@ import 'package:quickplay/models/models.dart';
 import 'package:quickplay/widgets/snackbar.dart';
 
 
-import 'effettua_prenotazione.dart';
+import 'ClubSelection.dart';
 import 'home_page_menu.dart';
 
 class Selezione1 extends StatefulWidget {

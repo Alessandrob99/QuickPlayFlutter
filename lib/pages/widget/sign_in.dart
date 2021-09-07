@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:quickplay/ViewModel/Auth_Handler.dart';
-import 'package:quickplay/pages/register_page.dart';
+import 'package:quickplay/pages/Register.dart';
 import 'package:quickplay/utils/constants.dart';
 import 'package:quickplay/widgets/snackbar.dart';
 import 'package:shared_preferences/shared_preferences.dart';

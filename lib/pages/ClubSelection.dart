@@ -142,6 +142,7 @@ class _EffettuaPrenotazione extends State<EffettuaPrenotazione> {
               Navigator.pop(context);
             });
           } else {
+            var myPos = await Geolocator.getCurrentPosition();
             //Usiamo una callback in quanto dobbiamo ritornare sia i circoli che i campi corrispondenti
             // ( Per ogni circolo non è detto che tutti i campi siano accettabili )
             var prezzoInt;
@@ -199,7 +200,6 @@ class _EffettuaPrenotazione extends State<EffettuaPrenotazione> {
                     position: LatLng(element.lat, element.lng)));
               });
 
-              var myPos = await Geolocator.getCurrentPosition();
               Navigator.pop(context);
               _center = LatLng(myPos.latitude, myPos.longitude);
               clubMarkers.add(Marker(

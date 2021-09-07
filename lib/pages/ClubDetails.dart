@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:quickplay/models/models.dart';
 import 'package:quickplay/pages/home_page.dart';
 
-import 'SelezioneOrario.dart';
+import 'TimeSelection.dart';
 
 class ClubDetails extends StatefulWidget {
   const ClubDetails({Key key, this.campi, this.circolo, this.data})

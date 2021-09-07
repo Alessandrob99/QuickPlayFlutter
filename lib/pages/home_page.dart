@@ -4,9 +4,9 @@ import 'package:quickplay/ViewModel/Auth_Handler.dart';
 import 'package:quickplay/ViewModel/DB_Handler_Reservations.dart';
 import 'package:quickplay/ViewModel/DB_Handler_Users.dart';
 import 'package:quickplay/models/models.dart';
-import 'package:quickplay/pages/Partecipa.dart';
-import 'package:quickplay/pages/selezione1.dart';
-import 'package:quickplay/pages/visualizza_prenotazioni.dart';
+import 'package:quickplay/pages/JoinReservation.dart';
+import 'package:quickplay/pages/SportDateSelection.dart';
+import 'package:quickplay/pages/ReservationList.dart';
 import 'package:quickplay/utils/dialog_helper.dart';
 
 

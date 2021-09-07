@@ -7,7 +7,7 @@ import 'package:quickplay/pages/home_profile.dart';
 import 'package:quickplay/utils/dialog_helper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'Circoli.dart';
+import 'ClubSearch.dart';
 import 'InfoPage.dart';
 
 class DrawerScreen extends StatefulWidget {
