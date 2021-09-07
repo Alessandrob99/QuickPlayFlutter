@@ -17,7 +17,19 @@ class Selezione1 extends StatefulWidget {
 }
 
 class _createSelezione1 extends State<Selezione1> {
-  List<String> _sports = ['Tennis', 'Calcetto', 'Paddle', 'Basket']; // Option 2
+  List<String> _sports = [
+    "Atletica",
+    "Badminton",
+    "Basket",
+    "Bocce",
+    "Calcetto",
+    "Golf",
+    "Nuoto",
+    "Padel",
+    "Paintball",
+    "Squash",
+    "Tennis",
+    "Touchtennis"]; // Option 2
   String _selectedSport; // Option 2
   DateTime date;
 
