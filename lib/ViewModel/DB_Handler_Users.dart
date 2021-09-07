@@ -32,7 +32,6 @@ class DB_Handler_Users{
     var cognomeSafe = cognome.replaceAll(" ", "");
     myRef.collection("users").document(email).setData({
       'email':email,
-      'password':password,
       'nome':nomeSafe.toLowerCase(),
       'cognome':cognomeSafe.toLowerCase(),
       'telefono':telefono
